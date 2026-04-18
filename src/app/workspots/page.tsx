@@ -1,18 +1,17 @@
 import { SpotsList } from "@/components/SpotsList";
 
-export default function Home() {
+export default function WorkSpotsPage() {
   return (
     <div className="space-y-6">
       <div className="space-y-2">
         <h1 className="text-3xl font-bold text-gray-900">
-          🍁 WaterlooBudget
+          💻 Work Spots
         </h1>
         <p className="text-gray-600 max-w-2xl">
-          A curated guide to budget-friendly spots in Waterloo, Ontario. 
-          Perfect for students, founders, and anyone building in Canada&apos;s tech hub.
+          Libraries, coworking spaces, cafes, and places to get work done in Waterloo.
         </p>
       </div>
-      <SpotsList />
+      <SpotsList filterCategory="workspots" />
     </div>
   );
 }
