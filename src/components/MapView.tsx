@@ -37,6 +37,7 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
 
   // Dynamic import for Leaflet (SSR compatibility)
   useEffect(() => {
+    // @ts-ignore - Dynamic import works at runtime
     import("./LeafletMap").then((mod) => {
       setMapComponent(() => mod.LeafletMap);
     });
