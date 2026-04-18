@@ -28,7 +28,11 @@ export function SpotCard({ spot, showSaveButton = true }: SpotCardProps) {
       return;
     }
 
-    await toggleSave(spot.id);
+    const result = await toggleSave(spot.id);
+    if (result.error) {
+      console.error("Save error:", result.error);
+      alert(`Error saving spot: ${result.error}`);
+    }
   };
 
   return (
@@ -36,7 +40,7 @@ export function SpotCard({ spot, showSaveButton = true }: SpotCardProps) {
       {showSaveButton && (
         <button
           onClick={handleSaveClick}
-          className="absolute top-3 right-3 p-2 rounded-full hover:bg-gray-100 transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
+          className="absolute top-3 right-3 p-2 rounded-full hover:bg-gray-100 transition-colors"
           title={isSaved ? "Remove from saved" : "Save spot"}
         >
           {isSaved ? (

@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, ReactNode, useMemo } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
 
@@ -17,7 +17,9 @@ export function SavedSpotsProvider({ children }: { children: ReactNode }) {
   const [savedSpotIds, setSavedSpotIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
-  const supabase = createClient();
+  
+  // Memoize supabase client to prevent recreation on every render
+  const supabase = useMemo(() => createClient(), []);
 
   // Fetch saved spots on mount
   useEffect(() => {

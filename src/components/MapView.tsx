@@ -139,7 +139,7 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
       </div>
 
       {/* Map Container */}
-      <div className="relative h-[500px] md:h-[600px] rounded-xl overflow-hidden border border-gray-200 bg-gray-100">
+      <div className="relative h-125 md:h-150 rounded-xl overflow-hidden border border-gray-200 bg-gray-100">
         {MapComponent ? (
           <MapComponent
             spots={spotsWithCoords}
@@ -156,7 +156,7 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
 
         {/* Selected spot info panel */}
         {selectedSpot && (
-          <div className="absolute bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-80 bg-white rounded-xl shadow-lg p-4 z-[1000]">
+          <div className="absolute bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-80 bg-white rounded-xl shadow-lg p-4 z-1000">
             <button
               onClick={() => setSelectedSpotId(null)}
               className="absolute top-2 right-2 p-1 rounded-full hover:bg-gray-100"
