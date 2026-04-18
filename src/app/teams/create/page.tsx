@@ -46,7 +46,8 @@ export default function CreateTeamPage() {
       .single();
 
     if (createError || !team) {
-      setError("Failed to create team. Please try again.");
+      console.error("Team creation error:", createError);
+      setError(createError?.message || "Failed to create team. Please try again.");
       setLoading(false);
       return;
     }
@@ -59,9 +60,10 @@ export default function CreateTeamPage() {
     });
 
     if (memberError) {
+      console.error("Team member error:", memberError);
       // Rollback team creation
       await supabase.from("teams").delete().eq("id", team.id);
-      setError("Failed to create team. Please try again.");
+      setError(memberError?.message || "Failed to create team. Please try again.");
       setLoading(false);
       return;
     }

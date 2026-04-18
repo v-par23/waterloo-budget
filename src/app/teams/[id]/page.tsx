@@ -67,22 +67,32 @@ export default function TeamDetailPage({ params }: { params: Promise<{ id: strin
       setTeam(teamData);
 
       // Fetch members
-      const { data: membersData } = await supabase
+      const { data: membersData, error: membersError } = await supabase
         .from("team_members")
-        .select(`
-          id,
-          user_id,
-          role,
-          joined_at,
-          profiles (
-            name,
-            email
-          )
-        `)
+        .select("id, user_id, role, joined_at")
         .eq("team_id", id);
 
-      if (membersData) {
-        setMembers(membersData as any);
+      console.log("Members query result:", { membersData, membersError });
+
+      if (membersData && membersData.length > 0) {
+        // Fetch profiles for each member
+        const userIds = membersData.map(m => m.user_id);
+        const { data: profilesData, error: profilesError } = await supabase
+          .from("profiles")
+          .select("id, name, email")
+          .in("id", userIds);
+
+        console.log("Profiles data:", { profilesData, profilesError, userIds });
+
+        // Combine members with their profiles
+        const membersWithProfiles = membersData.map(member => ({
+          ...member,
+          profiles: profilesData?.find(p => p.id === member.user_id) || null
+        }));
+
+        console.log("Members with profiles:", membersWithProfiles);
+
+        setMembers(membersWithProfiles as any);
       }
 
       // Fetch team spots
@@ -109,9 +119,13 @@ export default function TeamDetailPage({ params }: { params: Promise<{ id: strin
 
   const copyInviteCode = async () => {
     if (!team) return;
-    await navigator.clipboard.writeText(team.invite_code);
-    setCopiedCode(true);
-    setTimeout(() => setCopiedCode(false), 2000);
+    try {
+      await navigator.clipboard.writeText(team.invite_code);
+      setCopiedCode(true);
+      setTimeout(() => setCopiedCode(false), 2000);
+    } catch {
+      // Clipboard failed - code is already visible, user can select it manually
+    }
   };
 
   const handleAddSpot = async (spotId: string) => {
@@ -225,22 +239,25 @@ export default function TeamDetailPage({ params }: { params: Promise<{ id: strin
           Members ({members.length})
         </h2>
         <div className="flex flex-wrap gap-3">
-          {members.map((member) => (
-            <div
-              key={member.id}
-              className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg"
-            >
-              <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-sm font-medium text-gray-600">
-                {(member.profiles?.name || member.profiles?.email || "?")[0].toUpperCase()}
+          {members.map((member) => {
+            const displayName = member.profiles?.name || member.profiles?.email || `User ${member.user_id.slice(0, 8)}`;
+            return (
+              <div
+                key={member.id}
+                className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg"
+              >
+                <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-sm font-medium text-gray-600">
+                  {displayName[0].toUpperCase()}
+                </div>
+                <span className="text-sm text-gray-700">
+                  {displayName}
+                </span>
+                {member.role === "owner" && (
+                  <span className="text-xs bg-gray-200 px-2 py-0.5 rounded">Owner</span>
+                )}
               </div>
-              <span className="text-sm text-gray-700">
-                {member.profiles?.name || member.profiles?.email || "Unknown"}
-              </span>
-              {member.role === "owner" && (
-                <span className="text-xs bg-gray-200 px-2 py-0.5 rounded">Owner</span>
-              )}
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
