@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
-import { spots, Category, neighborhoods, categoryConfig } from "@/data/spots";
+import { useEffect, useState, useMemo, useRef } from "react";
+import { spots, Category, neighborhoods, categoryConfig, spotCoordinates, Spot } from "@/data/spots";
 import { CategoryFilter } from "./CategoryFilter";
 
 // Neighborhood coordinates for Waterloo/Kitchener area
@@ -34,6 +34,31 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [MapComponent, setMapComponent] = useState<React.ComponentType<any> | null>(null);
   const [selectedSpotId, setSelectedSpotId] = useState<string | null>(null);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
+
+  // Category labels for search
+  const categoryLabels: Record<Category, string> = {
+    food: "Food",
+    housing: "Housing",
+    workspots: "Work Spots",
+    coffee: "Coffee",
+    accelerators: "Accelerators",
+    gym: "Gym",
+    bars: "Bars",
+    grocery: "Grocery",
+  };
+
+  // Close suggestions when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // Dynamic import for Leaflet (SSR compatibility)
   useEffect(() => {
@@ -42,6 +67,20 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
       setMapComponent(() => mod.LeafletMap);
     });
   }, []);
+
+  // Get search suggestions
+  const suggestions = useMemo(() => {
+    if (!searchQuery || searchQuery.length < 2) return [];
+    
+    const query = searchQuery.toLowerCase();
+    return spots
+      .filter(spot => 
+        spot.name.toLowerCase().includes(query) ||
+        categoryLabels[spot.category].toLowerCase().includes(query) ||
+        spot.neighborhood.toLowerCase().includes(query)
+      )
+      .slice(0, 6);
+  }, [searchQuery]);
 
   const filteredSpots = useMemo(() => {
     return spots.filter((spot) => {
@@ -69,17 +108,26 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
     });
   }, [selectedCategory, selectedNeighborhood, searchQuery, filterCategory, showFreeOnly]);
 
-  // Add coordinates to filtered spots
+  // Add coordinates to filtered spots (use actual coords when available)
   const spotsWithCoords = useMemo(() => {
-    return filteredSpots.map((spot, index) => {
+    return filteredSpots.map((spot) => {
+      // Use actual coordinates if available
+      const coords = spotCoordinates[spot.id];
+      if (coords) {
+        return {
+          ...spot,
+          lat: coords.lat,
+          lng: coords.lng,
+        };
+      }
+      
+      // Fallback to neighborhood-based coordinates
       const baseCoords = neighborhoodCoords[spot.neighborhood] || DEFAULT_CENTER;
-      // Add slight offset for each spot in the same neighborhood to prevent overlap
-      const offset = index * 0.0005;
-      const jitter = (Math.random() - 0.5) * 0.003;
+      const jitter = (Math.random() - 0.5) * 0.002;
       return {
         ...spot,
-        lat: baseCoords[0] + offset * Math.cos(index) + jitter,
-        lng: baseCoords[1] + offset * Math.sin(index) + jitter,
+        lat: baseCoords[0] + jitter,
+        lng: baseCoords[1] + jitter,
       };
     });
   }, [filteredSpots]);
@@ -91,13 +139,17 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
   return (
     <div className="space-y-4">
       {/* Search */}
-      <div className="relative">
+      <div className="relative" ref={searchRef}>
         <input
           type="text"
-          placeholder="Search spots..."
+          placeholder="Search by name, category, location..."
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full px-4 py-3 pl-10 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-200"
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+            setShowSuggestions(true);
+          }}
+          onFocus={() => setShowSuggestions(true)}
+          className="w-full px-4 py-3 pl-10 pr-10 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-200"
         />
         <svg
           className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
@@ -112,6 +164,39 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
           />
         </svg>
+        {searchQuery && (
+          <button
+            onClick={() => { setSearchQuery(""); setShowSuggestions(false); }}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 hover:text-gray-600"
+          >
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        )}
+
+        {/* Search Suggestions Dropdown */}
+        {showSuggestions && suggestions.length > 0 && searchQuery.length >= 2 && (
+          <div className="absolute z-1000 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+            {suggestions.map((spot) => (
+              <button
+                key={spot.id}
+                onClick={() => {
+                  setSearchQuery(spot.name);
+                  setShowSuggestions(false);
+                  setSelectedSpotId(spot.id);
+                }}
+                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center gap-3 border-b border-gray-100 last:border-0"
+              >
+                <span className="text-xl">{spot.emoji}</span>
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-gray-900 truncate">{spot.name}</p>
+                  <p className="text-xs text-gray-500">{categoryLabels[spot.category]} · {spot.neighborhood}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Filters */}

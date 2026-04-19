@@ -8,9 +8,29 @@ import { useRouter } from "next/navigation";
 interface SpotCardProps {
   spot: Spot;
   showSaveButton?: boolean;
+  searchQuery?: string;
 }
 
-export function SpotCard({ spot, showSaveButton = true }: SpotCardProps) {
+// Highlight matching text in search results
+function highlightMatch(text: string, query: string): React.ReactNode {
+  if (!query || query.length < 2) return text;
+  
+  const lowerText = text.toLowerCase();
+  const lowerQuery = query.toLowerCase();
+  const index = lowerText.indexOf(lowerQuery);
+  
+  if (index === -1) return text;
+  
+  return (
+    <>
+      {text.slice(0, index)}
+      <mark className="bg-yellow-200 rounded px-0.5">{text.slice(index, index + query.length)}</mark>
+      {text.slice(index + query.length)}
+    </>
+  );
+}
+
+export function SpotCard({ spot, showSaveButton = true, searchQuery = "" }: SpotCardProps) {
   const priceIndicator = spot.isFree
     ? "Free"
     : "$".repeat(Math.max(1, spot.priceLevel));
@@ -58,9 +78,9 @@ export function SpotCard({ spot, showSaveButton = true }: SpotCardProps) {
         <div className="flex items-center gap-3">
           <span className="text-2xl">{spot.emoji}</span>
           <div>
-            <h3 className="font-semibold text-gray-900">{spot.name}</h3>
+            <h3 className="font-semibold text-gray-900">{highlightMatch(spot.name, searchQuery)}</h3>
             <p className="text-sm text-gray-500">
-              {spot.neighborhood} · {spot.price}
+              {highlightMatch(spot.neighborhood, searchQuery)} · {spot.price}
             </p>
           </div>
         </div>
