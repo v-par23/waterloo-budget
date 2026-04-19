@@ -1,4 +1,4 @@
-import { SpotsList } from "@/components/SpotsList";
+import { SpotsList } from "@/components/features/SpotsList";
 
 export default function Home() {
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { Spot, categoryConfig } from "@/data/spots";
+import { Spot } from "@/data/spots";
 import { useAuth } from "@/components/AuthProvider";
 import { useSavedSpots } from "@/components/SavedSpotsProvider";
 import { useRouter } from "next/navigation";

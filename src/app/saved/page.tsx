@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { spots } from "@/data/spots";
-import { SpotCard } from "@/components/SpotCard";
+import { SpotCard } from "@/components/ui/SpotCard";
 import { useSavedSpots } from "@/components/SavedSpotsProvider";
 import { useAuth } from "@/components/AuthProvider";
 import Link from "next/link";

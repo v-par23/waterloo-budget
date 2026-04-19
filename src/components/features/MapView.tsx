@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState, useMemo, useRef } from "react";
-import { spots, Category, neighborhoods, categoryConfig, spotCoordinates, Spot } from "@/data/spots";
-import { CategoryFilter } from "./CategoryFilter";
+import { spots, Category, neighborhoods, categoryConfig, spotCoordinates } from "@/data/spots";
+import { CategoryFilter } from "@/components/ui/CategoryFilter";
 
 // Neighborhood coordinates for Waterloo/Kitchener area
 const neighborhoodCoords: Record<string, [number, number]> = {
@@ -26,28 +26,29 @@ interface MapViewProps {
   showFreeOnly?: boolean;
 }
 
+// Category labels for search (moved outside component for referential stability)
+const categoryLabels: Record<Category, string> = {
+  food: "Food",
+  housing: "Housing",
+  workspots: "Work Spots",
+  coffee: "Coffee",
+  accelerators: "Accelerators",
+  gym: "Gym",
+  bars: "Bars",
+  grocery: "Grocery",
+};
+
 export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
   const [selectedCategory, setSelectedCategory] = useState<Category | "all">(
     filterCategory || "all"
   );
   const [selectedNeighborhood, setSelectedNeighborhood] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [MapComponent, setMapComponent] = useState<React.ComponentType<any> | null>(null);
   const [selectedSpotId, setSelectedSpotId] = useState<string | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
-
-  // Category labels for search
-  const categoryLabels: Record<Category, string> = {
-    food: "Food",
-    housing: "Housing",
-    workspots: "Work Spots",
-    coffee: "Coffee",
-    accelerators: "Accelerators",
-    gym: "Gym",
-    bars: "Bars",
-    grocery: "Grocery",
-  };
 
   // Close suggestions when clicking outside
   useEffect(() => {
@@ -62,7 +63,6 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
 
   // Dynamic import for Leaflet (SSR compatibility)
   useEffect(() => {
-    // @ts-ignore - Dynamic import works at runtime
     import("./LeafletMap").then((mod) => {
       setMapComponent(() => mod.LeafletMap);
     });
@@ -123,7 +123,9 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
       
       // Fallback to neighborhood-based coordinates
       const baseCoords = neighborhoodCoords[spot.neighborhood] || DEFAULT_CENTER;
-      const jitter = (Math.random() - 0.5) * 0.002;
+      // Use a deterministic offset based on spot index to avoid random during render
+      const index = filteredSpots.indexOf(spot);
+      const jitter = ((index % 10) - 5) * 0.0004;
       return {
         ...spot,
         lat: baseCoords[0] + jitter,

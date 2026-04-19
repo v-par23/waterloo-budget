@@ -49,7 +49,10 @@ export default function TeamsPage() {
 
       if (!error && memberData) {
         const teamsList = memberData
-          .map((m: any) => m.teams)
+          .map((m) => {
+            const teams = m.teams;
+            return Array.isArray(teams) ? teams[0] : teams;
+          })
           .filter(Boolean) as Team[];
         setTeams(teamsList);
       }

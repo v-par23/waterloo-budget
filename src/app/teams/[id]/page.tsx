@@ -4,8 +4,8 @@ import { useState, useEffect, useMemo, use } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
-import { spots as allSpots, categoryConfig } from "@/data/spots";
-import { SpotCard } from "@/components/SpotCard";
+import { spots as allSpots } from "@/data/spots";
+import { SpotCard } from "@/components/ui/SpotCard";
 
 interface Team {
   id: string;
@@ -92,7 +92,7 @@ export default function TeamDetailPage({ params }: { params: Promise<{ id: strin
 
         console.log("Members with profiles:", membersWithProfiles);
 
-        setMembers(membersWithProfiles as any);
+        setMembers(membersWithProfiles as TeamMember[]);
       }
 
       // Fetch team spots

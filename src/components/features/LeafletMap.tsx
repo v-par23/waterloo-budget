@@ -1,9 +1,9 @@
 "use client";
 
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import { Icon, divIcon } from "leaflet";
+import { divIcon } from "leaflet";
 import { useEffect } from "react";
-import { categoryConfig, Category } from "@/data/spots";
+import { Category } from "@/data/spots";
 
 import "leaflet/dist/leaflet.css";
 

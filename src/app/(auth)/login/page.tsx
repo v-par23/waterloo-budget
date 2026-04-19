@@ -2,14 +2,11 @@
 
 import { useState, Suspense } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { login } from "../actions";
 
 function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect");
 
   async function handleSubmit(formData: FormData) {
     setLoading(true);

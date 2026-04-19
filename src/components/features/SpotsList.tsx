@@ -2,8 +2,8 @@
 
 import { useState, useMemo, useRef, useEffect } from "react";
 import { spots, Category, neighborhoods, Spot } from "@/data/spots";
-import { SpotCard } from "./SpotCard";
-import { CategoryFilter } from "./CategoryFilter";
+import { SpotCard } from "@/components/ui/SpotCard";
+import { CategoryFilter } from "@/components/ui/CategoryFilter";
 
 interface SpotsListProps {
   filterCategory?: Category;
@@ -98,7 +98,7 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
   }, [searchQuery]);
 
   const filteredSpots = useMemo(() => {
-    let result = spots.filter((spot) => {
+    const result = spots.filter((spot) => {
       // Category filter
       if (selectedCategory !== "all" && spot.category !== selectedCategory) {
         return false;
