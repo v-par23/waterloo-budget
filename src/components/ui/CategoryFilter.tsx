@@ -14,10 +14,10 @@ export function CategoryFilter({ selected, onChange }: CategoryFilterProps) {
   ][];
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-1.5 sm:gap-2">
       <button
         onClick={() => onChange("all")}
-        className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+        className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-colors ${
           selected === "all"
             ? "bg-gray-900 text-white"
             : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -29,7 +29,7 @@ export function CategoryFilter({ selected, onChange }: CategoryFilterProps) {
         <button
           key={key}
           onClick={() => onChange(key)}
-          className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-1 ${
+          className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-colors flex items-center gap-1 ${
             selected === key
               ? "bg-gray-900 text-white"
               : "bg-gray-100 text-gray-700 hover:bg-gray-200"

@@ -117,9 +117,9 @@ export default function TeamsPage() {
 
   if (authLoading || loading) {
     return (
-      <div className="space-y-6">
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold text-gray-900">👥 My Teams</h1>
+      <div className="space-y-4 sm:space-y-6">
+        <div className="space-y-1 sm:space-y-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">👥 My Teams</h1>
         </div>
         <div className="flex items-center justify-center py-12">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
@@ -130,15 +130,15 @@ export default function TeamsPage() {
 
   if (!user) {
     return (
-      <div className="space-y-6">
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold text-gray-900">👥 My Teams</h1>
+      <div className="space-y-4 sm:space-y-6">
+        <div className="space-y-1 sm:space-y-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">👥 My Teams</h1>
         </div>
-        <div className="bg-white border border-gray-200 rounded-xl p-8 text-center">
-          <p className="text-gray-600 mb-4">Sign in to create and join teams</p>
+        <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8 text-center">
+          <p className="text-sm sm:text-base text-gray-600 mb-4">Sign in to create and join teams</p>
           <Link
             href="/login"
-            className="inline-block px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
+            className="inline-block px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors text-sm sm:text-base"
           >
             Sign in
           </Link>
@@ -148,24 +148,24 @@ export default function TeamsPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold text-gray-900">👥 My Teams</h1>
-          <p className="text-gray-600">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+        <div className="space-y-1 sm:space-y-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">👥 My Teams</h1>
+          <p className="text-sm sm:text-base text-gray-600">
             Create teams to share and save spots with friends
           </p>
         </div>
         <div className="flex gap-2">
           <button
             onClick={() => setShowJoinModal(true)}
-            className="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            className="px-3 sm:px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-sm sm:text-base"
           >
             Join Team
           </button>
           <Link
             href="/teams/create"
-            className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
+            className="px-3 sm:px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors text-sm sm:text-base"
           >
             Create Team
           </Link>
@@ -173,41 +173,41 @@ export default function TeamsPage() {
       </div>
 
       {teams.length === 0 ? (
-        <div className="bg-white border border-gray-200 rounded-xl p-8 text-center">
-          <p className="text-gray-600 mb-4">You&apos;re not part of any teams yet</p>
-          <p className="text-sm text-gray-500 mb-4">
+        <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8 text-center">
+          <p className="text-sm sm:text-base text-gray-600 mb-4">You&apos;re not part of any teams yet</p>
+          <p className="text-xs sm:text-sm text-gray-500 mb-4">
             Create a team to share favorite spots with friends, or join an existing team with an invite code
           </p>
-          <div className="flex gap-2 justify-center">
+          <div className="flex flex-col sm:flex-row gap-2 justify-center">
             <button
               onClick={() => setShowJoinModal(true)}
-              className="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-sm sm:text-base"
             >
               Join with Code
             </button>
             <Link
               href="/teams/create"
-              className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
+              className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors text-sm sm:text-base"
             >
               Create Team
             </Link>
           </div>
         </div>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-3 sm:gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3">
           {teams.map((team) => (
             <Link
               key={team.id}
               href={`/teams/${team.id}`}
-              className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow"
+              className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 hover:shadow-md transition-shadow"
             >
-              <h3 className="font-semibold text-gray-900 text-lg">{team.name}</h3>
+              <h3 className="font-semibold text-gray-900 text-base sm:text-lg">{team.name}</h3>
               {team.description && (
-                <p className="text-sm text-gray-500 mt-1 line-clamp-2">
+                <p className="text-xs sm:text-sm text-gray-500 mt-1 line-clamp-2">
                   {team.description}
                 </p>
               )}
-              <div className="mt-4 flex items-center gap-4 text-sm text-gray-500">
+              <div className="mt-3 sm:mt-4 flex items-center gap-4 text-xs sm:text-sm text-gray-500">
                 <span>Code: {team.invite_code}</span>
               </div>
             </Link>

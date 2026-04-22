@@ -96,30 +96,30 @@ export default function EventsPage() {
   ];
 
   return (
-    <div className="space-y-8">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900">📅 Events</h1>
-        <p className="text-gray-600 max-w-2xl">
+    <div className="space-y-6 sm:space-y-8">
+      <div className="space-y-1 sm:space-y-2">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">📅 Events</h1>
+        <p className="text-sm sm:text-base text-gray-600 max-w-2xl">
           Tech events, meetups, and networking opportunities in Waterloo Region.
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
         {events.map((event, index) => (
           <div
             key={index}
-            className="bg-white rounded-xl shadow-sm border border-gray-100 p-5"
+            className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-5"
           >
-            <div className="flex items-start justify-between">
-              <div>
-                <h3 className="font-semibold text-gray-900">{event.name}</h3>
-                <p className="text-sm text-gray-500 mt-1">
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">{event.name}</h3>
+                <p className="text-xs sm:text-sm text-gray-500 mt-1">
                   {event.frequency} · {event.location}
                 </p>
-                <p className="text-sm text-gray-600 mt-2">{event.description}</p>
+                <p className="text-xs sm:text-sm text-gray-600 mt-2">{event.description}</p>
               </div>
               <span
-                className={`text-xs font-medium px-2 py-1 rounded ${
+                className={`text-xs font-medium px-2 py-1 rounded flex-shrink-0 ${
                   event.free
                     ? "bg-green-100 text-green-700"
                     : "bg-gray-100 text-gray-600"
@@ -132,19 +132,19 @@ export default function EventsPage() {
         ))}
       </div>
 
-      <div className="mt-12">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">
+      <div className="mt-8 sm:mt-12">
+        <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">
           🔗 Community Resources
         </h2>
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-3 sm:gap-3 sm:gap-4 md:grid-cols-2">
           {communityResources.map((resource, index) => (
             <a
               key={index}
               href={resource.link}
-              className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow block"
+              className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-5 hover:shadow-md transition-shadow block"
             >
-              <h3 className="font-semibold text-gray-900">{resource.name}</h3>
-              <p className="text-sm text-gray-600 mt-1">{resource.description}</p>
+              <h3 className="font-semibold text-gray-900 text-sm sm:text-base">{resource.name}</h3>
+              <p className="text-xs sm:text-sm text-gray-600 mt-1">{resource.description}</p>
             </a>
           ))}
         </div>

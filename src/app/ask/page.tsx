@@ -102,36 +102,36 @@ export default function AskPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto flex flex-col h-[calc(100vh-8rem)]">
+    <div className="max-w-3xl mx-auto flex flex-col h-[calc(100vh-7rem)] sm:h-[calc(100vh-8rem)]">
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+      <div className="mb-4 sm:mb-6">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2">
           <span>🤖</span> Ask WaterlooBudget
         </h1>
-        <p className="text-gray-600 mt-1">
+        <p className="text-sm sm:text-base text-gray-600 mt-1">
           AI-powered recommendations for budget-friendly spots in Waterloo
         </p>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto space-y-4 mb-4 pr-2">
+      <div className="flex-1 overflow-y-auto space-y-3 sm:space-y-4 mb-3 sm:mb-4 pr-1 sm:pr-2">
         {messages.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="text-6xl mb-4">🍁</div>
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">
+          <div className="text-center py-8 sm:py-12">
+            <div className="text-5xl sm:text-6xl mb-3 sm:mb-4">🍁</div>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2">
               What are you looking for?
             </h2>
-            <p className="text-gray-500 mb-6">
+            <p className="text-sm sm:text-base text-gray-500 mb-4 sm:mb-6 px-4">
               Ask me anything about budget-friendly spots in Waterloo
             </p>
             
             {/* Suggested queries */}
-            <div className="flex flex-wrap justify-center gap-2">
+            <div className="flex flex-wrap justify-center gap-2 px-2">
               {SUGGESTED_QUERIES.map((query) => (
                 <button
                   key={query}
                   onClick={() => handleSuggestionClick(query)}
-                  className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 transition-colors"
+                  className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-100 hover:bg-gray-200 rounded-full text-xs sm:text-sm text-gray-700 transition-colors"
                 >
                   {query}
                 </button>
@@ -181,20 +181,20 @@ export default function AskPage() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask about places in Waterloo..."
-          className="flex-1 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-200 text-gray-900"
+          className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-200 text-gray-900"
           disabled={isLoading}
         />
         <button
           type="submit"
           disabled={isLoading || !input.trim()}
-          className="px-6 py-3 bg-gray-900 text-white font-medium rounded-xl hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-4 sm:px-6 py-2.5 sm:py-3 bg-gray-900 text-white text-sm sm:text-base font-medium rounded-xl hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? "..." : "Ask"}
         </button>
       </form>
 
       {/* Footer note */}
-      <p className="text-center text-xs text-gray-400 mt-3">
+      <p className="text-center text-xs text-gray-400 mt-2 sm:mt-3">
         Powered by AI • Recommendations based on our curated database of {58} spots
       </p>
     </div>

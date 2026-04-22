@@ -260,7 +260,7 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
       </p>
 
       {/* Spots grid */}
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-3 sm:gap-4 md:grid-cols-2 xl:grid-cols-3">
         {filteredSpots.map((spot) => (
           <SpotCard key={spot.id} spot={spot} searchQuery={searchQuery} />
         ))}

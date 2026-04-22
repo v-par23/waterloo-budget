@@ -23,14 +23,14 @@ export default function SuggestPage() {
 
   if (submitted) {
     return (
-      <div className="space-y-6">
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold text-gray-900">✨ Suggest a Spot</h1>
+      <div className="space-y-4 sm:space-y-6">
+        <div className="space-y-1 sm:space-y-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">✨ Suggest a Spot</h1>
         </div>
-        <div className="bg-green-50 border border-green-200 rounded-xl p-6 text-center space-y-4">
-          <div className="text-5xl">🎉</div>
-          <h2 className="text-xl font-semibold text-green-800">Thanks for your suggestion!</h2>
-          <p className="text-green-700 max-w-md mx-auto">
+        <div className="bg-green-50 border border-green-200 rounded-xl p-4 sm:p-6 text-center space-y-3 sm:space-y-4">
+          <div className="text-4xl sm:text-5xl">🎉</div>
+          <h2 className="text-lg sm:text-xl font-semibold text-green-800">Thanks for your suggestion!</h2>
+          <p className="text-sm sm:text-base text-green-700 max-w-md mx-auto">
             Our team will review your submission. If other users also suggest this spot, 
             we&apos;ll prioritize adding it to WaterlooBudget.
           </p>
@@ -47,7 +47,7 @@ export default function SuggestPage() {
                 submitterName: "",
               });
             }}
-            className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm sm:text-base"
           >
             Suggest Another Spot
           </button>
@@ -57,16 +57,16 @@ export default function SuggestPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900">✨ Suggest a Spot</h1>
-        <p className="text-gray-600 max-w-2xl">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="space-y-1 sm:space-y-2">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">✨ Suggest a Spot</h1>
+        <p className="text-sm sm:text-base text-gray-600 max-w-2xl">
           Know a budget-friendly spot in Waterloo that should be on our list? 
           Let us know! Suggestions will be reviewed by our team and added if recommended by others as well.
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white border border-gray-200 rounded-xl p-6 space-y-5 max-w-xl">
+      <form onSubmit={handleSubmit} className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 space-y-4 sm:space-y-5 max-w-xl">
         {/* Spot Name */}
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">

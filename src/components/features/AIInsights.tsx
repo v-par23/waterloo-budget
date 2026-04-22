@@ -94,7 +94,7 @@ export function AIInsights({ compact = false }: AIInsightsProps) {
     <div className={compact ? "" : "space-y-6"}>
       {/* Header - only show in full mode */}
       {!compact && (
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
           <div>
             <div className="flex items-center gap-2 text-sm text-gray-500 mb-1">
               <span>{data.timeContext.emoji}</span>
@@ -103,9 +103,9 @@ export function AIInsights({ compact = false }: AIInsightsProps) {
               <span>{data.seasonContext.emoji}</span>
               <span className="capitalize">{data.seasonContext.season}</span>
             </div>
-            <p className="text-gray-600">{data.timeContext.description}</p>
+            <p className="text-sm sm:text-base text-gray-600">{data.timeContext.description}</p>
           </div>
-          <div className="text-right text-sm text-gray-400">
+          <div className="text-left sm:text-right text-sm text-gray-400 flex sm:flex-col gap-2 sm:gap-0">
             <p>{data.stats.totalSpots} spots</p>
             <p>{data.stats.freeSpots} free</p>
           </div>
@@ -125,28 +125,28 @@ export function AIInsights({ compact = false }: AIInsightsProps) {
       )}
 
       {/* Insights Grid */}
-      <div className={`grid gap-4 ${compact ? "grid-cols-1" : "md:grid-cols-2"}`}>
+      <div className={`grid gap-3 sm:gap-4 ${compact ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"}`}>
         {displayInsights.map((insight, index) => (
           <div
             key={index}
-            className={`p-4 rounded-xl border ${typeColors[insight.type] || "bg-gray-50 border-gray-200"}`}
+            className={`p-3 sm:p-4 rounded-xl border ${typeColors[insight.type] || "bg-gray-50 border-gray-200"}`}
           >
-            <div className="flex items-start gap-3">
-              <span className="text-2xl">{insight.emoji}</span>
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  <h4 className="font-semibold">{insight.title}</h4>
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-white/50">
+            <div className="flex items-start gap-2 sm:gap-3">
+              <span className="text-xl sm:text-2xl flex-shrink-0">{insight.emoji}</span>
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-wrap items-center gap-1 sm:gap-2 mb-1">
+                  <h4 className="font-semibold text-sm sm:text-base">{insight.title}</h4>
+                  <span className="text-xs px-1.5 sm:px-2 py-0.5 rounded-full bg-white/50">
                     {typeLabels[insight.type]}
                   </span>
                 </div>
-                <p className="text-sm opacity-90">{insight.description}</p>
+                <p className="text-xs sm:text-sm opacity-90">{insight.description}</p>
                 {insight.spots.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-1">
                     {insight.spots.map((spot) => (
                       <span
                         key={spot}
-                        className="text-xs px-2 py-0.5 bg-white/70 rounded-full"
+                        className="text-xs px-1.5 sm:px-2 py-0.5 bg-white/70 rounded-full truncate max-w-[120px] sm:max-w-none"
                       >
                         {spot}
                       </span>
