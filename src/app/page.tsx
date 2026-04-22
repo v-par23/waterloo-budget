@@ -1,4 +1,5 @@
 import { SpotsList } from "@/components/features/SpotsList";
+import { AIInsights } from "@/components/features/AIInsights";
 
 export default function Home() {
   return (
@@ -12,6 +13,12 @@ export default function Home() {
           Perfect for students, founders, and anyone building in Canada&apos;s tech hub.
         </p>
       </div>
+      
+      {/* AI Insights Section */}
+      <div className="bg-white border border-gray-200 rounded-xl p-4">
+        <AIInsights compact={true} />
+      </div>
+      
       <SpotsList />
     </div>
   );
