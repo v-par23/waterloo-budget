@@ -5,13 +5,15 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
 
 const navItems = [
+  { href: "/ask", label: "Ask AI", emoji: "🤖" },
+  { href: "/discover", label: "AI Insights", emoji: "✨" },
   { href: "/map", label: "Map", emoji: "🗺️" },
   { href: "/", label: "Spots", emoji: "📍" },
   { href: "/workspots", label: "Work Spots", emoji: "💻" },
   { href: "/transport", label: "Getting Around", emoji: "🚌" },
   { href: "/events", label: "Events", emoji: "📅" },
   { href: "/free", label: "Free", emoji: "🆓" },
-  { href: "/suggest", label: "Suggest a Spot", emoji: "✨" },
+  { href: "/suggest", label: "Suggest a Spot", emoji: "📝" },
 ];
 
 const userNavItems = [
