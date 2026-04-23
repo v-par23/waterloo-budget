@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
 
 const navItems = [
+  { href: "/planner", label: "Daily Planner", emoji: "🗓️" },
   { href: "/ask", label: "Ask AI", emoji: "🤖" },
   { href: "/discover", label: "AI Insights", emoji: "✨" },
   { href: "/map", label: "Map", emoji: "🗺️" },
@@ -17,6 +18,7 @@ const navItems = [
 ];
 
 const userNavItems = [
+  { href: "/schedule", label: "My Schedule", emoji: "📓" },
   { href: "/saved", label: "Saved Spots", emoji: "❤️" },
   { href: "/teams", label: "My Teams", emoji: "👥" },
 ];
