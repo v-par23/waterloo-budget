@@ -302,6 +302,94 @@ export const spots: Spot[] = [
     description: "Quiet study spaces",
     isFree: true,
   },
+  {
+    id: "work-8",
+    name: "Dana Porter Library (UW)",
+    category: "workspots",
+    neighborhood: "UW Campus",
+    price: "Free",
+    priceLevel: 0,
+    emoji: "💻",
+    description: "Main campus library, multiple floors",
+    isFree: true,
+  },
+  {
+    id: "work-9",
+    name: "Hagey Hall",
+    category: "workspots",
+    neighborhood: "UW Campus",
+    price: "Free",
+    priceLevel: 0,
+    emoji: "💻",
+    description: "Arts building with study areas",
+    isFree: true,
+  },
+  {
+    id: "work-10",
+    name: "SJU (St. Jerome's)",
+    category: "workspots",
+    neighborhood: "UW Campus",
+    price: "Free",
+    priceLevel: 0,
+    emoji: "💻",
+    description: "Quiet federated university building",
+    isFree: true,
+  },
+  {
+    id: "work-11",
+    name: "EV3 (Environment 3)",
+    category: "workspots",
+    neighborhood: "UW Campus",
+    price: "Free",
+    priceLevel: 0,
+    emoji: "💻",
+    description: "Environment building study space",
+    isFree: true,
+  },
+  {
+    id: "work-12",
+    name: "STC (Science Teaching Complex)",
+    category: "workspots",
+    neighborhood: "UW Campus",
+    price: "Free",
+    priceLevel: 0,
+    emoji: "💻",
+    description: "Science building with open areas",
+    isFree: true,
+  },
+  {
+    id: "work-13",
+    name: "MC (Mathematics and Computer)",
+    category: "workspots",
+    neighborhood: "UW Campus",
+    price: "Free",
+    priceLevel: 0,
+    emoji: "💻",
+    description: "Math building, Comfy Lounge",
+    isFree: true,
+  },
+  {
+    id: "work-14",
+    name: "M3 (Mathematics 3)",
+    category: "workspots",
+    neighborhood: "UW Campus",
+    price: "Free",
+    priceLevel: 0,
+    emoji: "💻",
+    description: "Newer math building study spots",
+    isFree: true,
+  },
+  {
+    id: "work-15",
+    name: "E7 (Engineering 7)",
+    category: "workspots",
+    neighborhood: "UW Campus",
+    price: "Free",
+    priceLevel: 0,
+    emoji: "💻",
+    description: "Modern engineering building",
+    isFree: true,
+  },
 
 
 
@@ -387,6 +475,126 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "☕",
     description: "Cozy cafe with specialty coffee",
+  },
+  {
+    id: "coffee-11",
+    name: "Environmental Studies Coffee Shop",
+    category: "coffee",
+    neighborhood: "UW Campus",
+    price: "~$4",
+    priceLevel: 1,
+    emoji: "☕",
+    description: "On-campus cafe in Environment building",
+  },
+  {
+    id: "coffee-12",
+    name: "Ev3rgreen Cafe",
+    category: "coffee",
+    neighborhood: "UW Campus",
+    price: "~$4",
+    priceLevel: 1,
+    emoji: "☕",
+    description: "Campus cafe with fresh options",
+  },
+  {
+    id: "coffee-13",
+    name: "Liquid Assets Cafe",
+    category: "coffee",
+    neighborhood: "UW Campus",
+    price: "~$4",
+    priceLevel: 1,
+    emoji: "☕",
+    description: "Popular campus coffee spot",
+  },
+  {
+    id: "coffee-14",
+    name: "Browsers Cafe",
+    category: "coffee",
+    neighborhood: "UW Campus",
+    price: "~$4",
+    priceLevel: 1,
+    emoji: "☕",
+    description: "Campus cafe in Dana Porter Library",
+  },
+  {
+    id: "coffee-15",
+    name: "The Funcken Café",
+    category: "coffee",
+    neighborhood: "UW Campus",
+    price: "~$4",
+    priceLevel: 1,
+    emoji: "☕",
+    description: "Cozy campus cafe",
+  },
+  {
+    id: "coffee-16",
+    name: "Starbucks - SLC",
+    category: "coffee",
+    neighborhood: "UW Campus",
+    price: "~$6",
+    priceLevel: 2,
+    emoji: "☕",
+    description: "Starbucks in Student Life Centre",
+  },
+  {
+    id: "coffee-17",
+    name: "Starbucks - Plaza",
+    category: "coffee",
+    neighborhood: "University Plaza",
+    price: "~$6",
+    priceLevel: 2,
+    emoji: "☕",
+    description: "Starbucks near campus",
+  },
+  {
+    id: "coffee-18",
+    name: "Tim Hortons - Columbia",
+    category: "coffee",
+    neighborhood: "UW Campus",
+    price: "~$3",
+    priceLevel: 1,
+    emoji: "☕",
+    description: "Tim Hortons on Columbia St",
+  },
+  {
+    id: "coffee-19",
+    name: "Tim Hortons - Northfield",
+    category: "coffee",
+    neighborhood: "University Plaza",
+    price: "~$3",
+    priceLevel: 1,
+    emoji: "☕",
+    description: "Tim Hortons near campus",
+  },
+  {
+    id: "coffee-20",
+    name: "Tim Hortons - Uptown",
+    category: "coffee",
+    neighborhood: "Uptown Waterloo",
+    price: "~$3",
+    priceLevel: 1,
+    emoji: "☕",
+    description: "Tim Hortons in Uptown",
+  },
+  {
+    id: "coffee-21",
+    name: "Math C&D",
+    category: "coffee",
+    neighborhood: "UW Campus",
+    price: "~$3",
+    priceLevel: 1,
+    emoji: "☕",
+    description: "Coffee & donuts in MC building",
+  },
+  {
+    id: "coffee-22",
+    name: "Science C&D",
+    category: "coffee",
+    neighborhood: "UW Campus",
+    price: "~$3",
+    priceLevel: 1,
+    emoji: "☕",
+    description: "Coffee & donuts in Science building",
   },
 
   // ACCELERATORS & STARTUP RESOURCES
@@ -719,6 +927,14 @@ export const spotCoordinates: Record<string, { lat: number; lng: number }> = {
   "work-5": { lat: 43.4728, lng: -80.5401 }, // E5
   "work-6": { lat: 43.4719, lng: -80.5449 }, // SLC
   "work-7": { lat: 43.4711, lng: -80.5444 }, // QNC
+  "work-8": { lat: 43.4698, lng: -80.5424 }, // Dana Porter Library
+  "work-9": { lat: 43.4679, lng: -80.5414 }, // Hagey Hall
+  "work-10": { lat: 43.4688, lng: -80.5459 }, // SJU
+  "work-11": { lat: 43.4682, lng: -80.5436 }, // EV3
+  "work-12": { lat: 43.4706, lng: -80.5435 }, // STC
+  "work-13": { lat: 43.4721, lng: -80.5439 }, // MC
+  "work-14": { lat: 43.4733, lng: -80.5441 }, // M3
+  "work-15": { lat: 43.4733, lng: -80.5396 }, // E7
 
   // COFFEE - Verified
   "coffee-1": { lat: 43.4724, lng: -80.5386 }, // Williams - University Plaza
@@ -729,6 +945,18 @@ export const spotCoordinates: Record<string, { lat: number; lng: number }> = {
   "coffee-7": { lat: 43.4509, lng: -80.4913 }, // Matter of Taste
   "coffee-8": { lat: 43.4566, lng: -80.4918 }, // Smile Tiger
   "coffee-10": { lat: 43.4485, lng: -80.4842 }, // Yeti Cafe
+  "coffee-11": { lat: 43.4682, lng: -80.5429 }, // Environmental Studies Coffee Shop
+  "coffee-12": { lat: 43.4683, lng: -80.5436 }, // Ev3rgreen Cafe
+  "coffee-13": { lat: 43.4682, lng: -80.5414 }, // Liquid Assets Cafe
+  "coffee-14": { lat: 43.4697, lng: -80.5420 }, // Browsers Cafe
+  "coffee-15": { lat: 43.4690, lng: -80.5457 }, // The Funcken Café
+  "coffee-16": { lat: 43.4708, lng: -80.5435 }, // Starbucks - SLC
+  "coffee-17": { lat: 43.4735, lng: -80.5461 }, // Starbucks - Plaza
+  "coffee-18": { lat: 43.4755, lng: -80.5406 }, // Tim Hortons - Columbia
+  "coffee-19": { lat: 43.4769, lng: -80.5393 }, // Tim Hortons - Northfield
+  "coffee-20": { lat: 43.4691, lng: -80.5401 }, // Tim Hortons - Uptown
+  "coffee-21": { lat: 43.4718, lng: -80.5437 }, // Math C&D
+  "coffee-22": { lat: 43.4711, lng: -80.5431 }, // Science C&D
 
   // ACCELERATORS - Verified
   "acc-1": { lat: 43.4520, lng: -80.5009 }, // Velocity
