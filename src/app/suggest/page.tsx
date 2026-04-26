@@ -25,7 +25,7 @@ export default function SuggestPage() {
     return (
       <div className="space-y-4 sm:space-y-6">
         <div className="space-y-1 sm:space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">✨ Suggest a Spot</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Suggest a Spot</h1>
         </div>
         <div className="bg-green-50 border border-green-200 rounded-xl p-4 sm:p-6 text-center space-y-3 sm:space-y-4">
           <div className="text-4xl sm:text-5xl">🎉</div>
@@ -59,7 +59,7 @@ export default function SuggestPage() {
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="space-y-1 sm:space-y-2">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">✨ Suggest a Spot</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Suggest a Spot</h1>
         <p className="text-sm sm:text-base text-gray-600 max-w-2xl">
           Know a budget-friendly spot in Waterloo that should be on our list? 
           Let us know! Suggestions will be reviewed by our team and added if recommended by others as well.

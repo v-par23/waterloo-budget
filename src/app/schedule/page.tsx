@@ -126,7 +126,7 @@ export default function SchedulePage() {
     return (
       <div className="space-y-4 sm:space-y-6">
         <div className="space-y-1 sm:space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">📅 My Schedule</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">My Schedule</h1>
         </div>
         <div className="flex items-center justify-center py-12">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
@@ -139,7 +139,7 @@ export default function SchedulePage() {
     <div className="space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="space-y-1 sm:space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">📅 My Schedule</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">My Schedule</h1>
           <p className="text-sm sm:text-base text-gray-600">
             Add your classes to get personalized spot suggestions during breaks
           </p>

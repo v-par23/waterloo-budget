@@ -19,7 +19,7 @@ export default function SavedPage() {
     return (
       <div className="space-y-4 sm:space-y-6">
         <div className="space-y-1 sm:space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">❤️ My Saved Spots</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">My Saved Spots</h1>
         </div>
         <div className="flex items-center justify-center py-12">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
@@ -32,7 +32,7 @@ export default function SavedPage() {
     return (
       <div className="space-y-4 sm:space-y-6">
         <div className="space-y-1 sm:space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">❤️ My Saved Spots</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">My Saved Spots</h1>
         </div>
         <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8 text-center">
           <p className="text-sm sm:text-base text-gray-600 mb-4">Sign in to save your favorite spots</p>
@@ -50,7 +50,7 @@ export default function SavedPage() {
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="space-y-1 sm:space-y-2">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">❤️ My Saved Spots</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">My Saved Spots</h1>
         <p className="text-sm sm:text-base text-gray-600">
           {savedSpots.length} spot{savedSpots.length !== 1 ? "s" : ""} saved
         </p>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, FormEvent } from "react";
+import { spots } from "@/data/spots";
 
 interface Message {
   id: string;
@@ -105,8 +106,8 @@ export default function AskPage() {
     <div className="max-w-3xl mx-auto flex flex-col h-[calc(100vh-7rem)] sm:h-[calc(100vh-8rem)]">
       {/* Header */}
       <div className="mb-4 sm:mb-6">
-        <h1 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2">
-          <span>🤖</span> Ask WaterlooBudget
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+          Ask WaterlooBudget
         </h1>
         <p className="text-sm sm:text-base text-gray-600 mt-1">
           AI-powered recommendations for budget-friendly spots in Waterloo
@@ -117,7 +118,6 @@ export default function AskPage() {
       <div className="flex-1 overflow-y-auto space-y-3 sm:space-y-4 mb-3 sm:mb-4 pr-1 sm:pr-2">
         {messages.length === 0 ? (
           <div className="text-center py-8 sm:py-12">
-            <div className="text-5xl sm:text-6xl mb-3 sm:mb-4">🍁</div>
             <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2">
               What are you looking for?
             </h2>
@@ -195,7 +195,7 @@ export default function AskPage() {
 
       {/* Footer note */}
       <p className="text-center text-xs text-gray-400 mt-2 sm:mt-3">
-        Powered by AI • Recommendations based on our curated database of {58} spots
+        Powered by AI • Recommendations based on our curated database of {spots.length} spots
       </p>
     </div>
   );

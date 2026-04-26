@@ -98,7 +98,7 @@ export default function EventsPage() {
   return (
     <div className="space-y-6 sm:space-y-8">
       <div className="space-y-1 sm:space-y-2">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">📅 Events</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Events</h1>
         <p className="text-sm sm:text-base text-gray-600 max-w-2xl">
           Tech events, meetups, and networking opportunities in Waterloo Region.
         </p>

@@ -84,7 +84,7 @@ export default function PlannerPage() {
     return (
       <div className="space-y-4 sm:space-y-6">
         <div className="space-y-1 sm:space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">🗓️ Daily Planner</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Daily Planner</h1>
         </div>
         <div className="flex items-center justify-center py-12">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
@@ -97,7 +97,7 @@ export default function PlannerPage() {
     return (
       <div className="space-y-4 sm:space-y-6">
         <div className="space-y-1 sm:space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">🗓️ Daily Planner</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Daily Planner</h1>
           <p className="text-sm sm:text-base text-gray-600">
             Your personalized day with smart spot suggestions
           </p>
@@ -123,7 +123,7 @@ export default function PlannerPage() {
     <div className="space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="space-y-1 sm:space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">🗓️ Daily Planner</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Daily Planner</h1>
           <p className="text-sm sm:text-base text-gray-600">
             Your personalized day with smart spot suggestions
           </p>
@@ -203,7 +203,7 @@ export default function PlannerPage() {
                     <div className="w-2 h-full min-h-[60px] bg-green-400 rounded-full flex-shrink-0"></div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="text-green-800 font-medium">☕ Free Time</span>
+                        <span className="text-green-800 font-medium">Free Time</span>
                         <span className="text-xs text-green-600">
                           {formatTime(gap.startTime)} - {formatTime(gap.endTime)}
                         </span>
@@ -215,7 +215,7 @@ export default function PlannerPage() {
                         {/* Work Spots Column */}
                         <div className="space-y-2">
                           <p className="text-xs font-medium text-blue-800 uppercase tracking-wider flex items-center gap-1">
-                            <span>📚</span> Study Spots
+                            Study Spots
                           </p>
                           {suggestions.workSpots.map((suggestion) => {
                             const spot = spots.find((s) => s.id === suggestion.spotId);
@@ -320,7 +320,7 @@ export default function PlannerPage() {
 
       {/* Summary */}
       <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6">
-        <h3 className="font-semibold text-gray-900 mb-3 text-sm sm:text-base">📊 Day Summary</h3>
+        <h3 className="font-semibold text-gray-900 mb-3 text-sm sm:text-base">Day Summary</h3>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
           <div>
             <p className="text-2xl font-bold text-gray-900">{dayClasses.length}</p>
