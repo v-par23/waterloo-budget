@@ -237,15 +237,15 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
       )}
 
       {/* Neighborhood filter */}
-      <div className="flex gap-2 overflow-x-auto pb-2">
+      <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1">
         {neighborhoods.map((neighborhood) => (
           <button
             key={neighborhood}
             onClick={() => setSelectedNeighborhood(neighborhood)}
-            className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+            className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
               selectedNeighborhood === neighborhood
                 ? "bg-gray-800 text-white"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
             }`}
           >
             {neighborhood}
@@ -260,7 +260,7 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
       </p>
 
       {/* Spots grid */}
-      <div className="grid gap-3 sm:gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {filteredSpots.map((spot) => (
           <SpotCard key={spot.id} spot={spot} searchQuery={searchQuery} />
         ))}
@@ -268,7 +268,6 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
 
       {filteredSpots.length === 0 && (
         <div className="text-center py-12 space-y-4">
-          <div className="text-4xl">🔍</div>
           <p className="text-gray-500">No spots found matching your criteria.</p>
           {searchQuery && (
             <div className="space-y-2">

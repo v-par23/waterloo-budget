@@ -26,16 +26,16 @@ export interface Spot {
 
 export const categoryConfig: Record<
   Category,
-  { label: string; emoji: string; color: string }
+  { label: string; emoji: string; color: string; iconBg: string }
 > = {
-  food: { label: "Food", emoji: "🍽️", color: "bg-orange-100 text-orange-800" },
-  housing: { label: "Housing", emoji: "🏠", color: "bg-blue-100 text-blue-800" },
-  workspots: { label: "Work Spots", emoji: "💻", color: "bg-purple-100 text-purple-800" },
-  coffee: { label: "Coffee", emoji: "☕", color: "bg-amber-100 text-amber-800" },
-  accelerators: { label: "Accelerators", emoji: "🚀", color: "bg-green-100 text-green-800" },
-  gym: { label: "Gym & Fitness", emoji: "💪", color: "bg-red-100 text-red-800" },
-  bars: { label: "Bars & Drinks", emoji: "🍺", color: "bg-yellow-100 text-yellow-800" },
-  grocery: { label: "Grocery", emoji: "🛒", color: "bg-teal-100 text-teal-800" },
+  food: { label: "Food", emoji: "🍽️", color: "bg-orange-100 text-orange-800", iconBg: "bg-orange-50" },
+  housing: { label: "Housing", emoji: "🏠", color: "bg-blue-100 text-blue-800", iconBg: "bg-blue-50" },
+  workspots: { label: "Work Spots", emoji: "💻", color: "bg-purple-100 text-purple-800", iconBg: "bg-purple-50" },
+  coffee: { label: "Coffee", emoji: "☕", color: "bg-amber-100 text-amber-800", iconBg: "bg-amber-50" },
+  accelerators: { label: "Accelerators", emoji: "🚀", color: "bg-emerald-100 text-emerald-800", iconBg: "bg-emerald-50" },
+  gym: { label: "Gym & Fitness", emoji: "💪", color: "bg-red-100 text-red-800", iconBg: "bg-red-50" },
+  bars: { label: "Bars & Drinks", emoji: "🍺", color: "bg-yellow-100 text-yellow-800", iconBg: "bg-yellow-50" },
+  grocery: { label: "Grocery", emoji: "🛒", color: "bg-teal-100 text-teal-800", iconBg: "bg-teal-50" },
 };
 
 export const spots: Spot[] = [

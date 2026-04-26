@@ -1,6 +1,6 @@
 "use client";
 
-import { Spot } from "@/data/spots";
+import { Spot, categoryConfig } from "@/data/spots";
 import { useAuth } from "@/components/AuthProvider";
 import { useSavedSpots } from "@/components/SavedSpotsProvider";
 import { useRouter } from "next/navigation";
@@ -31,14 +31,11 @@ function highlightMatch(text: string, query: string): React.ReactNode {
 }
 
 export function SpotCard({ spot, showSaveButton = true, searchQuery = "" }: SpotCardProps) {
-  const priceIndicator = spot.isFree
-    ? "Free"
-    : "$".repeat(Math.max(1, spot.priceLevel));
-
   const { user } = useAuth();
   const { isSpotSaved, toggleSave } = useSavedSpots();
   const router = useRouter();
   const isSaved = isSpotSaved(spot.id);
+  const config = categoryConfig[spot.category];
 
   const handleSaveClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -55,52 +52,71 @@ export function SpotCard({ spot, showSaveButton = true, searchQuery = "" }: Spot
     }
   };
 
+  // Price badge styling based on price level
+  const getPriceBadgeStyle = () => {
+    if (spot.isFree) return "bg-emerald-100 text-emerald-700 border-emerald-200";
+    if (spot.priceLevel <= 1) return "bg-emerald-50 text-emerald-600 border-emerald-100";
+    if (spot.priceLevel === 2) return "bg-amber-50 text-amber-600 border-amber-100";
+    return "bg-red-50 text-red-600 border-red-100";
+  };
+
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4 hover:shadow-md transition-shadow cursor-pointer relative group">
+    <div className="bg-white rounded-xl border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-all cursor-pointer relative group">
+      {/* Save button */}
       {showSaveButton && (
         <button
           onClick={handleSaveClick}
-          className="absolute top-2 right-2 sm:top-3 sm:right-3 p-1.5 sm:p-2 rounded-full hover:bg-gray-100 transition-colors"
+          className="absolute top-3 right-3 p-1.5 rounded-full hover:bg-gray-100 transition-colors z-10"
           title={isSaved ? "Remove from saved" : "Save spot"}
         >
           {isSaved ? (
-            <svg className="w-4 h-4 sm:w-5 sm:h-5 text-red-500 fill-current" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 text-red-500 fill-current" viewBox="0 0 24 24">
               <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
             </svg>
           ) : (
-            <svg className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 hover:text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 text-gray-400 hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
           )}
         </button>
       )}
-      <div className="flex items-start justify-between pr-8 sm:pr-10">
-        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-          <span className="text-xl sm:text-2xl flex-shrink-0">{spot.emoji}</span>
-          <div className="min-w-0">
-            <h3 className="font-semibold text-gray-900 text-sm sm:text-base truncate">{highlightMatch(spot.name, searchQuery)}</h3>
-            <p className="text-xs sm:text-sm text-gray-500 truncate">
-              {highlightMatch(spot.neighborhood, searchQuery)} · {spot.price}
+
+      {/* Card content */}
+      <div className="p-4">
+        {/* Top row: Icon + Name/Location */}
+        <div className="flex items-start gap-3">
+          {/* Icon container */}
+          <div className={`w-10 h-10 rounded-lg ${config.iconBg} flex items-center justify-center flex-shrink-0`}>
+            <span className="text-lg">{spot.emoji}</span>
+          </div>
+          
+          {/* Name and location */}
+          <div className="flex-1 min-w-0 pr-6">
+            <h3 className="font-semibold text-gray-900 text-sm leading-tight truncate">
+              {highlightMatch(spot.name, searchQuery)}
+            </h3>
+            <p className="text-xs text-gray-500 mt-0.5 truncate">
+              {highlightMatch(spot.neighborhood, searchQuery)}
             </p>
           </div>
+
         </div>
-        <span
-          className={`text-xs sm:text-sm font-medium px-1.5 sm:px-2 py-0.5 sm:py-1 rounded flex-shrink-0 ${
-            spot.isFree
-              ? "bg-green-100 text-green-700"
-              : spot.priceLevel <= 1
-              ? "bg-green-50 text-green-600"
-              : spot.priceLevel === 2
-              ? "bg-yellow-50 text-yellow-600"
-              : "bg-red-50 text-red-600"
-          }`}
-        >
-          {priceIndicator}
-        </span>
+
+        {/* Description */}
+        {spot.description && (
+          <p className="text-xs text-gray-500 mt-2 line-clamp-1">{spot.description}</p>
+        )}
+
+        {/* Footer: Category tag + Price badge */}
+        <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
+          <span className={`text-xs px-2 py-0.5 rounded-full ${config.color}`}>
+            {config.label}
+          </span>
+          <span className={`text-xs font-medium px-2 py-1 rounded-md border flex-shrink-0 ${getPriceBadgeStyle()}`}>
+            {spot.isFree ? "Free" : spot.price}
+          </span>
+        </div>
       </div>
-      {spot.description && (
-        <p className="text-xs sm:text-sm text-gray-600 mt-2 ml-7 sm:ml-11 line-clamp-2">{spot.description}</p>
-      )}
     </div>
   );
 }
