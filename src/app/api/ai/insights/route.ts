@@ -3,6 +3,19 @@ import { openai, CHAT_MODEL } from "@/lib/ai/config";
 import { spots, categoryConfig, Category } from "@/data/spots";
 
 export const maxDuration = 30;
+const CACHE_TTL_MS = 1000 * 60 * 60 * 6; // 6 hours
+
+let insightsCache:
+  | {
+      timestamp: number;
+      payload: {
+        timeContext: { period: string; emoji: string; description: string };
+        seasonContext: { season: string; emoji: string };
+        insights: unknown[];
+        stats: { totalSpots: number; freeSpots: number; categories: number };
+      };
+    }
+  | null = null;
 
 // Get current time context
 function getTimeContext(): { period: string; emoji: string; description: string } {
@@ -51,6 +64,15 @@ function getFreeSpots() {
 
 export async function GET() {
   try {
+    if (insightsCache && Date.now() - insightsCache.timestamp < CACHE_TTL_MS) {
+      return Response.json(insightsCache.payload, {
+        headers: {
+          "Cache-Control": "public, max-age=300, s-maxage=21600, stale-while-revalidate=86400",
+          "X-Insights-Cache": "HIT",
+        },
+      });
+    }
+
     const timeContext = getTimeContext();
     const seasonContext = getSeasonContext();
     
@@ -152,7 +174,7 @@ Be specific - mention actual spot names from the list. Keep it casual and helpfu
       };
     }
 
-    return Response.json({
+    const payload = {
       timeContext,
       seasonContext,
       insights: insights.insights,
@@ -161,6 +183,18 @@ Be specific - mention actual spot names from the list. Keep it casual and helpfu
         freeSpots: freeSpots.length,
         categories: Object.keys(categoryConfig).length,
       }
+    };
+
+    insightsCache = {
+      timestamp: Date.now(),
+      payload,
+    };
+
+    return Response.json(payload, {
+      headers: {
+        "Cache-Control": "public, max-age=300, s-maxage=21600, stale-while-revalidate=86400",
+        "X-Insights-Cache": "MISS",
+      },
     });
   } catch (error) {
     console.error("Insights error:", error);

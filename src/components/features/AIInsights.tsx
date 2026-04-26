@@ -45,35 +45,90 @@ const typeLabels: Record<string, string> = {
 
 interface AIInsightsProps {
   compact?: boolean;
+  autoLoad?: boolean;
 }
 
-export function AIInsights({ compact = false }: AIInsightsProps) {
+const INSIGHTS_CACHE_KEY = "ai-insights-cache-v1";
+const INSIGHTS_CACHE_TTL_MS = 1000 * 60 * 60 * 6; // 6 hours
+
+export function AIInsights({ compact = false, autoLoad = true }: AIInsightsProps) {
   const [data, setData] = useState<InsightsData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(autoLoad);
   const [error, setError] = useState<string | null>(null);
+  const [hasLoaded, setHasLoaded] = useState(false);
+
+  async function fetchInsights() {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch("/api/ai/insights");
+      if (!response.ok) throw new Error("Failed to fetch insights");
+      const insights = await response.json();
+      setData(insights);
+      setHasLoaded(true);
+      try {
+        localStorage.setItem(
+          INSIGHTS_CACHE_KEY,
+          JSON.stringify({ timestamp: Date.now(), data: insights })
+        );
+      } catch {
+        // Ignore localStorage failures.
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    async function fetchInsights() {
-      try {
-        const response = await fetch("/api/ai/insights");
-        if (!response.ok) throw new Error("Failed to fetch insights");
-        const insights = await response.json();
-        setData(insights);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Something went wrong");
-      } finally {
-        setLoading(false);
+    try {
+      const cachedRaw = localStorage.getItem(INSIGHTS_CACHE_KEY);
+      if (cachedRaw) {
+        const cached = JSON.parse(cachedRaw) as { timestamp: number; data: InsightsData };
+        if (Date.now() - cached.timestamp < INSIGHTS_CACHE_TTL_MS) {
+          setData(cached.data);
+          setHasLoaded(true);
+          setLoading(false);
+          return;
+        }
       }
+    } catch {
+      // Ignore cache parse failures.
     }
 
-    fetchInsights();
-  }, []);
+    if (autoLoad) {
+      fetchInsights();
+    } else {
+      setLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoLoad]);
+
+  if (!autoLoad && !hasLoaded && !loading && !data) {
+    return (
+      <div className={`${compact ? "py-3" : "py-5"} px-2 sm:px-3`}>
+        <div className="flex items-center justify-between gap-3 mb-2">
+          <h3 className="text-sm sm:text-base font-semibold text-gray-900">AI Insights</h3>
+          <span className="text-xs text-gray-400">On demand</span>
+        </div>
+        <p className="text-sm text-gray-600 mb-3">
+          Generate recommendations whenever you want a fresh set of ideas.
+        </p>
+        <button
+          onClick={fetchInsights}
+          className="px-4 py-2 text-sm font-medium rounded-lg bg-gray-900 text-white hover:bg-gray-800 transition-colors"
+        >
+          Load AI Insights
+        </button>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
       <div className={`${compact ? "py-4" : "py-8"} text-center`}>
         <div className="animate-pulse">
-          <div className="text-2xl mb-2">🤖</div>
           <p className="text-sm text-gray-500">Generating AI insights...</p>
         </div>
       </div>
@@ -115,9 +170,7 @@ export function AIInsights({ compact = false }: AIInsightsProps) {
       {/* Compact header */}
       {compact && (
         <div className="flex items-center justify-between mb-3">
-          <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-            <span>🤖</span> AI Insights
-          </h3>
+          <h3 className="font-semibold text-gray-900">AI Insights</h3>
           <Link href="/discover" className="text-sm text-gray-500 hover:text-gray-700">
             View all →
           </Link>
@@ -165,7 +218,7 @@ export function AIInsights({ compact = false }: AIInsightsProps) {
           href="/ask"
           className="mt-3 block text-center py-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
         >
-          💬 Ask AI for personalized recommendations
+          Ask AI for personalized recommendations
         </Link>
       )}
     </div>
