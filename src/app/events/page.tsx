@@ -134,7 +134,7 @@ export default function EventsPage() {
 
       <div className="mt-8 sm:mt-12">
         <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">
-          🔗 Community Resources
+          Community Resources
         </h2>
         <div className="grid gap-3 sm:gap-3 sm:gap-4 md:grid-cols-2">
           {communityResources.map((resource, index) => (

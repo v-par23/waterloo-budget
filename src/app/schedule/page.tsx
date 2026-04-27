@@ -165,7 +165,6 @@ export default function SchedulePage() {
       {/* Upload Schedule Section */}
       <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4 sm:p-6">
         <div className="flex items-start gap-4">
-          <div className="text-3xl">📸</div>
           <div className="flex-1">
             <h3 className="font-semibold text-blue-900 mb-1">Import from Quest</h3>
             <p className="text-sm text-blue-700 mb-3">
@@ -374,7 +373,6 @@ export default function SchedulePage() {
       {/* Schedule Display */}
       {schedule.classes.length === 0 ? (
         <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8 text-center">
-          <div className="text-4xl mb-4">📚</div>
           <p className="text-gray-600 mb-2">No classes added yet</p>
           <p className="text-sm text-gray-500 mb-4">
             Add your classes to get smart spot suggestions during your free time
@@ -443,7 +441,7 @@ export default function SchedulePage() {
       {schedule.classes.length > 0 && (
         <div className="bg-green-50 rounded-xl p-4 sm:p-6 border border-green-100">
           <h3 className="font-semibold text-green-800 mb-2 text-sm sm:text-base">
-            💡 {schedule.classes.length} classes added
+            {schedule.classes.length} classes added
           </h3>
           <p className="text-sm text-green-700">
             Head to the <Link href="/planner" className="underline font-medium">Daily Planner</Link> to see

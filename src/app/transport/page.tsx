@@ -3,7 +3,7 @@ export default function TransportPage() {
     <div className="space-y-6 sm:space-y-8">
       <div className="space-y-1 sm:space-y-2">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-          🚌 Getting Around
+          Getting Around
         </h1>
         <p className="text-sm sm:text-base text-gray-600 max-w-2xl">
           How to navigate Waterloo Region without breaking the bank.
@@ -14,7 +14,6 @@ export default function TransportPage() {
         {/* GRT */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
           <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-            <span className="text-2xl sm:text-3xl">🚌</span>
             <div>
               <h2 className="font-semibold text-base sm:text-lg">GRT (Grand River Transit)</h2>
               <p className="text-xs sm:text-sm text-gray-500">Local bus system</p>
@@ -31,7 +30,6 @@ export default function TransportPage() {
         {/* ION LRT */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
           <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-            <span className="text-2xl sm:text-3xl">🚈</span>
             <div>
               <h2 className="font-semibold text-base sm:text-lg">ION Light Rail</h2>
               <p className="text-xs sm:text-sm text-gray-500">Modern LRT system</p>
@@ -48,7 +46,6 @@ export default function TransportPage() {
         {/* GO Transit */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
           <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-            <span className="text-2xl sm:text-3xl">🚆</span>
             <div>
               <h2 className="font-semibold text-base sm:text-lg">GO Transit</h2>
               <p className="text-xs sm:text-sm text-gray-500">Regional to Toronto</p>
@@ -65,7 +62,6 @@ export default function TransportPage() {
         {/* Biking */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
           <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-            <span className="text-2xl sm:text-3xl">🚲</span>
             <div>
               <h2 className="font-semibold text-base sm:text-lg">Biking</h2>
               <p className="text-xs sm:text-sm text-gray-500">Bike-friendly city</p>
@@ -82,7 +78,6 @@ export default function TransportPage() {
         {/* Rideshare */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
           <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-            <span className="text-2xl sm:text-3xl">🚗</span>
             <div>
               <h2 className="font-semibold text-base sm:text-lg">Rideshare</h2>
               <p className="text-xs sm:text-sm text-gray-500">Uber & carpooling</p>
@@ -99,7 +94,6 @@ export default function TransportPage() {
         {/* Walking */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
           <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-            <span className="text-2xl sm:text-3xl">🚶</span>
             <div>
               <h2 className="font-semibold text-base sm:text-lg">Walking</h2>
               <p className="text-xs sm:text-sm text-gray-500">Compact campus area</p>
@@ -109,13 +103,13 @@ export default function TransportPage() {
             <li>• Campus to Plaza: 5-10 min walk</li>
             <li>• Campus to Uptown: 15-20 min walk</li>
             <li>• Most student housing is walkable</li>
-            <li>• Free! 🆓</li>
+            <li>• Free!</li>
           </ul>
         </div>
       </div>
 
       <div className="bg-green-50 rounded-xl p-4 sm:p-6 border border-green-100">
-        <h3 className="font-semibold text-green-800 mb-2 text-sm sm:text-base">💡 Pro Tips</h3>
+        <h3 className="font-semibold text-green-800 mb-2 text-sm sm:text-base">Pro Tips</h3>
         <ul className="text-xs sm:text-sm text-green-700 space-y-1">
           <li>• Get a Presto card for seamless transit across GRT and GO</li>
           <li>• The U-Pass is mandatory and gives unlimited GRT access</li>

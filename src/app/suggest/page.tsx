@@ -28,7 +28,6 @@ export default function SuggestPage() {
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Suggest a Spot</h1>
         </div>
         <div className="bg-green-50 border border-green-200 rounded-xl p-4 sm:p-6 text-center space-y-3 sm:space-y-4">
-          <div className="text-4xl sm:text-5xl">🎉</div>
           <h2 className="text-lg sm:text-xl font-semibold text-green-800">Thanks for your suggestion!</h2>
           <p className="text-sm sm:text-base text-green-700 max-w-md mx-auto">
             Our team will review your submission. If other users also suggest this spot, 

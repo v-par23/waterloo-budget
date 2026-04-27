@@ -188,7 +188,6 @@ export default function PlannerPage() {
                       <p className="text-xs text-gray-400 mt-1">{classData.courseName}</p>
                     )}
                   </div>
-                  <div className="text-2xl">📚</div>
                 </div>
               );
             } else {
@@ -244,7 +243,7 @@ export default function PlannerPage() {
                         {/* Food/Coffee Column */}
                         <div className="space-y-2">
                           <p className="text-xs font-medium text-orange-800 uppercase tracking-wider flex items-center gap-1">
-                            <span>🍕</span> Food & Coffee
+                            Food & Coffee
                           </p>
                           {suggestions.foodCoffeeSpots.map((suggestion) => {
                             const spot = spots.find((s) => s.id === suggestion.spotId);
@@ -274,7 +273,7 @@ export default function PlannerPage() {
                         {/* Wellness Column (2 Gym + 1 Grocery) */}
                         <div className="space-y-2">
                           <p className="text-xs font-medium text-purple-800 uppercase tracking-wider flex items-center gap-1">
-                            <span>💪</span> Wellness
+                            Wellness
                           </p>
                           {suggestions.wellnessSpots.map((suggestion) => {
                             const spot = spots.find((s) => s.id === suggestion.spotId);
@@ -305,7 +304,7 @@ export default function PlannerPage() {
                       {/* Building context */}
                       {gap.nearestBuilding && (
                         <p className="text-xs text-green-600 mt-3">
-                          📍 Near {uwBuildings[gap.nearestBuilding].name}
+                          Near {gap.nearestBuilding} ({uwBuildings[gap.nearestBuilding].name})
                         </p>
                       )}
                     </div>
