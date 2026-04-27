@@ -103,7 +103,6 @@ export default function PlannerPage() {
           </p>
         </div>
         <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8 text-center">
-          <div className="text-4xl mb-4">📅</div>
           <p className="text-gray-600 mb-2">No schedule yet</p>
           <p className="text-sm text-gray-500 mb-4">
             Add your classes first to get personalized spot suggestions

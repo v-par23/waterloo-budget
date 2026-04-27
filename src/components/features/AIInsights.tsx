@@ -119,7 +119,7 @@ export function AIInsights({ compact = false, autoLoad = true }: AIInsightsProps
           onClick={fetchInsights}
           className="px-4 py-2 text-sm font-medium rounded-lg bg-gray-900 text-white hover:bg-gray-800 transition-colors"
         >
-          Load AI Insights
+          Get AI Insights
         </button>
       </div>
     );
