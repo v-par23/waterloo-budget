@@ -1,6 +1,6 @@
 // UW Buildings with approximate coordinates
 export const uwBuildings = {
-  "MC": { name: "Mathematics & Computer", lat: 43.4721, lng: -80.5440 },
+  "MC": { name: "Mathematics and Computer", lat: 43.4721, lng: -80.5440 },
   "DC": { name: "Davis Centre", lat: 43.4727, lng: -80.5422 },
   "E5": { name: "Engineering 5", lat: 43.4728, lng: -80.5398 },
   "E7": { name: "Engineering 7", lat: 43.4731, lng: -80.5388 },
