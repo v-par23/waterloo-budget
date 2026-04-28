@@ -106,8 +106,9 @@ export default function AskPage() {
     <div className="max-w-3xl mx-auto flex flex-col h-[calc(100vh-7rem)] sm:h-[calc(100vh-8rem)]">
       {/* Header */}
       <div className="mb-4 sm:mb-6">
-        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
-          Ask WaterlooBudget
+        <h1 className="text-xl sm:text-2xl font-bold">
+          Ask <span className="text-gray-900">Waterloo</span>
+          <span className="text-[#1D9E75]">Budget</span>
         </h1>
         <p className="text-sm sm:text-base text-gray-600 mt-1">
           AI-powered recommendations for budget-friendly spots in Waterloo

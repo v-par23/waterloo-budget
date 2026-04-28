@@ -27,7 +27,7 @@ export function Sidebar() {
   return (
     <aside className="hidden lg:flex lg:flex-col lg:w-56 lg:fixed lg:inset-y-0 bg-white border-r border-gray-200">
       <div className="flex items-center h-14 px-5 border-b border-gray-200">
-        <Link href="/" className="flex items-center gap-1.5">
+        <Link href="/" className="flex items-center gap-0">
           <span className="font-bold text-lg">
             <span className="text-gray-900">Waterloo</span>
             <span className="text-[#1D9E75]">Budget</span>
