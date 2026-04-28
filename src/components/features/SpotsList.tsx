@@ -110,11 +110,13 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
       }
 
       // Neighborhood filter
-      if (
-        selectedNeighborhood !== "All" &&
-        spot.neighborhood !== selectedNeighborhood
-      ) {
-        return false;
+      if (selectedNeighborhood !== "All") {
+        const spotNeighborhoods = spot.neighborhood
+          .split(",")
+          .map((n) => n.trim());
+        if (!spotNeighborhoods.includes(selectedNeighborhood)) {
+          return false;
+        }
       }
 
       // Free only filter
