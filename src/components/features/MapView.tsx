@@ -227,7 +227,7 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
       </div>
 
       {/* Map Container */}
-      <div className="relative h-125 md:h-150 rounded-xl overflow-hidden border border-gray-200 bg-gray-100">
+      <div className="relative h-125 md:h-150 overflow-hidden">
         {MapComponent ? (
           <MapComponent
             spots={spotsWithCoords}
