@@ -135,7 +135,7 @@ export const spots: Spot[] = [
   },
   {
     id: "food-13",
-    name: "Burrito Boyz",
+    name: "Fresh Burrito",
     category: "food",
     neighborhood: "University Plaza",
     price: "~$11",
@@ -1188,7 +1188,7 @@ export const spotCoordinates: Record<string, { lat: number; lng: number }> = {
   "food-9": { lat: 43.4767, lng: -80.5301 }, // Bao Sandwich Bar
   "food-10": { lat: 43.4726, lng: -80.5388 }, // Kabob Hut - University Plaza
   "food-12": { lat: 43.4644, lng: -80.5223 }, // Famoso Italian Pizzeria - Uptown
-  "food-13": { lat: 43.4719, lng: -80.5387 }, // Burrito Boyz - UW Plaza
+  "food-13": { lat: 43.4719, lng: -80.5387 }, // Fresh Burrito - UW Plaza
   "food-21": { lat: 43.4726, lng: -80.5388 }, // Pho Anh Vu - University Plaza
   "food-45": { lat: 43.47424721136457, lng: -80.53158425904914 }, // Gladiator Burger
   "food-46": { lat: 43.476606663156474, lng: -80.53000187137324 }, // Exclamation Waterloo
