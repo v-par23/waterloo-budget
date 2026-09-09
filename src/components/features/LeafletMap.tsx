@@ -4,7 +4,8 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { divIcon, type Marker as LeafletMarkerInstance } from "leaflet";
 import { useEffect, useRef } from "react";
 import { Category, categoryConfig } from "@/data/spots";
-import { haversineDistanceMeters, formatDistance, googleMapsDirectionsUrl } from "@/lib/geo";
+import { haversineDistanceMeters, formatDistance } from "@/lib/geo";
+import { SpotReviewsSection } from "@/components/ui/SpotReviewsSection";
 
 import "leaflet/dist/leaflet.css";
 
@@ -216,14 +217,13 @@ export function LeafletMap({ spots, center, zoom, onSpotSelect, selectedSpotId, 
                     </span>
                   )}
                 </div>
-                <a
-                  href={googleMapsDirectionsUrl(spot.lat, spot.lng)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-sm font-medium text-blue-600 hover:text-blue-700"
-                >
-                  🧭 Get directions
-                </a>
+                <SpotReviewsSection
+                  spotId={spot.id}
+                  spotName={spot.name}
+                  lat={spot.lat}
+                  lng={spot.lng}
+                  className="pt-2 border-t border-gray-100"
+                />
               </div>
             </Popup>
           </Marker>
