@@ -83,11 +83,11 @@ export default function AskPage() {
 
           const chunk = decoder.decode(value);
           setMessages((prev) => {
+            const lastIndex = prev.length - 1;
+            const lastMsg = prev[lastIndex];
+            if (lastMsg.role !== "assistant") return prev;
             const updated = [...prev];
-            const lastMsg = updated[updated.length - 1];
-            if (lastMsg.role === "assistant") {
-              lastMsg.content += chunk;
-            }
+            updated[lastIndex] = { ...lastMsg, content: lastMsg.content + chunk };
             return updated;
           });
         }
