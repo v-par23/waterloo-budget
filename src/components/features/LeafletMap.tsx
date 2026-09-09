@@ -1,9 +1,10 @@
 "use client";
 
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import { divIcon } from "leaflet";
-import { useEffect } from "react";
-import { Category } from "@/data/spots";
+import { divIcon, type Marker as LeafletMarkerInstance } from "leaflet";
+import { useEffect, useRef } from "react";
+import { Category, categoryConfig } from "@/data/spots";
+import { haversineDistanceMeters, formatDistance, googleMapsDirectionsUrl } from "@/lib/geo";
 
 import "leaflet/dist/leaflet.css";
 
@@ -84,6 +85,15 @@ function FlyToUserLocation({ lat, lng }: { lat: number; lng: number }) {
 }
 
 export function LeafletMap({ spots, center, zoom, onSpotSelect, selectedSpotId, userLocation }: LeafletMapProps) {
+  const markerRefs = useRef<Record<string, LeafletMarkerInstance>>({});
+
+  // Open the popup for spots selected via search (not just direct marker clicks)
+  useEffect(() => {
+    if (selectedSpotId) {
+      markerRefs.current[selectedSpotId]?.openPopup();
+    }
+  }, [selectedSpotId]);
+
   return (
     <>
       <style jsx global>{`
@@ -163,9 +173,8 @@ export function LeafletMap({ spots, center, zoom, onSpotSelect, selectedSpotId, 
             <Marker
               position={[userLocation.lat, userLocation.lng]}
               icon={createUserLocationIcon()}
-            >
-              <Popup>You are here</Popup>
-            </Marker>
+              interactive={false}
+            />
           </>
         )}
         {spots.map((spot) => (
@@ -173,12 +182,16 @@ export function LeafletMap({ spots, center, zoom, onSpotSelect, selectedSpotId, 
             key={spot.id}
             position={[spot.lat, spot.lng]}
             icon={createEmojiIcon(spot.emoji, spot.id === selectedSpotId)}
+            ref={(instance) => {
+              if (instance) markerRefs.current[spot.id] = instance;
+              else delete markerRefs.current[spot.id];
+            }}
             eventHandlers={{
               click: () => onSpotSelect(spot.id),
             }}
           >
             <Popup>
-              <div className="p-3">
+              <div className="p-3 min-w-52">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-xl">{spot.emoji}</span>
                   <span className="font-semibold text-gray-900">{spot.name}</span>
@@ -187,12 +200,30 @@ export function LeafletMap({ spots, center, zoom, onSpotSelect, selectedSpotId, 
                 {spot.description && (
                   <p className="text-sm text-gray-600 mb-2">{spot.description}</p>
                 )}
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium">{spot.price}</span>
+                <div className="flex flex-wrap items-center gap-2 mb-2">
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${categoryConfig[spot.category]?.color || "bg-gray-100"}`}>
+                    {categoryConfig[spot.category]?.label}
+                  </span>
+                  <span className="text-sm font-medium text-gray-700">{spot.price}</span>
                   {spot.isFree && (
-                    <span className="px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-700">Free</span>
+                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">Free</span>
+                  )}
+                  {userLocation && (
+                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-600">
+                      📍 {formatDistance(
+                        haversineDistanceMeters(userLocation.lat, userLocation.lng, spot.lat, spot.lng)
+                      )}
+                    </span>
                   )}
                 </div>
+                <a
+                  href={googleMapsDirectionsUrl(spot.lat, spot.lng)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-sm font-medium text-blue-600 hover:text-blue-700"
+                >
+                  🧭 Get directions
+                </a>
               </div>
             </Popup>
           </Marker>

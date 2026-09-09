@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState, useMemo, useRef } from "react";
-import { spots, Category, neighborhoods, categoryConfig, spotCoordinates } from "@/data/spots";
+import { spots, Category, neighborhoods, spotCoordinates } from "@/data/spots";
 import { CategoryFilter } from "@/components/ui/CategoryFilter";
 import { useUserLocation } from "@/lib/hooks/useUserLocation";
-import { haversineDistanceMeters, formatDistance, googleMapsDirectionsUrl } from "@/lib/geo";
 
 // Neighborhood coordinates for Waterloo/Kitchener area
 const neighborhoodCoords: Record<string, [number, number]> = {
@@ -137,10 +136,6 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
     });
   }, [filteredSpots]);
 
-  const selectedSpot = selectedSpotId
-    ? spotsWithCoords.find(s => s.id === selectedSpotId)
-    : null;
-
   return (
     <div className="space-y-4">
       {/* Search */}
@@ -257,56 +252,6 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
         ) : (
           <div className="flex items-center justify-center h-full">
             <div className="text-gray-500">Loading map...</div>
-          </div>
-        )}
-
-        {/* Selected spot info panel */}
-        {selectedSpot && (
-          <div className="absolute bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-80 bg-white rounded-xl shadow-lg p-4 z-1000">
-            <button
-              onClick={() => setSelectedSpotId(null)}
-              className="absolute top-2 right-2 p-1 rounded-full hover:bg-gray-100"
-            >
-              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-            <div className="flex items-start gap-3">
-              <span className="text-2xl">{selectedSpot.emoji}</span>
-              <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-gray-900 truncate">{selectedSpot.name}</h3>
-                <p className="text-sm text-gray-500">{selectedSpot.neighborhood}</p>
-                {selectedSpot.description && (
-                  <p className="text-sm text-gray-600 mt-1 line-clamp-2">{selectedSpot.description}</p>
-                )}
-                <div className="flex items-center gap-2 mt-2">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${categoryConfig[selectedSpot.category]?.color || "bg-gray-100"}`}>
-                    {categoryConfig[selectedSpot.category]?.label}
-                  </span>
-                  <span className="text-sm font-medium text-gray-700">{selectedSpot.price}</span>
-                  {selectedSpot.isFree && (
-                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
-                      Free
-                    </span>
-                  )}
-                  {location && (
-                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-600">
-                      📍 {formatDistance(
-                        haversineDistanceMeters(location.lat, location.lng, selectedSpot.lat, selectedSpot.lng)
-                      )}
-                    </span>
-                  )}
-                </div>
-                <a
-                  href={googleMapsDirectionsUrl(selectedSpot.lat, selectedSpot.lng)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-blue-600 hover:text-blue-700"
-                >
-                  🧭 Get directions
-                </a>
-              </div>
-            </div>
           </div>
         )}
       </div>
