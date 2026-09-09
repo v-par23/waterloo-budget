@@ -4,7 +4,7 @@ import { useEffect, useState, useMemo, useRef } from "react";
 import { spots, Category, neighborhoods, categoryConfig, spotCoordinates } from "@/data/spots";
 import { CategoryFilter } from "@/components/ui/CategoryFilter";
 import { useUserLocation } from "@/lib/hooks/useUserLocation";
-import { haversineDistanceMeters, formatDistance } from "@/lib/geo";
+import { haversineDistanceMeters, formatDistance, googleMapsDirectionsUrl } from "@/lib/geo";
 
 // Neighborhood coordinates for Waterloo/Kitchener area
 const neighborhoodCoords: Record<string, [number, number]> = {
@@ -297,6 +297,14 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
                     </span>
                   )}
                 </div>
+                <a
+                  href={googleMapsDirectionsUrl(selectedSpot.lat, selectedSpot.lng)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-blue-600 hover:text-blue-700"
+                >
+                  🧭 Get directions
+                </a>
               </div>
             </div>
           </div>

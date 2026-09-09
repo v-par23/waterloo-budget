@@ -24,3 +24,13 @@ export function formatDistance(meters: number): string {
   if (meters < 1000) return `${Math.round(meters / 10) * 10} m`;
   return `${(meters / 1000).toFixed(1)} km`;
 }
+
+// Opens Google Maps turn-by-turn directions to the given point. Omitting the
+// origin makes Google Maps default to the visitor's current location.
+export function googleMapsDirectionsUrl(lat: number, lng: number): string {
+  const params = new URLSearchParams({
+    api: "1",
+    destination: `${lat},${lng}`,
+  });
+  return `https://www.google.com/maps/dir/?${params.toString()}`;
+}

@@ -5,7 +5,7 @@ import { Spot, categoryConfig, spotCoordinates } from "@/data/spots";
 import { useAuth } from "@/components/AuthProvider";
 import { useSavedSpots } from "@/components/SavedSpotsProvider";
 import { useRouter } from "next/navigation";
-import { formatDistance } from "@/lib/geo";
+import { formatDistance, googleMapsDirectionsUrl } from "@/lib/geo";
 import { useSpotReviews } from "@/lib/hooks/useSpotReviews";
 
 interface SpotCardProps {
@@ -140,19 +140,30 @@ export function SpotCard({ spot, showSaveButton = true, searchQuery = "", distan
           </div>
         </div>
 
-        {/* Reviews */}
+        {/* Reviews + Directions */}
         {coords && (
           <div className="mt-3 pt-3 border-t border-gray-100">
-            <button
-              onClick={handleReviewsClick}
-              className="text-xs font-medium text-gray-500 hover:text-gray-700 flex items-center gap-1"
-            >
-              {showReviews
-                ? "Hide reviews"
-                : reviewsData?.rating
-                ? `⭐ ${reviewsData.rating} (${reviewsData.reviewCount}) · See reviews`
-                : "⭐ See reviews"}
-            </button>
+            <div className="flex items-center justify-between gap-2">
+              <button
+                onClick={handleReviewsClick}
+                className="text-xs font-medium text-gray-500 hover:text-gray-700 flex items-center gap-1"
+              >
+                {showReviews
+                  ? "Hide reviews"
+                  : reviewsData?.rating
+                  ? `⭐ ${reviewsData.rating} (${reviewsData.reviewCount}) · See reviews`
+                  : "⭐ See reviews"}
+              </button>
+              <a
+                href={googleMapsDirectionsUrl(coords.lat, coords.lng)}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="text-xs font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1 flex-shrink-0"
+              >
+                🧭 Directions
+              </a>
+            </div>
 
             {showReviews && (
               <div className="mt-2 space-y-2" onClick={(e) => e.stopPropagation()}>
