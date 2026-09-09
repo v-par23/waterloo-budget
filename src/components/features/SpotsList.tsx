@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useMemo, useRef, useEffect } from "react";
-import { spots, Category, neighborhoods, Spot } from "@/data/spots";
+import { spots, Category, neighborhoods, Spot, spotCoordinates } from "@/data/spots";
 import { SpotCard } from "@/components/ui/SpotCard";
 import { CategoryFilter } from "@/components/ui/CategoryFilter";
+import { useUserLocation } from "@/lib/hooks/useUserLocation";
+import { haversineDistanceMeters } from "@/lib/geo";
 
 interface SpotsListProps {
   filterCategory?: Category;
@@ -26,19 +28,19 @@ const categoryLabels: Record<Category, string> = {
 function fuzzyMatch(str: string, query: string): number {
   str = str.toLowerCase();
   query = query.toLowerCase();
-  
+
   // Exact match gets highest score
   if (str === query) return 100;
-  
+
   // Contains gets high score
   if (str.includes(query)) return 80;
-  
+
   // Check each word
   const words = str.split(/\s+/);
   for (const word of words) {
     if (word.startsWith(query)) return 70;
   }
-  
+
   // Fuzzy character matching
   let queryIndex = 0;
   let score = 0;
@@ -48,7 +50,7 @@ function fuzzyMatch(str: string, query: string): number {
       queryIndex++;
     }
   }
-  
+
   return queryIndex === query.length ? score : 0;
 }
 
@@ -59,7 +61,29 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
   const [selectedNeighborhood, setSelectedNeighborhood] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [sortByDistance, setSortByDistance] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+  const { location, loading: locating, error: locationError, requestLocation } = useUserLocation();
+
+  // Distance (in meters) from the user to each spot with known coordinates
+  const distances = useMemo(() => {
+    if (!location) return {} as Record<string, number>;
+    const map: Record<string, number> = {};
+    for (const spot of spots) {
+      const coords = spotCoordinates[spot.id];
+      if (coords) {
+        map[spot.id] = haversineDistanceMeters(location.lat, location.lng, coords.lat, coords.lng);
+      }
+    }
+    return map;
+  }, [location]);
+
+  const handleNearMeClick = () => {
+    if (!location) {
+      requestLocation();
+    }
+    setSortByDistance((prev) => !location ? true : !prev);
+  };
 
   // Close suggestions when clicking outside
   useEffect(() => {
@@ -75,22 +99,22 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
   // Get search suggestions
   const suggestions = useMemo(() => {
     if (!searchQuery || searchQuery.length < 2) return [];
-    
+
     const query = searchQuery.toLowerCase();
     const matches: { spot: Spot; score: number }[] = [];
-    
+
     for (const spot of spots) {
       const nameScore = fuzzyMatch(spot.name, query);
       const categoryScore = fuzzyMatch(categoryLabels[spot.category], query) * 0.5;
       const neighborhoodScore = fuzzyMatch(spot.neighborhood, query) * 0.7;
       const descScore = spot.description ? fuzzyMatch(spot.description, query) * 0.3 : 0;
-      
+
       const totalScore = Math.max(nameScore, categoryScore, neighborhoodScore, descScore);
       if (totalScore > 0) {
         matches.push({ spot, score: totalScore });
       }
     }
-    
+
     return matches
       .sort((a, b) => b.score - a.score)
       .slice(0, 6)
@@ -132,12 +156,22 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
         const neighborhoodMatch = fuzzyMatch(spot.neighborhood, query);
         const descMatch = spot.description ? fuzzyMatch(spot.description, query) : 0;
         const priceMatch = spot.price?.toLowerCase().includes(query) ? 50 : 0;
-        
+
         return Math.max(nameMatch, categoryMatch, neighborhoodMatch, descMatch, priceMatch) > 0;
       }
 
       return true;
     });
+
+    // Sort by distance when "Near Me" is active (spots with no known location sink to the end)
+    if (sortByDistance && location) {
+      result.sort((a, b) => {
+        const distA = distances[a.id] ?? Infinity;
+        const distB = distances[b.id] ?? Infinity;
+        return distA - distB;
+      });
+      return result;
+    }
 
     // Sort by relevance if searching
     if (searchQuery) {
@@ -158,7 +192,7 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
     }
 
     return result;
-  }, [selectedCategory, selectedNeighborhood, searchQuery, filterCategory, showFreeOnly]);
+  }, [selectedCategory, selectedNeighborhood, searchQuery, filterCategory, showFreeOnly, sortByDistance, location, distances]);
 
   const handleSuggestionClick = (spot: Spot) => {
     setSearchQuery(spot.name);
@@ -208,7 +242,7 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
             </svg>
           </button>
         )}
-        
+
         {/* Search Suggestions Dropdown */}
         {showSuggestions && suggestions.length > 0 && searchQuery.length >= 2 && (
           <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
@@ -229,6 +263,7 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
           </div>
         )}
       </div>
+      {locationError && <p className="text-xs text-red-500">{locationError}</p>}
 
       {/* Filters */}
       {!filterCategory && (
@@ -237,6 +272,21 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
           onChange={setSelectedCategory}
         />
       )}
+
+      {/* Near me */}
+      <div className="flex flex-col gap-1.5">
+        <button
+          onClick={handleNearMeClick}
+          disabled={locating}
+          className={`self-start flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors disabled:opacity-60 ${
+            sortByDistance && location
+              ? "bg-blue-600 text-white"
+              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+          }`}
+        >
+          📍 {locating ? "Locating…" : sortByDistance && location ? "Sorted by distance" : "Near me"}
+        </button>
+      </div>
 
       {/* Neighborhood filter */}
       <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1">
@@ -264,7 +314,7 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
       {/* Spots grid */}
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {filteredSpots.map((spot) => (
-          <SpotCard key={spot.id} spot={spot} searchQuery={searchQuery} />
+          <SpotCard key={spot.id} spot={spot} searchQuery={searchQuery} distanceMeters={distances[spot.id]} />
         ))}
       </div>
 

@@ -4,23 +4,25 @@ import { Spot, categoryConfig } from "@/data/spots";
 import { useAuth } from "@/components/AuthProvider";
 import { useSavedSpots } from "@/components/SavedSpotsProvider";
 import { useRouter } from "next/navigation";
+import { formatDistance } from "@/lib/geo";
 
 interface SpotCardProps {
   spot: Spot;
   showSaveButton?: boolean;
   searchQuery?: string;
+  distanceMeters?: number;
 }
 
 // Highlight matching text in search results
 function highlightMatch(text: string, query: string): React.ReactNode {
   if (!query || query.length < 2) return text;
-  
+
   const lowerText = text.toLowerCase();
   const lowerQuery = query.toLowerCase();
   const index = lowerText.indexOf(lowerQuery);
-  
+
   if (index === -1) return text;
-  
+
   return (
     <>
       {text.slice(0, index)}
@@ -30,7 +32,7 @@ function highlightMatch(text: string, query: string): React.ReactNode {
   );
 }
 
-export function SpotCard({ spot, showSaveButton = true, searchQuery = "" }: SpotCardProps) {
+export function SpotCard({ spot, showSaveButton = true, searchQuery = "", distanceMeters }: SpotCardProps) {
   const { user } = useAuth();
   const { isSpotSaved, toggleSave } = useSavedSpots();
   const router = useRouter();
@@ -39,7 +41,7 @@ export function SpotCard({ spot, showSaveButton = true, searchQuery = "" }: Spot
 
   const handleSaveClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    
+
     if (!user) {
       router.push("/login");
       return;
@@ -89,7 +91,7 @@ export function SpotCard({ spot, showSaveButton = true, searchQuery = "" }: Spot
           <div className={`w-10 h-10 rounded-lg ${config.iconBg} flex items-center justify-center flex-shrink-0`}>
             <span className="text-lg">{spot.emoji}</span>
           </div>
-          
+
           {/* Name and location */}
           <div className="flex-1 min-w-0 pr-6">
             <h3 className="font-semibold text-gray-900 text-sm leading-tight truncate">
@@ -112,9 +114,16 @@ export function SpotCard({ spot, showSaveButton = true, searchQuery = "" }: Spot
           <span className={`text-xs px-2 py-0.5 rounded-full ${config.color}`}>
             {config.label}
           </span>
-          <span className={`text-xs font-medium px-2 py-1 rounded-md border flex-shrink-0 ${getPriceBadgeStyle()}`}>
-            {spot.isFree ? "Free" : spot.price}
-          </span>
+          <div className="flex items-center gap-1.5 flex-shrink-0">
+            {typeof distanceMeters === "number" && (
+              <span className="text-xs font-medium px-2 py-1 rounded-md border border-blue-100 bg-blue-50 text-blue-600 whitespace-nowrap">
+                📍 {formatDistance(distanceMeters)}
+              </span>
+            )}
+            <span className={`text-xs font-medium px-2 py-1 rounded-md border ${getPriceBadgeStyle()}`}>
+              {spot.isFree ? "Free" : spot.price}
+            </span>
+          </div>
         </div>
       </div>
     </div>

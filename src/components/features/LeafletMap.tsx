@@ -20,12 +20,19 @@ interface SpotWithCoords {
   isFree?: boolean;
 }
 
+interface UserLocation {
+  lat: number;
+  lng: number;
+  accuracy: number;
+}
+
 interface LeafletMapProps {
   spots: SpotWithCoords[];
   center: [number, number];
   zoom: number;
   onSpotSelect: (id: string | null) => void;
   selectedSpotId: string | null;
+  userLocation?: UserLocation | null;
 }
 
 // Custom emoji marker
@@ -35,6 +42,16 @@ function createEmojiIcon(emoji: string, isSelected: boolean) {
     className: "custom-emoji-marker",
     iconSize: [40, 40],
     iconAnchor: [20, 20],
+  });
+}
+
+// "You are here" marker
+function createUserLocationIcon() {
+  return divIcon({
+    html: `<div class="user-location-marker"><div class="user-location-dot"></div></div>`,
+    className: "custom-user-location-marker",
+    iconSize: [20, 20],
+    iconAnchor: [10, 10],
   });
 }
 
@@ -54,7 +71,19 @@ function MapEvents({ selectedSpotId, spots }: { selectedSpotId: string | null; s
   return null;
 }
 
-export function LeafletMap({ spots, center, zoom, onSpotSelect, selectedSpotId }: LeafletMapProps) {
+// Flies the map to the user's location once it becomes available
+function FlyToUserLocation({ lat, lng }: { lat: number; lng: number }) {
+  const map = useMap();
+
+  useEffect(() => {
+    map.flyTo([lat, lng], 15, { duration: 0.75 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lat, lng]);
+
+  return null;
+}
+
+export function LeafletMap({ spots, center, zoom, onSpotSelect, selectedSpotId, userLocation }: LeafletMapProps) {
   return (
     <>
       <style jsx global>{`
@@ -97,6 +126,25 @@ export function LeafletMap({ spots, center, zoom, onSpotSelect, selectedSpotId }
           margin: 0;
           min-width: 200px;
         }
+        .custom-user-location-marker {
+          background: none !important;
+          border: none !important;
+        }
+        .user-location-marker {
+          width: 20px;
+          height: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .user-location-dot {
+          width: 14px;
+          height: 14px;
+          background: #3b82f6;
+          border: 3px solid white;
+          border-radius: 50%;
+          box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3);
+        }
       `}</style>
       <MapContainer
         center={center}
@@ -109,6 +157,17 @@ export function LeafletMap({ spots, center, zoom, onSpotSelect, selectedSpotId }
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <MapEvents selectedSpotId={selectedSpotId} spots={spots} />
+        {userLocation && (
+          <>
+            <FlyToUserLocation lat={userLocation.lat} lng={userLocation.lng} />
+            <Marker
+              position={[userLocation.lat, userLocation.lng]}
+              icon={createUserLocationIcon()}
+            >
+              <Popup>You are here</Popup>
+            </Marker>
+          </>
+        )}
         {spots.map((spot) => (
           <Marker
             key={spot.id}

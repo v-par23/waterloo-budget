@@ -3,6 +3,8 @@
 import { useEffect, useState, useMemo, useRef } from "react";
 import { spots, Category, neighborhoods, categoryConfig, spotCoordinates } from "@/data/spots";
 import { CategoryFilter } from "@/components/ui/CategoryFilter";
+import { useUserLocation } from "@/lib/hooks/useUserLocation";
+import { haversineDistanceMeters, formatDistance } from "@/lib/geo";
 
 // Neighborhood coordinates for Waterloo/Kitchener area
 const neighborhoodCoords: Record<string, [number, number]> = {
@@ -49,6 +51,7 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
   const [selectedSpotId, setSelectedSpotId] = useState<string | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+  const { location, loading: locating, error: locationError, requestLocation } = useUserLocation();
 
   // Close suggestions when clicking outside
   useEffect(() => {
@@ -71,10 +74,10 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
   // Get search suggestions
   const suggestions = useMemo(() => {
     if (!searchQuery || searchQuery.length < 2) return [];
-    
+
     const query = searchQuery.toLowerCase();
     return spots
-      .filter(spot => 
+      .filter(spot =>
         spot.name.toLowerCase().includes(query) ||
         categoryLabels[spot.category].toLowerCase().includes(query) ||
         spot.neighborhood.toLowerCase().includes(query)
@@ -120,7 +123,7 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
           lng: coords.lng,
         };
       }
-      
+
       // Fallback to neighborhood-based coordinates
       const baseCoords = neighborhoodCoords[spot.neighborhood] || DEFAULT_CENTER;
       // Use a deterministic offset based on spot index to avoid random during render
@@ -134,8 +137,8 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
     });
   }, [filteredSpots]);
 
-  const selectedSpot = selectedSpotId 
-    ? spotsWithCoords.find(s => s.id === selectedSpotId) 
+  const selectedSpot = selectedSpotId
+    ? spotsWithCoords.find(s => s.id === selectedSpotId)
     : null;
 
   return (
@@ -209,6 +212,20 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
         />
       )}
 
+      {/* Near me */}
+      <div className="flex flex-col gap-1.5">
+        <button
+          onClick={requestLocation}
+          disabled={locating}
+          className={`self-start flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors disabled:opacity-60 ${
+            location ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+          }`}
+        >
+          📍 {locating ? "Locating…" : location ? "Location on" : "Near me"}
+        </button>
+        {locationError && <p className="text-xs text-red-500">{locationError}</p>}
+      </div>
+
       {/* Neighborhood filter */}
       <div className="flex gap-2 overflow-x-auto pb-2">
         {neighborhoods.map((neighborhood) => (
@@ -235,6 +252,7 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
             zoom={DEFAULT_ZOOM}
             onSpotSelect={setSelectedSpotId}
             selectedSpotId={selectedSpotId}
+            userLocation={location}
           />
         ) : (
           <div className="flex items-center justify-center h-full">
@@ -269,6 +287,13 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
                   {selectedSpot.isFree && (
                     <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
                       Free
+                    </span>
+                  )}
+                  {location && (
+                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-600">
+                      📍 {formatDistance(
+                        haversineDistanceMeters(location.lat, location.lng, selectedSpot.lat, selectedSpot.lng)
+                      )}
                     </span>
                   )}
                 </div>
