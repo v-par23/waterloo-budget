@@ -6,6 +6,7 @@ import { SpotCard } from "@/components/ui/SpotCard";
 import { CategoryFilter } from "@/components/ui/CategoryFilter";
 import { useUserLocation } from "@/lib/hooks/useUserLocation";
 import { haversineDistanceMeters } from "@/lib/geo";
+import { useSpeechRecognition } from "@/lib/hooks/useSpeechRecognition";
 
 interface SpotsListProps {
   filterCategory?: Category;
@@ -64,6 +65,15 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
   const [sortByDistance, setSortByDistance] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const { location, loading: locating, error: locationError, requestLocation } = useUserLocation();
+  const {
+    isSupported: voiceSupported,
+    isListening,
+    error: voiceError,
+    startListening,
+  } = useSpeechRecognition((text) => {
+    setSearchQuery(text);
+    setShowSuggestions(true);
+  });
 
   // Distance (in meters) from the user to each spot with known coordinates
   const distances = useMemo(() => {
@@ -232,7 +242,7 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
           />
         </svg>
-        {searchQuery && (
+        {searchQuery ? (
           <button
             onClick={clearSearch}
             className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 hover:text-gray-600"
@@ -241,6 +251,25 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
+        ) : (
+          voiceSupported && (
+            <button
+              onClick={startListening}
+              title="Search by voice"
+              className={`absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 transition-colors ${
+                isListening ? "text-red-500 animate-pulse" : "text-gray-400 hover:text-gray-600"
+              }`}
+            >
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z"
+                />
+              </svg>
+            </button>
+          )
         )}
 
         {/* Search Suggestions Dropdown */}
@@ -264,6 +293,7 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
         )}
       </div>
       {locationError && <p className="text-xs text-red-500">{locationError}</p>}
+      {voiceError && <p className="text-xs text-red-500">{voiceError}</p>}
 
       {/* Filters */}
       {!filterCategory && (
