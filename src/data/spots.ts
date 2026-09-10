@@ -8,6 +8,8 @@ export type Category =
   | "bars"
   | "grocery";
 
+export type VibeLevel = "quiet" | "moderate" | "busy";
+
 export interface Spot {
   id: string;
   name: string;
@@ -22,7 +24,17 @@ export interface Spot {
   isFree?: boolean;
   lat?: number;
   lng?: number;
+  cuisine?: string; // food/drink type tag (e.g. "Vietnamese", "Coffee Chain") — food, coffee, bars only
+  // Hand-curated estimate of typical crowd level, not live data (no free API provides real-time
+  // busyness for these spots) — shown in the UI as an estimate, never as a live figure.
+  vibe?: VibeLevel;
 }
+
+export const vibeConfig: Record<VibeLevel, { label: string; emoji: string; color: string }> = {
+  quiet: { label: "Usually quiet", emoji: "🤫", color: "bg-blue-50 text-blue-600 border-blue-100" },
+  moderate: { label: "Moderate", emoji: "🙂", color: "bg-amber-50 text-amber-600 border-amber-100" },
+  busy: { label: "Usually busy", emoji: "🔥", color: "bg-red-50 text-red-600 border-red-100" },
+};
 
 export const categoryConfig: Record<
   Category,
@@ -49,6 +61,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍜",
     description: "Vietnamese pho restaurant",
+    cuisine: "Vietnamese",
+    vibe: "moderate",
   },
   {
     id: "food-2",
@@ -59,6 +73,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍽️",
     description: "Shawarma on the sticks, student favorite",
+    cuisine: "Middle Eastern",
+    vibe: "busy",
   },
   {
     id: "food-3",
@@ -69,6 +85,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍜",
     description: "Hand-pulled noodles",
+    cuisine: "Chinese",
+    vibe: "moderate",
   },
   {
     id: "food-4",
@@ -79,6 +97,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍽️",
     description: "Classic diner breakfast & burgers",
+    cuisine: "American",
+    vibe: "moderate",
   },
   {
     id: "food-5",
@@ -89,6 +109,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍽️",
     description: "Huge portions shawarma",
+    cuisine: "Middle Eastern",
+    vibe: "busy",
   },
 
 
@@ -101,6 +123,8 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "🍜",
     description: "Chinese cuisine",
+    cuisine: "Chinese",
+    vibe: "moderate",
   },
   {
     id: "food-9",
@@ -111,6 +135,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍽️",
     description: "Asian fusion baos",
+    cuisine: "Asian Fusion",
+    vibe: "moderate",
   },
   {
     id: "food-10",
@@ -121,6 +147,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍖",
     description: "Persian cuisine",
+    cuisine: "Persian",
+    vibe: "moderate",
   },
 
   {
@@ -132,6 +160,8 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "🍕",
     description: "Neapolitan pizza",
+    cuisine: "Italian",
+    vibe: "moderate",
   },
   {
     id: "food-13",
@@ -142,6 +172,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍽️",
     description: "Massive burritos",
+    cuisine: "Mexican",
+    vibe: "busy",
   },
   {
     id: "food-21",
@@ -152,6 +184,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍜",
     description: "Vietnamese pho",
+    cuisine: "Vietnamese",
+    vibe: "moderate",
   },
   {
     id: "food-45",
@@ -162,6 +196,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍔",
     description: "Burgers & more",
+    cuisine: "American",
+    vibe: "moderate",
   },
   {
     id: "food-46",
@@ -172,6 +208,8 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "🍣",
     description: "Japanese restaurant",
+    cuisine: "Japanese",
+    vibe: "quiet",
   },
   {
     id: "food-47",
@@ -182,6 +220,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍛",
     description: "Indian restaurant",
+    cuisine: "Indian",
+    vibe: "moderate",
   },
   {
     id: "food-48",
@@ -192,6 +232,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍛",
     description: "Indian restaurant",
+    cuisine: "Indian",
+    vibe: "moderate",
   },
   {
     id: "food-49",
@@ -202,6 +244,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍩",
     description: "Dessert shop",
+    cuisine: "Dessert",
+    vibe: "moderate",
   },
 
   {
@@ -213,6 +257,8 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "🍽️",
     description: "Korean restaurant",
+    cuisine: "Korean",
+    vibe: "moderate",
   },
   {
     id: "food-23",
@@ -223,6 +269,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🧋",
     description: "Bubble tea and more",
+    cuisine: "Bubble Tea",
+    vibe: "quiet",
   },
   {
     id: "food-24",
@@ -233,6 +281,8 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "🍽️",
     description: "Korean restaurant",
+    cuisine: "Korean",
+    vibe: "moderate",
   },
   {
     id: "food-25",
@@ -243,6 +293,8 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "🍽️",
     description: "Taiwanese restaurant",
+    cuisine: "Taiwanese",
+    vibe: "moderate",
   },
   {
     id: "food-26",
@@ -253,6 +305,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍔",
     description: "Burgers and more",
+    cuisine: "American",
+    vibe: "busy",
   },
   {
     id: "food-27",
@@ -263,6 +317,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍽️",
     description: "Chinese restaurant",
+    cuisine: "Chinese",
+    vibe: "moderate",
   },
   {
     id: "food-28",
@@ -273,6 +329,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍜",
     description: "Chinese restaurant",
+    cuisine: "Chinese",
+    vibe: "moderate",
   },
   {
     id: "food-29",
@@ -283,6 +341,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍽️",
     description: "Chinese restaurant",
+    cuisine: "Chinese",
+    vibe: "moderate",
   },
   {
     id: "food-30",
@@ -293,6 +353,8 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "🍽️",
     description: "Japanese restaurant",
+    cuisine: "Japanese",
+    vibe: "moderate",
   },
   {
     id: "food-31",
@@ -303,6 +365,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🧋",
     description: "Bubble tea store",
+    cuisine: "Bubble Tea",
+    vibe: "busy",
   },
   {
     id: "food-32",
@@ -313,6 +377,8 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "🍣",
     description: "Sushi restaurant",
+    cuisine: "Japanese",
+    vibe: "moderate",
   },
   {
     id: "food-33",
@@ -323,6 +389,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍽️",
     description: "Korean restaurant",
+    cuisine: "Korean",
+    vibe: "moderate",
   },
   {
     id: "food-34",
@@ -333,6 +401,8 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "🍽️",
     description: "Chinese restaurant",
+    cuisine: "Chinese",
+    vibe: "quiet",
   },
   {
     id: "food-35",
@@ -343,6 +413,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍽️",
     description: "Middle Eastern restaurant",
+    cuisine: "Middle Eastern",
+    vibe: "busy",
   },
   {
     id: "food-36",
@@ -353,6 +425,8 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "🍽️",
     description: "Japanese restaurant",
+    cuisine: "Japanese",
+    vibe: "moderate",
   },
   {
     id: "food-37",
@@ -363,6 +437,8 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "🍽️",
     description: "Korean restaurant",
+    cuisine: "Korean",
+    vibe: "moderate",
   },
   {
     id: "food-38",
@@ -373,6 +449,8 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "🍗",
     description: "Korean restaurant",
+    cuisine: "Korean",
+    vibe: "moderate",
   },
   {
     id: "food-39",
@@ -383,6 +461,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍽️",
     description: "Turkish restaurant",
+    cuisine: "Turkish",
+    vibe: "quiet",
   },
   {
     id: "food-40",
@@ -393,6 +473,8 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "🍽️",
     description: "Korean restaurant",
+    cuisine: "Korean",
+    vibe: "moderate",
   },
   {
     id: "food-41",
@@ -403,6 +485,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🧋",
     description: "Bubble tea and juice",
+    cuisine: "Bubble Tea",
+    vibe: "busy",
   },
   {
     id: "food-42",
@@ -413,6 +497,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍽️",
     description: "Asian restaurant",
+    cuisine: "Asian",
+    vibe: "moderate",
   },
   {
     id: "food-43",
@@ -423,6 +509,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍽️",
     description: "Fast food restaurant",
+    cuisine: "Fast Food",
+    vibe: "moderate",
   },
   {
     id: "food-44",
@@ -433,6 +521,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍽️",
     description: "Indian restaurant",
+    cuisine: "Indian",
+    vibe: "quiet",
   },
 
 
@@ -446,6 +536,8 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "🍻",
     description: "Gastropub with local beer",
+    cuisine: "Gastropub",
+    vibe: "moderate",
   },
   {
     id: "food-19",
@@ -456,6 +548,8 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "🍽️",
     description: "Upscale pub food",
+    cuisine: "Pub Food",
+    vibe: "quiet",
   },
 
 
@@ -527,6 +621,7 @@ export const spots: Spot[] = [
     emoji: "💻",
     description: "Public library",
     isFree: true,
+    vibe: "moderate",
   },
   {
     id: "work-2",
@@ -538,6 +633,7 @@ export const spots: Spot[] = [
     emoji: "💻",
     description: "University library, 24/7 during exams",
     isFree: true,
+    vibe: "busy",
   },
 
   {
@@ -549,6 +645,7 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "💻",
     description: "Tech community hub",
+    vibe: "moderate",
   },
   {
     id: "work-5",
@@ -560,6 +657,7 @@ export const spots: Spot[] = [
     emoji: "💻",
     description: "Engineering building study space",
     isFree: true,
+    vibe: "moderate",
   },
   {
     id: "work-6",
@@ -571,6 +669,7 @@ export const spots: Spot[] = [
     emoji: "💻",
     description: "Student center with tables",
     isFree: true,
+    vibe: "busy",
   },
   {
     id: "work-7",
@@ -582,6 +681,7 @@ export const spots: Spot[] = [
     emoji: "💻",
     description: "Quiet study spaces",
     isFree: true,
+    vibe: "quiet",
   },
   {
     id: "work-8",
@@ -593,6 +693,7 @@ export const spots: Spot[] = [
     emoji: "💻",
     description: "Main campus library, multiple floors",
     isFree: true,
+    vibe: "busy",
   },
   {
     id: "work-9",
@@ -604,6 +705,7 @@ export const spots: Spot[] = [
     emoji: "💻",
     description: "Arts building with study areas",
     isFree: true,
+    vibe: "quiet",
   },
   {
     id: "work-10",
@@ -615,6 +717,7 @@ export const spots: Spot[] = [
     emoji: "💻",
     description: "Quiet federated university building",
     isFree: true,
+    vibe: "quiet",
   },
   {
     id: "work-11",
@@ -626,6 +729,7 @@ export const spots: Spot[] = [
     emoji: "💻",
     description: "Environment building study space",
     isFree: true,
+    vibe: "moderate",
   },
   {
     id: "work-12",
@@ -637,6 +741,7 @@ export const spots: Spot[] = [
     emoji: "💻",
     description: "Science building with open areas",
     isFree: true,
+    vibe: "moderate",
   },
   {
     id: "work-13",
@@ -648,6 +753,7 @@ export const spots: Spot[] = [
     emoji: "💻",
     description: "Math building, Comfy Lounge",
     isFree: true,
+    vibe: "busy",
   },
   {
     id: "work-14",
@@ -659,6 +765,7 @@ export const spots: Spot[] = [
     emoji: "💻",
     description: "Newer math building study spots",
     isFree: true,
+    vibe: "quiet",
   },
   {
     id: "work-15",
@@ -670,6 +777,7 @@ export const spots: Spot[] = [
     emoji: "💻",
     description: "Modern engineering building",
     isFree: true,
+    vibe: "moderate",
   },
 
 
@@ -684,6 +792,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "☕",
     description: "Local chain, good wifi",
+    cuisine: "Local Chain",
+    vibe: "busy",
   },
   {
     id: "coffee-2",
@@ -694,6 +804,8 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "☕",
     description: "Artisan coffee",
+    cuisine: "Artisan Roaster",
+    vibe: "moderate",
   },
 
   {
@@ -705,6 +817,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "☕",
     description: "Cozy small batch roaster",
+    cuisine: "Artisan Roaster",
+    vibe: "quiet",
   },
   {
     id: "coffee-5",
@@ -715,6 +829,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "☕",
     description: "Tim Hortons in Student Life Centre",
+    cuisine: "Coffee Chain",
+    vibe: "busy",
   },
   {
     id: "coffee-6",
@@ -725,6 +841,8 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "☕",
     description: "Starbucks near Columbia",
+    cuisine: "Coffee Chain",
+    vibe: "busy",
   },
   {
     id: "coffee-7",
@@ -735,6 +853,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "☕",
     description: "Cafe in Duke Food Block",
+    cuisine: "Local Cafe",
+    vibe: "quiet",
   },
   {
     id: "coffee-8",
@@ -745,6 +865,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "☕",
     description: "Specialty roaster",
+    cuisine: "Artisan Roaster",
+    vibe: "moderate",
   },
 
   {
@@ -756,6 +878,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "☕",
     description: "Cozy cafe with specialty coffee",
+    cuisine: "Local Cafe",
+    vibe: "quiet",
   },
   {
     id: "coffee-11",
@@ -766,6 +890,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "☕",
     description: "On-campus cafe in Environment building",
+    cuisine: "Campus Cafe",
+    vibe: "quiet",
   },
   {
     id: "coffee-12",
@@ -776,6 +902,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "☕",
     description: "Campus cafe with fresh options",
+    cuisine: "Campus Cafe",
+    vibe: "moderate",
   },
   {
     id: "coffee-13",
@@ -786,6 +914,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "☕",
     description: "Popular campus coffee spot",
+    cuisine: "Campus Cafe",
+    vibe: "busy",
   },
   {
     id: "coffee-14",
@@ -796,6 +926,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "☕",
     description: "Campus cafe in Dana Porter Library",
+    cuisine: "Campus Cafe",
+    vibe: "moderate",
   },
   {
     id: "coffee-15",
@@ -806,6 +938,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "☕",
     description: "Cozy campus cafe",
+    cuisine: "Campus Cafe",
+    vibe: "quiet",
   },
   {
     id: "coffee-16",
@@ -816,6 +950,8 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "☕",
     description: "Starbucks in Student Life Centre",
+    cuisine: "Coffee Chain",
+    vibe: "busy",
   },
   {
     id: "coffee-17",
@@ -826,6 +962,8 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "☕",
     description: "Starbucks near campus",
+    cuisine: "Coffee Chain",
+    vibe: "busy",
   },
   {
     id: "coffee-18",
@@ -836,6 +974,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "☕",
     description: "Tim Hortons on Columbia St",
+    cuisine: "Coffee Chain",
+    vibe: "busy",
   },
   {
     id: "coffee-19",
@@ -846,6 +986,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "☕",
     description: "Tim Hortons near campus",
+    cuisine: "Coffee Chain",
+    vibe: "busy",
   },
   {
     id: "coffee-20",
@@ -856,6 +998,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "☕",
     description: "Tim Hortons in Uptown",
+    cuisine: "Coffee Chain",
+    vibe: "moderate",
   },
   {
     id: "coffee-21",
@@ -866,6 +1010,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "☕",
     description: "Coffee & donuts in MC building",
+    cuisine: "Campus Cafe",
+    vibe: "busy",
   },
   {
     id: "coffee-22",
@@ -876,6 +1022,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "☕",
     description: "Coffee & donuts in Science building",
+    cuisine: "Campus Cafe",
+    vibe: "moderate",
   },
 
   // ACCELERATORS & STARTUP RESOURCES
@@ -948,6 +1096,7 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "💪",
     description: "UW gym, students included in fees",
+    vibe: "busy",
   },
   {
     id: "gym-2",
@@ -958,6 +1107,7 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "💪",
     description: "Newer UW fitness facility",
+    vibe: "moderate",
   },
   {
     id: "gym-3",
@@ -968,6 +1118,7 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "💪",
     description: "Weber St N & Columbia St E location",
+    vibe: "moderate",
   },
   {
     id: "gym-4",
@@ -978,6 +1129,7 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "💪",
     description: "Budget gym option",
+    vibe: "moderate",
   },
   {
     id: "gym-5",
@@ -988,6 +1140,7 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "💪",
     description: "Premium athletic club",
+    vibe: "moderate",
   },
   {
     id: "gym-6",
@@ -998,6 +1151,7 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "💪",
     description: "Community fitness center",
+    vibe: "moderate",
   },
   {
     id: "gym-7",
@@ -1009,6 +1163,7 @@ export const spots: Spot[] = [
     emoji: "💪",
     description: "Running trails and outdoor space",
     isFree: true,
+    vibe: "quiet",
   },
   {
     id: "gym-8",
@@ -1019,6 +1174,7 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "💪",
     description: "Public rec facility",
+    vibe: "quiet",
   },
 
   // BARS & DRINKS
@@ -1031,6 +1187,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍺",
     description: "On-campus student pub",
+    cuisine: "Pub",
+    vibe: "busy",
   },
 
 
@@ -1043,6 +1201,8 @@ export const spots: Spot[] = [
     priceLevel: 1,
     emoji: "🍺",
     description: "Live music venue",
+    cuisine: "Lounge",
+    vibe: "busy",
   },
   {
     id: "bar-5",
@@ -1053,6 +1213,8 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "🍺",
     description: "Local craft brewery",
+    cuisine: "Brewery",
+    vibe: "moderate",
   },
 
   {
@@ -1064,6 +1226,8 @@ export const spots: Spot[] = [
     priceLevel: 2,
     emoji: "🍺",
     description: "Craft beer selection",
+    cuisine: "Brewery",
+    vibe: "moderate",
   },
 
 
@@ -1172,6 +1336,11 @@ export const neighborhoods = [
   "Various",
   "Virtual",
 ];
+
+// Distinct cuisine/type tags actually used in `spots`, for the Compare filters.
+export const cuisines = Array.from(
+  new Set(spots.map((s) => s.cuisine).filter((c): c is string => Boolean(c)))
+).sort();
 
 // ====================================================================
 // VERIFIED COORDINATES FROM GOOGLE MAPS (April 2026)

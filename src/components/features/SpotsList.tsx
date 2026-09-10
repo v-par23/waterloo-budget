@@ -1,12 +1,21 @@
 "use client";
 
 import { useState, useMemo, useRef, useEffect } from "react";
-import { spots, Category, neighborhoods, Spot, spotCoordinates } from "@/data/spots";
+import { spots, Category, neighborhoods, Spot, spotCoordinates, VibeLevel, vibeConfig } from "@/data/spots";
 import { SpotCard } from "@/components/ui/SpotCard";
 import { CategoryFilter } from "@/components/ui/CategoryFilter";
+import { CompareModal } from "@/components/features/CompareModal";
 import { useUserLocation } from "@/lib/hooks/useUserLocation";
 import { haversineDistanceMeters } from "@/lib/geo";
 import { useSpeechRecognition } from "@/lib/hooks/useSpeechRecognition";
+
+const MAX_COMPARE = 4;
+const priceLevels = [
+  { level: 1, label: "$" },
+  { level: 2, label: "$$" },
+  { level: 3, label: "$$$" },
+  { level: 4, label: "$$$$" },
+];
 
 interface SpotsListProps {
   filterCategory?: Category;
@@ -63,6 +72,12 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [sortByDistance, setSortByDistance] = useState(false);
+  const [selectedCuisine, setSelectedCuisine] = useState<string | "all">("all");
+  const [selectedPriceLevel, setSelectedPriceLevel] = useState<number | "all">("all");
+  const [selectedVibe, setSelectedVibe] = useState<VibeLevel | "all">("all");
+  const [compareMode, setCompareMode] = useState(false);
+  const [compareIds, setCompareIds] = useState<string[]>([]);
+  const [showCompareModal, setShowCompareModal] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const { location, loading: locating, error: locationError, requestLocation } = useUserLocation();
   const {
@@ -158,6 +173,21 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
         return false;
       }
 
+      // Cuisine / type filter
+      if (selectedCuisine !== "all" && spot.cuisine !== selectedCuisine) {
+        return false;
+      }
+
+      // Price level filter
+      if (selectedPriceLevel !== "all" && spot.priceLevel !== selectedPriceLevel) {
+        return false;
+      }
+
+      // Typical vibe filter
+      if (selectedVibe !== "all" && spot.vibe !== selectedVibe) {
+        return false;
+      }
+
       // Search filter with fuzzy matching
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
@@ -202,7 +232,45 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
     }
 
     return result;
-  }, [selectedCategory, selectedNeighborhood, searchQuery, filterCategory, showFreeOnly, sortByDistance, location, distances]);
+  }, [
+    selectedCategory,
+    selectedNeighborhood,
+    searchQuery,
+    filterCategory,
+    showFreeOnly,
+    selectedCuisine,
+    selectedPriceLevel,
+    selectedVibe,
+    sortByDistance,
+    location,
+    distances,
+  ]);
+
+  // Cuisine options scoped to whatever's currently visible via category/neighborhood,
+  // so the pill list doesn't show tags with zero matching spots.
+  const availableCuisines = useMemo(() => {
+    const scoped = spots.filter((spot) => {
+      if (selectedCategory !== "all" && spot.category !== selectedCategory) return false;
+      if (filterCategory && spot.category !== filterCategory) return false;
+      return true;
+    });
+    return Array.from(new Set(scoped.map((s) => s.cuisine).filter((c): c is string => Boolean(c)))).sort();
+  }, [selectedCategory, filterCategory]);
+
+  const handleToggleCompare = (spotId: string) => {
+    setCompareIds((prev) => {
+      if (prev.includes(spotId)) return prev.filter((id) => id !== spotId);
+      if (prev.length >= MAX_COMPARE) return prev;
+      return [...prev, spotId];
+    });
+  };
+
+  const handleToggleCompareMode = () => {
+    setCompareMode((prev) => {
+      if (prev) setCompareIds([]);
+      return !prev;
+    });
+  };
 
   const handleSuggestionClick = (spot: Spot) => {
     setSearchQuery(spot.name);
@@ -303,12 +371,12 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
         />
       )}
 
-      {/* Near me */}
-      <div className="flex flex-col gap-1.5">
+      {/* Near me + Compare */}
+      <div className="flex flex-wrap gap-1.5">
         <button
           onClick={handleNearMeClick}
           disabled={locating}
-          className={`self-start flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors disabled:opacity-60 ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors disabled:opacity-60 ${
             sortByDistance && location
               ? "bg-blue-600 text-white"
               : "bg-gray-100 text-gray-600 hover:bg-gray-200"
@@ -316,6 +384,97 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
         >
           📍 {locating ? "Locating…" : sortByDistance && location ? "Sorted by distance" : "Near me"}
         </button>
+        <button
+          onClick={handleToggleCompareMode}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+            compareMode ? "bg-[#1D9E75] text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+          }`}
+        >
+          ⚖️ {compareMode ? "Comparing" : "Compare"}
+        </button>
+      </div>
+
+      {/* Cuisine filter */}
+      {availableCuisines.length > 0 && (
+        <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1">
+          <button
+            onClick={() => setSelectedCuisine("all")}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+              selectedCuisine === "all"
+                ? "bg-gray-800 text-white"
+                : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
+            }`}
+          >
+            Any cuisine
+          </button>
+          {availableCuisines.map((cuisine) => (
+            <button
+              key={cuisine}
+              onClick={() => setSelectedCuisine(cuisine)}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+                selectedCuisine === cuisine
+                  ? "bg-gray-800 text-white"
+                  : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
+              }`}
+            >
+              {cuisine}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Price + Vibe filters */}
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="flex gap-1.5">
+          <button
+            onClick={() => setSelectedPriceLevel("all")}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+              selectedPriceLevel === "all"
+                ? "bg-gray-800 text-white"
+                : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
+            }`}
+          >
+            Any price
+          </button>
+          {priceLevels.map(({ level, label }) => (
+            <button
+              key={level}
+              onClick={() => setSelectedPriceLevel(level)}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+                selectedPriceLevel === level
+                  ? "bg-gray-800 text-white"
+                  : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        <div className="flex gap-1.5">
+          <button
+            onClick={() => setSelectedVibe("all")}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+              selectedVibe === "all"
+                ? "bg-gray-800 text-white"
+                : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
+            }`}
+          >
+            Any vibe
+          </button>
+          {(Object.keys(vibeConfig) as VibeLevel[]).map((vibe) => (
+            <button
+              key={vibe}
+              onClick={() => setSelectedVibe(vibe)}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+                selectedVibe === vibe
+                  ? "bg-gray-800 text-white"
+                  : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
+              }`}
+            >
+              {vibeConfig[vibe].emoji} {vibeConfig[vibe].label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Neighborhood filter */}
@@ -342,11 +501,51 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
       </p>
 
       {/* Spots grid */}
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className={`grid gap-4 md:grid-cols-2 xl:grid-cols-3 ${compareMode ? "pb-20" : ""}`}>
         {filteredSpots.map((spot) => (
-          <SpotCard key={spot.id} spot={spot} searchQuery={searchQuery} distanceMeters={distances[spot.id]} />
+          <SpotCard
+            key={spot.id}
+            spot={spot}
+            searchQuery={searchQuery}
+            distanceMeters={distances[spot.id]}
+            compareMode={compareMode}
+            isCompareSelected={compareIds.includes(spot.id)}
+            compareDisabled={compareIds.length >= MAX_COMPARE}
+            onToggleCompare={handleToggleCompare}
+          />
         ))}
       </div>
+
+      {/* Floating compare bar */}
+      {compareMode && compareIds.length > 0 && (
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 bg-gray-900 text-white rounded-full shadow-lg px-4 py-2.5 flex items-center gap-3">
+          <span className="text-sm font-medium">
+            {compareIds.length} / {MAX_COMPARE} selected
+          </span>
+          <button
+            onClick={() => setCompareIds([])}
+            className="text-xs text-gray-300 hover:text-white"
+          >
+            Clear
+          </button>
+          <button
+            onClick={() => setShowCompareModal(true)}
+            disabled={compareIds.length < 2}
+            className="px-3 py-1.5 bg-[#1D9E75] rounded-full text-sm font-medium hover:bg-[#178a66] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          >
+            Compare
+          </button>
+        </div>
+      )}
+
+      {showCompareModal && (
+        <CompareModal
+          spotIds={compareIds}
+          distances={distances}
+          onClose={() => setShowCompareModal(false)}
+          onRemove={(id) => setCompareIds((prev) => prev.filter((s) => s !== id))}
+        />
+      )}
 
       {filteredSpots.length === 0 && (
         <div className="text-center py-12 space-y-4">

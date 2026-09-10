@@ -1,6 +1,6 @@
 "use client";
 
-import { Spot, categoryConfig, spotCoordinates } from "@/data/spots";
+import { Spot, categoryConfig, spotCoordinates, vibeConfig } from "@/data/spots";
 import { useAuth } from "@/components/AuthProvider";
 import { useSavedSpots } from "@/components/SavedSpotsProvider";
 import { useRouter } from "next/navigation";
@@ -12,6 +12,10 @@ interface SpotCardProps {
   showSaveButton?: boolean;
   searchQuery?: string;
   distanceMeters?: number;
+  compareMode?: boolean;
+  isCompareSelected?: boolean;
+  compareDisabled?: boolean;
+  onToggleCompare?: (spotId: string) => void;
 }
 
 // Highlight matching text in search results
@@ -33,7 +37,16 @@ function highlightMatch(text: string, query: string): React.ReactNode {
   );
 }
 
-export function SpotCard({ spot, showSaveButton = true, searchQuery = "", distanceMeters }: SpotCardProps) {
+export function SpotCard({
+  spot,
+  showSaveButton = true,
+  searchQuery = "",
+  distanceMeters,
+  compareMode = false,
+  isCompareSelected = false,
+  compareDisabled = false,
+  onToggleCompare,
+}: SpotCardProps) {
   const { user } = useAuth();
   const { isSpotSaved, toggleSave } = useSavedSpots();
   const router = useRouter();
@@ -80,10 +93,44 @@ export function SpotCard({ spot, showSaveButton = true, searchQuery = "", distan
     return "bg-red-50 text-red-600 border-red-100";
   };
 
+  const handleCardClick = () => {
+    if (compareMode && onToggleCompare && !(compareDisabled && !isCompareSelected)) {
+      onToggleCompare(spot.id);
+    }
+  };
+
   return (
-    <div className="bg-white rounded-xl border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-all cursor-pointer relative group">
+    <div
+      onClick={compareMode ? handleCardClick : undefined}
+      className={`bg-white rounded-xl border transition-all relative group ${
+        compareMode
+          ? compareDisabled && !isCompareSelected
+            ? "border-gray-100 opacity-50 cursor-not-allowed"
+            : isCompareSelected
+            ? "border-[#1D9E75] ring-2 ring-[#1D9E75]/30 cursor-pointer"
+            : "border-gray-200 hover:border-gray-300 hover:shadow-sm cursor-pointer"
+          : "border-gray-200 hover:border-gray-300 hover:shadow-sm cursor-pointer"
+      }`}
+    >
+      {/* Compare checkbox */}
+      {compareMode && (
+        <div
+          className={`absolute top-3 right-3 w-5 h-5 rounded-md border-2 flex items-center justify-center z-10 transition-colors ${
+            isCompareSelected
+              ? "bg-[#1D9E75] border-[#1D9E75]"
+              : "bg-white border-gray-300"
+          }`}
+        >
+          {isCompareSelected && (
+            <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+            </svg>
+          )}
+        </div>
+      )}
+
       {/* Save button */}
-      {showSaveButton && (
+      {showSaveButton && !compareMode && (
         <button
           onClick={handleSaveClick}
           className="absolute top-3 right-3 p-1.5 rounded-full hover:bg-gray-100 transition-colors z-10"
@@ -127,11 +174,18 @@ export function SpotCard({ spot, showSaveButton = true, searchQuery = "", distan
           <p className="text-xs text-gray-500 mt-2 line-clamp-1">{spot.description}</p>
         )}
 
-        {/* Footer: Category tag + Price badge */}
-        <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
-          <span className={`text-xs px-2 py-0.5 rounded-full ${config.color}`}>
-            {config.label}
-          </span>
+        {/* Footer: Category tag + Cuisine + Price badge */}
+        <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between flex-wrap gap-1.5">
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className={`text-xs px-2 py-0.5 rounded-full ${config.color}`}>
+              {config.label}
+            </span>
+            {spot.cuisine && (
+              <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
+                {spot.cuisine}
+              </span>
+            )}
+          </div>
           <div className="flex items-center gap-1.5 flex-shrink-0">
             {typeof distanceMeters === "number" && (
               <span className="text-xs font-medium px-2 py-1 rounded-md border border-blue-100 bg-blue-50 text-blue-600 whitespace-nowrap">
@@ -143,6 +197,16 @@ export function SpotCard({ spot, showSaveButton = true, searchQuery = "", distan
             </span>
           </div>
         </div>
+
+        {/* Typical vibe (hand-curated estimate, not live data) */}
+        {spot.vibe && (
+          <span
+            title="Estimated typical vibe — not live crowd data"
+            className={`mt-1.5 inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-md border ${vibeConfig[spot.vibe].color}`}
+          >
+            {vibeConfig[spot.vibe].emoji} {vibeConfig[spot.vibe].label}
+          </span>
+        )}
 
         {/* Reviews + Directions */}
         {coords && (
