@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
 import { spots as allSpots } from "@/data/spots";
@@ -287,35 +287,62 @@ export function TeamExpenses({ teamId, teamName, members }: TeamExpensesProps) {
 // A small "Remind via..." dropdown so people can pick whichever mail service they
 // actually use, rather than us guessing wrong for them.
 function ReminderMenu({ toEmail, content }: { toEmail: string; content: ReminderContent }) {
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [open]);
+
   if (!toEmail) return null;
 
   return (
-    <details className="relative inline-block [&_summary::-webkit-details-marker]:hidden">
-      <summary className="text-xs text-blue-600 hover:underline cursor-pointer list-none">
+    <div className="relative inline-block" ref={menuRef}>
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        className="text-xs text-blue-600 hover:underline"
+      >
         Remind
-      </summary>
-      <div className="absolute right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-20 w-32">
-        <a
-          href={gmailComposeUrl(toEmail, content)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50"
-        >
-          Gmail
-        </a>
-        <a
-          href={outlookComposeUrl(toEmail, content)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50"
-        >
-          Outlook
-        </a>
-        <a href={mailtoUrl(toEmail, content)} className="block px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50">
-          Other
-        </a>
-      </div>
-    </details>
+      </button>
+      {open && (
+        <div className="absolute right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-20 w-32">
+          <a
+            href={gmailComposeUrl(toEmail, content)}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setOpen(false)}
+            className="block px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50"
+          >
+            Gmail
+          </a>
+          <a
+            href={outlookComposeUrl(toEmail, content)}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setOpen(false)}
+            className="block px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50"
+          >
+            Outlook
+          </a>
+          <a
+            href={mailtoUrl(toEmail, content)}
+            onClick={() => setOpen(false)}
+            className="block px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50"
+          >
+            Other
+          </a>
+        </div>
+      )}
+    </div>
   );
 }
 
