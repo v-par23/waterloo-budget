@@ -11,6 +11,7 @@ const navItems = [
   { href: "/planner", label: "Planner" },
   { href: "/events", label: "Events" },
   { href: "/ask", label: "Ask AI" },
+  { href: "/budget", label: "Budget Tracker" },
   { href: "/free", label: "Free" },
   { href: "/suggest", label: "Suggest a Spot" },
 ];

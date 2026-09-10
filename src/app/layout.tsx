@@ -6,6 +6,7 @@ import { MobileHeader } from "@/components/layout/MobileHeader";
 import { AuthProvider } from "@/components/AuthProvider";
 import { SavedSpotsProvider } from "@/components/SavedSpotsProvider";
 import { ScheduleProvider } from "@/components/ScheduleProvider";
+import { BudgetProvider } from "@/components/BudgetProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,13 +28,15 @@ export default function RootLayout({
         <AuthProvider>
           <SavedSpotsProvider>
             <ScheduleProvider>
-              <Sidebar />
-              <MobileHeader />
-              <main className="lg:pl-64 pt-14 lg:pt-0">
-                <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
-                  {children}
-                </div>
-              </main>
+              <BudgetProvider>
+                <Sidebar />
+                <MobileHeader />
+                <main className="lg:pl-64 pt-14 lg:pt-0">
+                  <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
+                    {children}
+                  </div>
+                </main>
+              </BudgetProvider>
             </ScheduleProvider>
           </SavedSpotsProvider>
         </AuthProvider>

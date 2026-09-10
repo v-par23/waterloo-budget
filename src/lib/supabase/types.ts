@@ -109,6 +109,51 @@ export type Database = {
           note?: string | null;
         };
       };
+      expenses: {
+        Row: {
+          id: string;
+          user_id: string;
+          spot_id: string | null;
+          amount: number;
+          note: string | null;
+          spent_at: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          spot_id?: string | null;
+          amount: number;
+          note?: string | null;
+          spent_at?: string;
+          created_at?: string;
+        };
+        Update: {
+          amount?: number;
+          note?: string | null;
+          spent_at?: string;
+        };
+      };
+      budget_goals: {
+        Row: {
+          id: string;
+          user_id: string;
+          period: "weekly" | "monthly";
+          amount: number;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          period: "weekly" | "monthly";
+          amount: number;
+          updated_at?: string;
+        };
+        Update: {
+          amount?: number;
+          updated_at?: string;
+        };
+      };
     };
   };
 };

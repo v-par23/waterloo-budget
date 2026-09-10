@@ -56,6 +56,22 @@ export function SpotCard({ spot, showSaveButton = true, searchQuery = "", distan
     }
   };
 
+  const handleLogSpendClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+
+    const params = new URLSearchParams({ spotId: spot.id });
+    if (!spot.isFree) {
+      const amount = parseFloat(spot.price.replace(/[^0-9.]/g, ""));
+      if (Number.isFinite(amount)) params.set("amount", String(amount));
+    }
+    router.push(`/budget?${params.toString()}`);
+  };
+
   // Price badge styling based on price level
   const getPriceBadgeStyle = () => {
     if (spot.isFree) return "bg-emerald-100 text-emerald-700 border-emerald-200";
@@ -138,6 +154,16 @@ export function SpotCard({ spot, showSaveButton = true, searchQuery = "", distan
             className="mt-3 pt-3 border-t border-gray-100"
           />
         )}
+
+        {/* Log spend */}
+        <button
+          onClick={handleLogSpendClick}
+          className={`w-full text-xs font-medium text-emerald-600 hover:text-emerald-700 flex items-center gap-1 ${
+            coords ? "mt-2" : "mt-3 pt-3 border-t border-gray-100"
+          }`}
+        >
+          💰 Log spend
+        </button>
       </div>
     </div>
   );
