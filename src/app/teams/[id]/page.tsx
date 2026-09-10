@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
 import { spots as allSpots } from "@/data/spots";
 import { SpotCard } from "@/components/ui/SpotCard";
+import { TeamExpenses } from "@/components/features/TeamExpenses";
 
 interface Team {
   id: string;
@@ -260,6 +261,9 @@ export default function TeamDetailPage({ params }: { params: Promise<{ id: strin
           })}
         </div>
       </div>
+
+      {/* Group Expenses */}
+      <TeamExpenses teamId={team.id} teamName={team.name} members={members} />
 
       {/* Team Spots */}
       <div>

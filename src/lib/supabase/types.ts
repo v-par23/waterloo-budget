@@ -154,6 +154,52 @@ export type Database = {
           updated_at?: string;
         };
       };
+      team_expenses: {
+        Row: {
+          id: string;
+          team_id: string;
+          spot_id: string | null;
+          description: string;
+          amount: number;
+          paid_by: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          team_id: string;
+          spot_id?: string | null;
+          description: string;
+          amount: number;
+          paid_by: string;
+          created_at?: string;
+        };
+        Update: {
+          description?: string;
+          amount?: number;
+        };
+      };
+      team_expense_splits: {
+        Row: {
+          id: string;
+          expense_id: string;
+          user_id: string;
+          amount: number;
+          settled: boolean;
+          settled_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          expense_id: string;
+          user_id: string;
+          amount: number;
+          settled?: boolean;
+          settled_at?: string | null;
+        };
+        Update: {
+          settled?: boolean;
+          settled_at?: string | null;
+        };
+      };
     };
   };
 };
