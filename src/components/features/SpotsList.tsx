@@ -78,7 +78,9 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
   const [compareMode, setCompareMode] = useState(false);
   const [compareIds, setCompareIds] = useState<string[]>([]);
   const [showCompareModal, setShowCompareModal] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+  const filtersRef = useRef<HTMLDivElement>(null);
   const { location, loading: locating, error: locationError, requestLocation } = useUserLocation();
   const {
     isSupported: voiceSupported,
@@ -115,6 +117,17 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
     function handleClickOutside(event: MouseEvent) {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
         setShowSuggestions(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Close the filters dropdown when clicking outside it
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (filtersRef.current && !filtersRef.current.contains(event.target as Node)) {
+        setShowFilters(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -267,10 +280,21 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
 
   const handleToggleCompareMode = () => {
     setCompareMode((prev) => {
-      if (prev) setCompareIds([]);
+      if (prev) {
+        setCompareIds([]);
+        setShowFilters(false);
+        setSelectedCuisine("all");
+        setSelectedPriceLevel("all");
+        setSelectedVibe("all");
+      }
       return !prev;
     });
   };
+
+  const activeFilterCount =
+    (selectedCuisine !== "all" ? 1 : 0) +
+    (selectedPriceLevel !== "all" ? 1 : 0) +
+    (selectedVibe !== "all" ? 1 : 0);
 
   const handleSuggestionClick = (spot: Spot) => {
     setSearchQuery(spot.name);
@@ -392,89 +416,135 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
         >
           ⚖️ {compareMode ? "Comparing" : "Compare"}
         </button>
-      </div>
 
-      {/* Cuisine filter */}
-      {availableCuisines.length > 0 && (
-        <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1">
-          <button
-            onClick={() => setSelectedCuisine("all")}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
-              selectedCuisine === "all"
-                ? "bg-gray-800 text-white"
-                : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
-            }`}
-          >
-            Any cuisine
-          </button>
-          {availableCuisines.map((cuisine) => (
+        {compareMode && (
+          <div className="relative" ref={filtersRef}>
             <button
-              key={cuisine}
-              onClick={() => setSelectedCuisine(cuisine)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
-                selectedCuisine === cuisine
+              onClick={() => setShowFilters((prev) => !prev)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+                showFilters || activeFilterCount > 0
                   ? "bg-gray-800 text-white"
-                  : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
               }`}
             >
-              {cuisine}
+              🔧 Filters{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
+              <svg
+                className={`w-3 h-3 transition-transform ${showFilters ? "rotate-180" : ""}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
             </button>
-          ))}
-        </div>
-      )}
 
-      {/* Price + Vibe filters */}
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="flex gap-1.5">
-          <button
-            onClick={() => setSelectedPriceLevel("all")}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
-              selectedPriceLevel === "all"
-                ? "bg-gray-800 text-white"
-                : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
-            }`}
-          >
-            Any price
-          </button>
-          {priceLevels.map(({ level, label }) => (
-            <button
-              key={level}
-              onClick={() => setSelectedPriceLevel(level)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
-                selectedPriceLevel === level
-                  ? "bg-gray-800 text-white"
-                  : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-        <div className="flex gap-1.5">
-          <button
-            onClick={() => setSelectedVibe("all")}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
-              selectedVibe === "all"
-                ? "bg-gray-800 text-white"
-                : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
-            }`}
-          >
-            Any vibe
-          </button>
-          {(Object.keys(vibeConfig) as VibeLevel[]).map((vibe) => (
-            <button
-              key={vibe}
-              onClick={() => setSelectedVibe(vibe)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
-                selectedVibe === vibe
-                  ? "bg-gray-800 text-white"
-                  : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
-              }`}
-            >
-              {vibeConfig[vibe].emoji} {vibeConfig[vibe].label}
-            </button>
-          ))}
-        </div>
+            {showFilters && (
+              <div className="absolute z-40 mt-2 w-72 bg-white border border-gray-200 rounded-xl shadow-lg p-4 space-y-4">
+                {availableCuisines.length > 0 && (
+                  <div>
+                    <p className="text-xs font-medium text-gray-500 mb-1.5">Cuisine</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      <button
+                        onClick={() => setSelectedCuisine("all")}
+                        className={`px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+                          selectedCuisine === "all"
+                            ? "bg-gray-800 text-white"
+                            : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
+                        }`}
+                      >
+                        Any
+                      </button>
+                      {availableCuisines.map((cuisine) => (
+                        <button
+                          key={cuisine}
+                          onClick={() => setSelectedCuisine(cuisine)}
+                          className={`px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+                            selectedCuisine === cuisine
+                              ? "bg-gray-800 text-white"
+                              : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
+                          }`}
+                        >
+                          {cuisine}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div>
+                  <p className="text-xs font-medium text-gray-500 mb-1.5">Price</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    <button
+                      onClick={() => setSelectedPriceLevel("all")}
+                      className={`px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+                        selectedPriceLevel === "all"
+                          ? "bg-gray-800 text-white"
+                          : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
+                      }`}
+                    >
+                      Any
+                    </button>
+                    {priceLevels.map(({ level, label }) => (
+                      <button
+                        key={level}
+                        onClick={() => setSelectedPriceLevel(level)}
+                        className={`px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+                          selectedPriceLevel === level
+                            ? "bg-gray-800 text-white"
+                            : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <p className="text-xs font-medium text-gray-500 mb-1.5">Typical vibe</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    <button
+                      onClick={() => setSelectedVibe("all")}
+                      className={`px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+                        selectedVibe === "all"
+                          ? "bg-gray-800 text-white"
+                          : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
+                      }`}
+                    >
+                      Any
+                    </button>
+                    {(Object.keys(vibeConfig) as VibeLevel[]).map((vibe) => (
+                      <button
+                        key={vibe}
+                        onClick={() => setSelectedVibe(vibe)}
+                        className={`px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+                          selectedVibe === vibe
+                            ? "bg-gray-800 text-white"
+                            : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
+                        }`}
+                      >
+                        {vibeConfig[vibe].emoji} {vibeConfig[vibe].label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {activeFilterCount > 0 && (
+                  <button
+                    onClick={() => {
+                      setSelectedCuisine("all");
+                      setSelectedPriceLevel("all");
+                      setSelectedVibe("all");
+                    }}
+                    className="text-xs text-gray-400 hover:text-red-500"
+                  >
+                    Clear filters
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Neighborhood filter */}
