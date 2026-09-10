@@ -416,20 +416,62 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
         >
           ⚖️ {compareMode ? "Comparing" : "Compare"}
         </button>
+      </div>
 
-        {compareMode && (
+      {/* Neighborhood filter */}
+      <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1">
+        {neighborhoods.map((neighborhood) => (
+          <button
+            key={neighborhood}
+            onClick={() => setSelectedNeighborhood(neighborhood)}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+              selectedNeighborhood === neighborhood
+                ? "bg-gray-800 text-white"
+                : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
+            }`}
+          >
+            {neighborhood}
+          </button>
+        ))}
+      </div>
+
+      {/* Results count */}
+      <p className="text-sm text-gray-500">
+        {filteredSpots.length} {filteredSpots.length === 1 ? 'spot' : 'spots'}
+        {searchQuery && ` for "${searchQuery}"`}
+      </p>
+
+      {/* Spots grid */}
+      <div className={`grid gap-4 md:grid-cols-2 xl:grid-cols-3 ${compareMode ? "pb-20" : ""}`}>
+        {filteredSpots.map((spot) => (
+          <SpotCard
+            key={spot.id}
+            spot={spot}
+            searchQuery={searchQuery}
+            distanceMeters={distances[spot.id]}
+            compareMode={compareMode}
+            isCompareSelected={compareIds.includes(spot.id)}
+            compareDisabled={compareIds.length >= MAX_COMPARE}
+            onToggleCompare={handleToggleCompare}
+          />
+        ))}
+      </div>
+
+      {/* Floating compare bar */}
+      {compareMode && (
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 flex items-center gap-3">
           <div className="relative" ref={filtersRef}>
             <button
               onClick={() => setShowFilters((prev) => !prev)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap shadow-lg transition-colors ${
                 showFilters || activeFilterCount > 0
-                  ? "bg-gray-800 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  ? "bg-[#1D9E75] text-white"
+                  : "bg-gray-900 text-gray-200 hover:bg-gray-800"
               }`}
             >
               🔧 Filters{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
               <svg
-                className={`w-3 h-3 transition-transform ${showFilters ? "rotate-180" : ""}`}
+                className={`w-3 h-3 transition-transform ${showFilters ? "" : "rotate-180"}`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -439,7 +481,7 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
             </button>
 
             {showFilters && (
-              <div className="absolute z-40 mt-2 w-72 bg-white border border-gray-200 rounded-xl shadow-lg p-4 space-y-4">
+              <div className="absolute z-40 bottom-full mb-2 left-0 w-72 bg-white border border-gray-200 rounded-xl shadow-lg p-4 space-y-4">
                 {availableCuisines.length > 0 && (
                   <div>
                     <p className="text-xs font-medium text-gray-500 mb-1.5">Cuisine</p>
@@ -544,67 +586,27 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
               </div>
             )}
           </div>
-        )}
-      </div>
 
-      {/* Neighborhood filter */}
-      <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1">
-        {neighborhoods.map((neighborhood) => (
-          <button
-            key={neighborhood}
-            onClick={() => setSelectedNeighborhood(neighborhood)}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
-              selectedNeighborhood === neighborhood
-                ? "bg-gray-800 text-white"
-                : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
-            }`}
-          >
-            {neighborhood}
-          </button>
-        ))}
-      </div>
-
-      {/* Results count */}
-      <p className="text-sm text-gray-500">
-        {filteredSpots.length} {filteredSpots.length === 1 ? 'spot' : 'spots'}
-        {searchQuery && ` for "${searchQuery}"`}
-      </p>
-
-      {/* Spots grid */}
-      <div className={`grid gap-4 md:grid-cols-2 xl:grid-cols-3 ${compareMode ? "pb-20" : ""}`}>
-        {filteredSpots.map((spot) => (
-          <SpotCard
-            key={spot.id}
-            spot={spot}
-            searchQuery={searchQuery}
-            distanceMeters={distances[spot.id]}
-            compareMode={compareMode}
-            isCompareSelected={compareIds.includes(spot.id)}
-            compareDisabled={compareIds.length >= MAX_COMPARE}
-            onToggleCompare={handleToggleCompare}
-          />
-        ))}
-      </div>
-
-      {/* Floating compare bar */}
-      {compareMode && compareIds.length > 0 && (
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 bg-gray-900 text-white rounded-full shadow-lg px-4 py-2.5 flex items-center gap-3">
-          <span className="text-sm font-medium">
-            {compareIds.length} / {MAX_COMPARE} selected
-          </span>
-          <button
-            onClick={() => setCompareIds([])}
-            className="text-xs text-gray-300 hover:text-white"
-          >
-            Clear
-          </button>
-          <button
-            onClick={() => setShowCompareModal(true)}
-            disabled={compareIds.length < 2}
-            className="px-3 py-1.5 bg-[#1D9E75] rounded-full text-sm font-medium hover:bg-[#178a66] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-          >
-            Compare
-          </button>
+          {compareIds.length > 0 && (
+            <div className="bg-gray-900 text-white rounded-full shadow-lg px-4 py-2.5 flex items-center gap-3">
+              <span className="text-sm font-medium whitespace-nowrap">
+                {compareIds.length} / {MAX_COMPARE} selected
+              </span>
+              <button
+                onClick={() => setCompareIds([])}
+                className="text-xs text-gray-300 hover:text-white"
+              >
+                Clear
+              </button>
+              <button
+                onClick={() => setShowCompareModal(true)}
+                disabled={compareIds.length < 2}
+                className="px-3 py-1.5 bg-[#1D9E75] rounded-full text-sm font-medium hover:bg-[#178a66] disabled:opacity-40 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
+              >
+                Compare
+              </button>
+            </div>
+          )}
         </div>
       )}
 
