@@ -40,20 +40,21 @@ function displayName(member: Member | undefined, fallbackId: string): string {
   return member?.profiles?.name || member?.profiles?.email || `User ${fallbackId.slice(0, 8)}`;
 }
 
-// Builds a Gmail web-compose reminder — this only opens a pre-filled draft in Gmail's
-// own compose window (in a new tab). It never moves money itself; real e-Transfers can
-// only be sent from within someone's own banking app, and Interac has no public API for
-// that. Gmail is used as the default since most people use it day-to-day rather than a
-// native mail app — mailto: links would otherwise open whatever the OS's default mail
-// client is (e.g. Apple Mail), regardless of what the person actually uses.
-function buildReminderGmailLink(
-  toEmail: string,
+// These only open a pre-filled draft in the chosen webmail/mail app — they never move
+// money themselves. Real e-Transfers can only be sent from within someone's own banking
+// app, and Interac has no public API for that.
+interface ReminderContent {
+  subject: string;
+  body: string;
+}
+
+function buildReminderContent(
   payerEmail: string,
   payerName: string,
   amount: number,
   description: string,
   teamName: string
-): string {
+): ReminderContent {
   const subject = `You owe $${amount.toFixed(2)} for ${description}`;
   const body = [
     `Hey!`,
@@ -65,14 +66,34 @@ function buildReminderGmailLink(
     `Thanks!`,
     `${payerName}`,
   ].join("\n");
+  return { subject, body };
+}
+
+function gmailComposeUrl(toEmail: string, content: ReminderContent): string {
   const params = new URLSearchParams({
     view: "cm",
     fs: "1",
     to: toEmail,
-    su: subject,
-    body,
+    su: content.subject,
+    body: content.body,
   });
   return `https://mail.google.com/mail/?${params.toString()}`;
+}
+
+function outlookComposeUrl(toEmail: string, content: ReminderContent): string {
+  const params = new URLSearchParams({
+    to: toEmail,
+    subject: content.subject,
+    body: content.body,
+  });
+  return `https://outlook.live.com/mail/deeplink/compose?${params.toString()}`;
+}
+
+// Falls back to whatever mail app is set as the OS default (Apple Mail, Thunderbird, etc).
+// Uses encodeURIComponent (not URLSearchParams) since mailto: URIs expect %20 for spaces
+// per RFC 6068, not the "+" that URLSearchParams produces for regular query strings.
+function mailtoUrl(toEmail: string, content: ReminderContent): string {
+  return `mailto:${toEmail}?subject=${encodeURIComponent(content.subject)}&body=${encodeURIComponent(content.body)}`;
 }
 
 export function TeamExpenses({ teamId, teamName, members }: TeamExpensesProps) {
@@ -193,10 +214,9 @@ export function TeamExpenses({ teamId, teamName, members }: TeamExpensesProps) {
                     {expenseSplits.map((split) => {
                       const participant = memberByUserId.get(split.user_id);
                       const isSelf = user?.id === split.user_id;
-                      const reminderHref =
+                      const reminderContent =
                         payer && payer.profiles?.email
-                          ? buildReminderGmailLink(
-                              participant?.profiles?.email || "",
+                          ? buildReminderContent(
                               payer.profiles.email,
                               displayName(payer, expense.paid_by),
                               split.amount,
@@ -223,15 +243,11 @@ export function TeamExpenses({ teamId, teamName, members }: TeamExpensesProps) {
                               </button>
                             ) : isPayer ? (
                               <>
-                                {reminderHref && (
-                                  <a
-                                    href={reminderHref}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-xs text-blue-600 hover:underline"
-                                  >
-                                    Remind
-                                  </a>
+                                {reminderContent && (
+                                  <ReminderMenu
+                                    toEmail={participant?.profiles?.email || ""}
+                                    content={reminderContent}
+                                  />
                                 )}
                                 <button
                                   onClick={() => markSettled(split.id)}
@@ -265,6 +281,41 @@ export function TeamExpenses({ teamId, teamName, members }: TeamExpensesProps) {
         />
       )}
     </div>
+  );
+}
+
+// A small "Remind via..." dropdown so people can pick whichever mail service they
+// actually use, rather than us guessing wrong for them.
+function ReminderMenu({ toEmail, content }: { toEmail: string; content: ReminderContent }) {
+  if (!toEmail) return null;
+
+  return (
+    <details className="relative inline-block [&_summary::-webkit-details-marker]:hidden">
+      <summary className="text-xs text-blue-600 hover:underline cursor-pointer list-none">
+        Remind
+      </summary>
+      <div className="absolute right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-20 w-32">
+        <a
+          href={gmailComposeUrl(toEmail, content)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50"
+        >
+          Gmail
+        </a>
+        <a
+          href={outlookComposeUrl(toEmail, content)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50"
+        >
+          Outlook
+        </a>
+        <a href={mailtoUrl(toEmail, content)} className="block px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50">
+          Other
+        </a>
+      </div>
+    </details>
   );
 }
 
