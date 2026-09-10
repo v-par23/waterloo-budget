@@ -246,7 +246,7 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
             location ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
           }`}
         >
-          📍 {locating ? "Locating…" : location ? "Location on" : "Near me"}
+          {locating ? "Locating…" : location ? "Location on" : "Near me"}
         </button>
         {locationError && <p className="text-xs text-red-500">{locationError}</p>}
       </div>

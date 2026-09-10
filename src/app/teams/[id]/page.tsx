@@ -372,7 +372,6 @@ function AddSpotModal({
               onClick={() => onAdd(spot.id)}
               className="w-full text-left p-3 rounded-lg hover:bg-gray-50 flex items-center gap-3 transition-colors"
             >
-              <span className="text-xl">{spot.emoji}</span>
               <div className="flex-1 min-w-0">
                 <div className="font-medium text-gray-900 truncate">{spot.name}</div>
                 <div className="text-sm text-gray-500">{spot.neighborhood}</div>

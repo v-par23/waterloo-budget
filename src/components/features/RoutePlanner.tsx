@@ -212,7 +212,7 @@ export function RoutePlanner({ day }: { day: ClassSession["day"] }) {
                 rel="noopener noreferrer"
                 className="px-3 py-1.5 bg-[#1D9E75] text-white rounded-lg hover:bg-[#178a66] transition-colors text-sm font-medium flex items-center gap-1.5"
               >
-                🧭 Start in Google Maps
+                Start in Google Maps
               </a>
             )}
           </div>

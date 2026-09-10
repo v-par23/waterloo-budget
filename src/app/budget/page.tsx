@@ -266,7 +266,6 @@ function ExpenseList() {
         return (
           <div key={expense.id} className="flex items-center justify-between px-4 py-3 gap-3">
             <div className="flex items-center gap-3 min-w-0">
-              <span className="text-lg">{spot?.emoji ?? "💵"}</span>
               <div className="min-w-0">
                 <p className="text-sm font-medium text-gray-900 truncate">
                   {spot?.name ?? expense.note ?? "Spend"}

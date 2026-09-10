@@ -9,8 +9,8 @@ let insightsCache:
   | {
       timestamp: number;
       payload: {
-        timeContext: { period: string; emoji: string; description: string };
-        seasonContext: { season: string; emoji: string };
+        timeContext: { period: string; description: string };
+        seasonContext: { season: string };
         insights: unknown[];
         stats: { totalSpots: number; freeSpots: number; categories: number };
       };
@@ -18,29 +18,29 @@ let insightsCache:
   | null = null;
 
 // Get current time context
-function getTimeContext(): { period: string; emoji: string; description: string } {
+function getTimeContext(): { period: string; description: string } {
   const hour = new Date().getHours();
-  
+
   if (hour >= 5 && hour < 11) {
-    return { period: "morning", emoji: "🌅", description: "Good morning! Here are some breakfast and coffee spots to start your day." };
+    return { period: "morning", description: "Good morning! Here are some breakfast and coffee spots to start your day." };
   } else if (hour >= 11 && hour < 14) {
-    return { period: "lunch", emoji: "☀️", description: "Lunchtime! Here are affordable spots to grab a bite." };
+    return { period: "lunch", description: "Lunchtime! Here are affordable spots to grab a bite." };
   } else if (hour >= 14 && hour < 17) {
-    return { period: "afternoon", emoji: "🌤️", description: "Afternoon vibes! Great time for coffee or a study session." };
+    return { period: "afternoon", description: "Afternoon vibes! Great time for coffee or a study session." };
   } else if (hour >= 17 && hour < 21) {
-    return { period: "evening", emoji: "🌆", description: "Evening time! Dinner spots and places to unwind." };
+    return { period: "evening", description: "Evening time! Dinner spots and places to unwind." };
   } else {
-    return { period: "night", emoji: "🌙", description: "Late night! Here's what's still open and budget-friendly." };
+    return { period: "night", description: "Late night! Here's what's still open and budget-friendly." };
   }
 }
 
 // Get season context
-function getSeasonContext(): { season: string; emoji: string } {
+function getSeasonContext(): { season: string } {
   const month = new Date().getMonth();
-  if (month >= 2 && month <= 4) return { season: "spring", emoji: "🌸" };
-  if (month >= 5 && month <= 7) return { season: "summer", emoji: "☀️" };
-  if (month >= 8 && month <= 10) return { season: "fall", emoji: "🍂" };
-  return { season: "winter", emoji: "❄️" };
+  if (month >= 2 && month <= 4) return { season: "spring" };
+  if (month >= 5 && month <= 7) return { season: "summer" };
+  if (month >= 8 && month <= 10) return { season: "fall" };
+  return { season: "winter" };
 }
 
 // Get spots by category with budget info

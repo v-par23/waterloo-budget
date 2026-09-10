@@ -108,7 +108,7 @@ export function CompareModal({ spotIds, distances, onClose, onRemove }: CompareM
                       spot.vibe ? vibeConfig[spot.vibe].color : "border-gray-100 text-gray-400"
                     }`}
                   >
-                    {spot.vibe ? `${vibeConfig[spot.vibe].emoji} ${vibeConfig[spot.vibe].label}` : "—"}
+                    {spot.vibe ? vibeConfig[spot.vibe].label : "—"}
                   </span>
                 )}
               />

@@ -169,7 +169,7 @@ export default function AskPage() {
                     onClick={() => speak(message.id, message.content)}
                     className="mt-2 text-xs text-gray-500 hover:text-gray-700 flex items-center gap-1"
                   >
-                    {speakingId === message.id ? "⏹ Stop" : "🔊 Read aloud"}
+                    {speakingId === message.id ? "Stop" : "Read aloud"}
                   </button>
                 )}
               </div>

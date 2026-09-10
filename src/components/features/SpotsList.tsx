@@ -399,7 +399,7 @@ export function SpotsList({ filterCategory }: SpotsListProps) {
               : "bg-gray-100 text-gray-600 hover:bg-gray-200"
           }`}
         >
-          📍 {locating ? "Locating…" : sortByDistance && location ? "Sorted by distance" : "Near me"}
+          {locating ? "Locating…" : sortByDistance && location ? "Sorted by distance" : "Near me"}
         </button>
         <button
           onClick={handleToggleCompareMode}
@@ -407,7 +407,7 @@ export function SpotsList({ filterCategory }: SpotsListProps) {
             compareMode ? "bg-[#1D9E75] text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
           }`}
         >
-          ⚖️ {compareMode ? "Comparing" : "Compare"}
+          {compareMode ? "Comparing" : "Compare"}
         </button>
       </div>
 
@@ -558,7 +558,7 @@ export function SpotsList({ filterCategory }: SpotsListProps) {
                             : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
                         }`}
                       >
-                        {vibeConfig[vibe].emoji} {vibeConfig[vibe].label}
+                        {vibeConfig[vibe].label}
                       </button>
                     ))}
                   </div>

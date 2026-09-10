@@ -184,7 +184,6 @@ export function TeamExpenses({ teamId, teamName, members }: TeamExpensesProps) {
         <div className="space-y-3">
           {expenses.map((expense) => {
             const expenseSplits = splits.filter((s) => s.expense_id === expense.id);
-            const spot = expense.spot_id ? allSpots.find((s) => s.id === expense.spot_id) : undefined;
             const payer = memberByUserId.get(expense.paid_by);
             const isPayer = user?.id === expense.paid_by;
 
@@ -192,7 +191,6 @@ export function TeamExpenses({ teamId, teamName, members }: TeamExpensesProps) {
               <div key={expense.id} className="bg-white border border-gray-200 rounded-xl p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-2 min-w-0">
-                    {spot && <span className="text-lg">{spot.emoji}</span>}
                     <div className="min-w-0">
                       <p className="font-medium text-gray-900 truncate">{expense.description}</p>
                       <p className="text-xs text-gray-400">
@@ -233,7 +231,7 @@ export function TeamExpenses({ teamId, teamName, members }: TeamExpensesProps) {
                           <div className="flex items-center gap-2 flex-shrink-0">
                             <span className="text-gray-900 font-medium">${split.amount.toFixed(2)}</span>
                             {split.settled ? (
-                              <span className="text-xs text-emerald-600">✓ Settled</span>
+                              <span className="text-xs text-emerald-600">Settled</span>
                             ) : isSelf ? (
                               <button
                                 onClick={() => markSettled(split.id)}

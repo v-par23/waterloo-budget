@@ -97,7 +97,7 @@ export default function SuggestPage() {
             <option value="">Select a category</option>
             {Object.entries(categoryConfig).map(([key, config]) => (
               <option key={key} value={key}>
-                {config.emoji} {config.label}
+                {config.label}
               </option>
             ))}
           </select>

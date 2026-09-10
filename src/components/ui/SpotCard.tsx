@@ -204,7 +204,7 @@ export function SpotCard({
             title="Estimated typical vibe — not live crowd data"
             className={`mt-1.5 inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-md border ${vibeConfig[spot.vibe].color}`}
           >
-            {vibeConfig[spot.vibe].emoji} {vibeConfig[spot.vibe].label}
+            {vibeConfig[spot.vibe].label}
           </span>
         )}
 

@@ -30,10 +30,10 @@ export interface Spot {
   vibe?: VibeLevel;
 }
 
-export const vibeConfig: Record<VibeLevel, { label: string; emoji: string; color: string }> = {
-  quiet: { label: "Usually quiet", emoji: "🤫", color: "bg-blue-50 text-blue-600 border-blue-100" },
-  moderate: { label: "Moderate", emoji: "🙂", color: "bg-amber-50 text-amber-600 border-amber-100" },
-  busy: { label: "Usually busy", emoji: "🔥", color: "bg-red-50 text-red-600 border-red-100" },
+export const vibeConfig: Record<VibeLevel, { label: string; color: string }> = {
+  quiet: { label: "Usually quiet", color: "bg-blue-50 text-blue-600 border-blue-100" },
+  moderate: { label: "Moderate", color: "bg-amber-50 text-amber-600 border-amber-100" },
+  busy: { label: "Usually busy", color: "bg-red-50 text-red-600 border-red-100" },
 };
 
 export const categoryConfig: Record<

@@ -14,12 +14,10 @@ interface Insight {
 interface InsightsData {
   timeContext: {
     period: string;
-    emoji: string;
     description: string;
   };
   seasonContext: {
     season: string;
-    emoji: string;
   };
   insights: Insight[];
   stats: {
@@ -152,10 +150,8 @@ export function AIInsights({ compact = false, autoLoad = true }: AIInsightsProps
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
           <div>
             <div className="flex items-center gap-2 text-sm text-gray-500 mb-1">
-              <span>{data.timeContext.emoji}</span>
               <span className="capitalize">{data.timeContext.period}</span>
               <span>•</span>
-              <span>{data.seasonContext.emoji}</span>
               <span className="capitalize">{data.seasonContext.season}</span>
             </div>
             <p className="text-sm sm:text-base text-gray-600">{data.timeContext.description}</p>
