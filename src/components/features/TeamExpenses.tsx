@@ -40,10 +40,13 @@ function displayName(member: Member | undefined, fallbackId: string): string {
   return member?.profiles?.name || member?.profiles?.email || `User ${fallbackId.slice(0, 8)}`;
 }
 
-// Builds a mailto: reminder — this only opens the sender's own email client with a
-// pre-filled message. It never moves money itself; real e-Transfers can only be sent
-// from within someone's own banking app, and Interac has no public API for that.
-function buildReminderMailto(
+// Builds a Gmail web-compose reminder — this only opens a pre-filled draft in Gmail's
+// own compose window (in a new tab). It never moves money itself; real e-Transfers can
+// only be sent from within someone's own banking app, and Interac has no public API for
+// that. Gmail is used as the default since most people use it day-to-day rather than a
+// native mail app — mailto: links would otherwise open whatever the OS's default mail
+// client is (e.g. Apple Mail), regardless of what the person actually uses.
+function buildReminderGmailLink(
   toEmail: string,
   payerEmail: string,
   payerName: string,
@@ -62,7 +65,14 @@ function buildReminderMailto(
     `Thanks!`,
     `${payerName}`,
   ].join("\n");
-  return `mailto:${toEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const params = new URLSearchParams({
+    view: "cm",
+    fs: "1",
+    to: toEmail,
+    su: subject,
+    body,
+  });
+  return `https://mail.google.com/mail/?${params.toString()}`;
 }
 
 export function TeamExpenses({ teamId, teamName, members }: TeamExpensesProps) {
@@ -185,7 +195,7 @@ export function TeamExpenses({ teamId, teamName, members }: TeamExpensesProps) {
                       const isSelf = user?.id === split.user_id;
                       const reminderHref =
                         payer && payer.profiles?.email
-                          ? buildReminderMailto(
+                          ? buildReminderGmailLink(
                               participant?.profiles?.email || "",
                               payer.profiles.email,
                               displayName(payer, expense.paid_by),
@@ -216,6 +226,8 @@ export function TeamExpenses({ teamId, teamName, members }: TeamExpensesProps) {
                                 {reminderHref && (
                                   <a
                                     href={reminderHref}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className="text-xs text-blue-600 hover:underline"
                                   >
                                     Remind
