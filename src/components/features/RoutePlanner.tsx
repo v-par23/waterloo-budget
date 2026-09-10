@@ -103,7 +103,7 @@ export function RoutePlanner({ day }: { day: ClassSession["day"] }) {
         <div>
           <h2 className="font-semibold text-gray-900">Build Your Route</h2>
           <p className="text-xs text-gray-500 mt-0.5">
-            Chain classes and spots together in order — &quot;study here, eat there.&quot;
+            Chain classes and spots together in the order you want.
           </p>
         </div>
         <button

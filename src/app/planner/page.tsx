@@ -324,36 +324,6 @@ export default function PlannerPage() {
         )}
       </div>
 
-      {/* Summary */}
-      <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6">
-        <h3 className="font-semibold text-gray-900 mb-3 text-sm sm:text-base">Day Summary</h3>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-          <div>
-            <p className="text-2xl font-bold text-gray-900">{dayClasses.length}</p>
-            <p className="text-xs text-gray-500">Classes</p>
-          </div>
-          <div>
-            <p className="text-2xl font-bold text-green-600">{gapsWithSuggestions.length}</p>
-            <p className="text-xs text-gray-500">Free Periods</p>
-          </div>
-          <div>
-            <p className="text-2xl font-bold text-gray-900">
-              {Math.round(
-                gapsWithSuggestions.reduce((acc, g) => acc + g.gap.durationMinutes, 0) / 60
-              )}h
-            </p>
-            <p className="text-xs text-gray-500">Free Time</p>
-          </div>
-          <div>
-            <p className="text-2xl font-bold text-gray-900">
-              {gapsWithSuggestions.reduce((acc, g) => 
-                acc + g.suggestions.workSpots.length + g.suggestions.foodCoffeeSpots.length + g.suggestions.wellnessSpots.length, 
-              0)}
-            </p>
-            <p className="text-xs text-gray-500">Suggestions</p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
