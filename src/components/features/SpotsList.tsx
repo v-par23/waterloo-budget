@@ -19,7 +19,6 @@ const priceLevels = [
 
 interface SpotsListProps {
   filterCategory?: Category;
-  showFreeOnly?: boolean;
 }
 
 // Category display names for search
@@ -64,7 +63,7 @@ function fuzzyMatch(str: string, query: string): number {
   return queryIndex === query.length ? score : 0;
 }
 
-export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
+export function SpotsList({ filterCategory }: SpotsListProps) {
   const [selectedCategory, setSelectedCategory] = useState<Category | "all">(
     filterCategory || "all"
   );
@@ -181,11 +180,6 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
         }
       }
 
-      // Free only filter
-      if (showFreeOnly && !spot.isFree) {
-        return false;
-      }
-
       // Cuisine / type filter
       if (selectedCuisine !== "all" && spot.cuisine !== selectedCuisine) {
         return false;
@@ -250,7 +244,6 @@ export function SpotsList({ filterCategory, showFreeOnly }: SpotsListProps) {
     selectedNeighborhood,
     searchQuery,
     filterCategory,
-    showFreeOnly,
     selectedCuisine,
     selectedPriceLevel,
     selectedVibe,
