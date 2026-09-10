@@ -15,6 +15,7 @@ import {
   getCategorizedSuggestionsForGap,
   getGapDescription,
 } from "@/lib/schedule/suggestions";
+import { RoutePlanner } from "@/components/features/RoutePlanner";
 import Link from "next/link";
 
 export default function PlannerPage() {
@@ -102,10 +103,14 @@ export default function PlannerPage() {
             Your personalized day with smart spot suggestions
           </p>
         </div>
+
+        {/* Route Planner still works without any classes — pure spot-to-spot chains */}
+        <RoutePlanner day={selectedDay} />
+
         <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8 text-center">
           <p className="text-gray-600 mb-2">No schedule yet</p>
           <p className="text-sm text-gray-500 mb-4">
-            Add your classes first to get personalized spot suggestions
+            Add your classes to include them in your route and get personalized spot suggestions
           </p>
           <Link
             href="/schedule"
@@ -155,6 +160,9 @@ export default function PlannerPage() {
           );
         })}
       </div>
+
+      {/* Route Planner */}
+      <RoutePlanner day={selectedDay} />
 
       {/* Timeline */}
       <div className="space-y-3">

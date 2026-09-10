@@ -34,3 +34,31 @@ export function googleMapsDirectionsUrl(lat: number, lng: number): string {
   });
   return `https://www.google.com/maps/dir/?${params.toString()}`;
 }
+
+// Google's free web Directions URL reliably supports the destination plus up to
+// this many waypoints (any more and Maps silently drops/ignores the rest).
+export const GOOGLE_MAPS_MAX_WAYPOINTS = 9;
+
+// Opens Google Maps with a full multi-stop route: origin defaults to the visitor's
+// current location (same as googleMapsDirectionsUrl), the last point is the
+// destination, and everything in between becomes ordered waypoints. Only the first
+// GOOGLE_MAPS_MAX_WAYPOINTS + 1 stops are included — Maps doesn't support more via
+// this free URL scheme.
+export function googleMapsMultiStopUrl(
+  stops: { lat: number; lng: number }[],
+  travelMode: "walking" | "driving" = "walking"
+): string {
+  const capped = stops.slice(0, GOOGLE_MAPS_MAX_WAYPOINTS + 1);
+  const destination = capped[capped.length - 1];
+  const waypoints = capped.slice(0, -1);
+
+  const params = new URLSearchParams({
+    api: "1",
+    destination: `${destination.lat},${destination.lng}`,
+    travelmode: travelMode,
+  });
+  if (waypoints.length > 0) {
+    params.set("waypoints", waypoints.map((s) => `${s.lat},${s.lng}`).join("|"));
+  }
+  return `https://www.google.com/maps/dir/?${params.toString()}`;
+}
