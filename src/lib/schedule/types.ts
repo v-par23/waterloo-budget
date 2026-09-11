@@ -26,7 +26,7 @@ export const uwBuildings = {
   "M3": { name: "Mathematics 3", lat: 43.4730, lng: -80.5442 },
   "AHS": { name: "Applied Health Sciences", lat: 43.4743, lng: -80.5475 },
   "SJ1": { name: "St. Jerome's 1", lat: 43.4695, lng: -80.5465 },
-  "REV": { name: "Ron Chicken Village", lat: 43.4706, lng: -80.5492 },
+  "REV": { name: "Ron Eydt Village", lat: 43.4706, lng: -80.5492 },
   "V1": { name: "Village 1", lat: 43.4718, lng: -80.5512 },
   "MKV": { name: "Mackenzie King Village", lat: 43.4710, lng: -80.5532 },
   "UWP": { name: "UW Place", lat: 43.4707, lng: -80.5355 },
