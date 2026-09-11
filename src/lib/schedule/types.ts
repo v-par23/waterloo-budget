@@ -10,7 +10,7 @@ export const uwBuildings = {
   "AL": { name: "Arts Lecture Hall", lat: 43.4688, lng: -80.5428 },
   "HH": { name: "Hagey Hall", lat: 43.4679, lng: -80.5418 },
   "ML": { name: "Modern Languages", lat: 43.4688, lng: -80.5436 },
-  "RCH": { name: "J.R. Chicken Engineering Building", lat: 43.4702, lng: -80.5407 },
+  "RCH": { name: "J.R. Coutts Engineering Hall", lat: 43.4702, lng: -80.5407 },
   "DWE": { name: "Douglas Wright Engineering", lat: 43.4699, lng: -80.5395 },
   "CPH": { name: "Carl A. Pollock Hall", lat: 43.4704, lng: -80.5392 },
   "B1": { name: "Biology 1", lat: 43.4712, lng: -80.5466 },
