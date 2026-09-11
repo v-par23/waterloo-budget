@@ -153,7 +153,7 @@ export function TeamExpenses({ teamId, teamName, members }: TeamExpensesProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-8">
-        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
+        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-ink"></div>
       </div>
     );
   }
@@ -161,22 +161,16 @@ export function TeamExpenses({ teamId, teamName, members }: TeamExpensesProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="font-semibold text-gray-900">Group Expenses</h2>
-        <button
-          onClick={() => setShowModal(true)}
-          className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors text-sm"
-        >
+        <h2 className="font-bold uppercase tracking-wide text-ink">Group Expenses</h2>
+        <button onClick={() => setShowModal(true)} className="receipt-btn w-auto px-4 !bg-ink !text-cream">
           Split a bill
         </button>
       </div>
 
       {expenses.length === 0 ? (
-        <div className="bg-white border border-gray-200 rounded-xl p-8 text-center">
-          <p className="text-gray-600 mb-4">No expenses split yet</p>
-          <button
-            onClick={() => setShowModal(true)}
-            className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
-          >
+        <div className="receipt-card p-8 text-center">
+          <p className="text-ink/70 mb-4">No expenses split yet</p>
+          <button onClick={() => setShowModal(true)} className="receipt-btn inline-flex w-auto px-4 !bg-ink !text-cream">
             Split your first bill
           </button>
         </div>
@@ -188,12 +182,12 @@ export function TeamExpenses({ teamId, teamName, members }: TeamExpensesProps) {
             const isPayer = user?.id === expense.paid_by;
 
             return (
-              <div key={expense.id} className="bg-white border border-gray-200 rounded-xl p-4">
+              <div key={expense.id} className="receipt-card p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-2 min-w-0">
                     <div className="min-w-0">
-                      <p className="font-medium text-gray-900 truncate">{expense.description}</p>
-                      <p className="text-xs text-gray-400">
+                      <p className="font-bold text-ink truncate">{expense.description}</p>
+                      <p className="text-[11px] uppercase tracking-wide text-ink/40">
                         Paid by {displayName(payer, expense.paid_by)} ·{" "}
                         {new Date(expense.created_at).toLocaleDateString(undefined, {
                           month: "short",
@@ -202,13 +196,13 @@ export function TeamExpenses({ teamId, teamName, members }: TeamExpensesProps) {
                       </p>
                     </div>
                   </div>
-                  <span className="text-sm font-semibold text-gray-900 flex-shrink-0">
+                  <span className="text-sm font-bold text-accent flex-shrink-0">
                     ${expense.amount.toFixed(2)}
                   </span>
                 </div>
 
                 {expenseSplits.length > 0 && (
-                  <div className="mt-3 pt-3 border-t border-gray-100 space-y-2">
+                  <div className="mt-3 pt-3 border-t border-dashed border-ink/30 space-y-2">
                     {expenseSplits.map((split) => {
                       const participant = memberByUserId.get(split.user_id);
                       const isSelf = user?.id === split.user_id;
@@ -225,22 +219,31 @@ export function TeamExpenses({ teamId, teamName, members }: TeamExpensesProps) {
 
                       return (
                         <div key={split.id} className="flex items-center justify-between gap-2 text-sm">
-                          <span className="text-gray-600 truncate">
+                          <span className="text-ink/60 truncate">
                             {displayName(participant, split.user_id)}
                           </span>
-                          <div className="flex items-center gap-2 flex-shrink-0">
-                            <span className="text-gray-900 font-medium">${split.amount.toFixed(2)}</span>
+                          <div className="flex items-center gap-3 flex-shrink-0">
+                            <span className="text-ink font-bold">${split.amount.toFixed(2)}</span>
                             {split.settled ? (
-                              <span className="text-xs text-emerald-600">Settled</span>
+                              <span
+                                className="inline-flex items-center text-[11px] font-bold uppercase tracking-wide text-ink"
+                                style={{ verticalAlign: "middle" }}
+                              >
+                                Settled
+                              </span>
                             ) : isSelf ? (
                               <button
                                 onClick={() => markSettled(split.id)}
-                                className="text-xs text-[#1D9E75] hover:underline"
+                                className="inline-flex items-center text-[11px] font-bold uppercase tracking-wide text-accent hover:underline"
+                                style={{ verticalAlign: "middle" }}
                               >
                                 Mark as paid
                               </button>
                             ) : isPayer ? (
-                              <>
+                              <span
+                                className="inline-flex items-center gap-3"
+                                style={{ verticalAlign: "middle" }}
+                              >
                                 {reminderContent && (
                                   <ReminderMenu
                                     toEmail={participant?.profiles?.email || ""}
@@ -249,13 +252,18 @@ export function TeamExpenses({ teamId, teamName, members }: TeamExpensesProps) {
                                 )}
                                 <button
                                   onClick={() => markSettled(split.id)}
-                                  className="text-xs text-gray-400 hover:text-gray-600"
+                                  className="text-[11px] font-bold uppercase tracking-wide text-ink/40 hover:text-ink"
                                 >
                                   Mark received
                                 </button>
-                              </>
+                              </span>
                             ) : (
-                              <span className="text-xs text-gray-400">Unpaid</span>
+                              <span
+                                className="inline-flex items-center text-[11px] font-bold uppercase tracking-wide text-ink/40"
+                                style={{ verticalAlign: "middle" }}
+                              >
+                                Unpaid
+                              </span>
                             )}
                           </div>
                         </div>
@@ -303,22 +311,22 @@ function ReminderMenu({ toEmail, content }: { toEmail: string; content: Reminder
   if (!toEmail) return null;
 
   return (
-    <div className="relative inline-block" ref={menuRef}>
+    <div className="relative inline-flex items-center" ref={menuRef} style={{ verticalAlign: "middle" }}>
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className="text-xs text-blue-600 hover:underline"
+        className="text-[11px] font-bold uppercase tracking-wide text-accent hover:underline"
       >
         Remind
       </button>
       {open && (
-        <div className="absolute right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-20 w-32">
+        <div className="absolute right-0 top-full mt-1 receipt-card py-1 z-20 w-32 !shadow-[4px_4px_0_#1B1A17]">
           <a
             href={gmailComposeUrl(toEmail, content)}
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setOpen(false)}
-            className="block px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50"
+            className="block px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-ink hover:text-accent"
           >
             Gmail
           </a>
@@ -327,14 +335,14 @@ function ReminderMenu({ toEmail, content }: { toEmail: string; content: Reminder
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setOpen(false)}
-            className="block px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50"
+            className="block px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-ink hover:text-accent"
           >
             Outlook
           </a>
           <a
             href={mailtoUrl(toEmail, content)}
             onClick={() => setOpen(false)}
-            className="block px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50"
+            className="block px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-ink hover:text-accent"
           >
             Other
           </a>
@@ -447,41 +455,41 @@ function SplitBillModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-ink/50 flex items-center justify-center z-50 p-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-xl w-full max-w-md p-6 space-y-4"
+        className="receipt-card w-full max-w-md p-6 space-y-4 !shadow-[8px_8px_0_#1B1A17]"
       >
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold">Split a bill</h2>
-          <button type="button" onClick={onClose} className="p-1 hover:bg-gray-100 rounded">
-            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <h2 className="text-xl font-bold uppercase tracking-wide">Split a bill</h2>
+          <button type="button" onClick={onClose} className="p-1 hover:text-accent">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">What was it for?</label>
+          <label className="block text-[10px] font-bold uppercase tracking-widest text-ink/60 mb-1">What was it for?</label>
           <input
             type="text"
             required
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="e.g. Dinner at Lazeez Shawarma"
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-200"
+            className="w-full px-1 py-2 bg-transparent border-0 border-b-2 border-ink text-sm focus:outline-none"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Link a spot (optional)</label>
+          <label className="block text-[10px] font-bold uppercase tracking-widest text-ink/60 mb-1">Link a spot (optional)</label>
           <input
             type="text"
             list="team-expense-spot-options"
             value={spotQuery}
             onChange={(e) => setSpotQuery(e.target.value)}
             placeholder="Search a spot..."
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-200"
+            className="w-full px-1 py-2 bg-transparent border-0 border-b-2 border-ink text-sm focus:outline-none"
           />
           <datalist id="team-expense-spot-options">
             {allSpots.map((s) => (
@@ -491,9 +499,9 @@ function SplitBillModal({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Total amount</label>
+          <label className="block text-[10px] font-bold uppercase tracking-widest text-ink/60 mb-1">Total amount</label>
           <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
+            <span className="absolute left-1 top-1/2 -translate-y-1/2 text-ink/50 text-sm">$</span>
             <input
               type="number"
               step="0.01"
@@ -502,46 +510,38 @@ function SplitBillModal({
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               placeholder="0.00"
-              className="w-full pl-6 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-200"
+              className="w-full pl-4 pr-1 py-2 bg-transparent border-0 border-b-2 border-ink text-sm focus:outline-none"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Split between</label>
+          <label className="block text-[10px] font-bold uppercase tracking-widest text-ink/60 mb-2">Split between</label>
           <div className="space-y-1.5 max-h-40 overflow-y-auto">
             {members.map((member) => (
-              <label key={member.user_id} className="flex items-center gap-2 text-sm text-gray-700">
+              <label key={member.user_id} className="flex items-center gap-2 text-sm text-ink">
                 <input
                   type="checkbox"
                   checked={participantIds.has(member.user_id)}
                   onChange={() => toggleParticipant(member.user_id)}
-                  className="rounded border-gray-300"
+                  className="accent-[#1B1A17]"
                 />
                 {displayName(member, member.user_id)}
                 {member.user_id === currentUserId && (
-                  <span className="text-xs text-gray-400">(you)</span>
+                  <span className="text-xs text-ink/40">(you)</span>
                 )}
               </label>
             ))}
           </div>
         </div>
 
-        {error && <p className="text-sm text-red-500">{error}</p>}
+        {error && <p className="text-sm text-accent">{error}</p>}
 
         <div className="flex gap-2 pt-2">
-          <button
-            type="button"
-            onClick={onClose}
-            className="flex-1 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-          >
+          <button type="button" onClick={onClose} className="receipt-btn flex-1">
             Cancel
           </button>
-          <button
-            type="submit"
-            disabled={submitting}
-            className="flex-1 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50"
-          >
+          <button type="submit" disabled={submitting} className="receipt-btn flex-1 !bg-ink !text-cream disabled:opacity-50">
             {submitting ? "Saving..." : "Split it"}
           </button>
         </div>

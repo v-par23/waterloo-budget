@@ -19,10 +19,10 @@ export default function SavedPage() {
     return (
       <div className="space-y-4 sm:space-y-6">
         <div className="space-y-1 sm:space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">My Saved Spots</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-ink">My Saved Spots</h1>
         </div>
         <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-ink"></div>
         </div>
       </div>
     );
@@ -32,14 +32,11 @@ export default function SavedPage() {
     return (
       <div className="space-y-4 sm:space-y-6">
         <div className="space-y-1 sm:space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">My Saved Spots</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-ink">My Saved Spots</h1>
         </div>
-        <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8 text-center">
-          <p className="text-sm sm:text-base text-gray-600 mb-4">Sign in to save your favorite spots</p>
-          <Link
-            href="/login"
-            className="inline-block px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors text-sm sm:text-base"
-          >
+        <div className="receipt-card p-6 sm:p-8 text-center">
+          <p className="text-sm sm:text-base text-ink/70 mb-4">Sign in to save your favorite spots</p>
+          <Link href="/login" className="receipt-btn inline-flex w-auto px-4 !bg-ink !text-cream">
             Sign in
           </Link>
         </div>
@@ -50,27 +47,26 @@ export default function SavedPage() {
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="space-y-1 sm:space-y-2">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">My Saved Spots</h1>
-        <p className="text-sm sm:text-base text-gray-600">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-ink">My Saved Spots</h1>
+        <p className="text-sm sm:text-base text-ink/70">
           {savedSpots.length} spot{savedSpots.length !== 1 ? "s" : ""} saved
         </p>
       </div>
 
+      <div className="receipt-divider" />
+
       {savedSpots.length === 0 ? (
-        <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8 text-center">
-          <p className="text-sm sm:text-base text-gray-600 mb-4">You haven&apos;t saved any spots yet</p>
-          <p className="text-xs sm:text-sm text-gray-500">
-            Hover over any spot and click the heart icon to save it here
+        <div className="receipt-card p-6 sm:p-8 text-center">
+          <p className="text-sm sm:text-base text-ink/70 mb-4">You haven&apos;t saved any spots yet</p>
+          <p className="text-xs sm:text-sm text-ink/50">
+            Hover over any spot and tap the &quot;Tap to save&quot; tag to save it here
           </p>
-          <Link
-            href="/"
-            className="inline-block mt-4 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors text-sm sm:text-base"
-          >
+          <Link href="/" className="receipt-btn inline-flex mt-4 w-auto px-4 !bg-ink !text-cream">
             Browse Spots
           </Link>
         </div>
       ) : (
-        <div className="grid gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
           {savedSpots.map((spot) => (
             <SpotCard key={spot.id} spot={spot} />
           ))}

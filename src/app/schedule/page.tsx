@@ -85,7 +85,7 @@ export default function SchedulePage() {
       }
 
       setUploadSuccess(`Successfully imported ${addedCount} classes!`);
-      
+
       // Clear file input
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
@@ -126,10 +126,10 @@ export default function SchedulePage() {
     return (
       <div className="space-y-4 sm:space-y-6">
         <div className="space-y-1 sm:space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">My Schedule</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-ink">My Schedule</h1>
         </div>
         <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-ink"></div>
         </div>
       </div>
     );
@@ -139,38 +139,34 @@ export default function SchedulePage() {
     <div className="space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="space-y-1 sm:space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">My Schedule</h1>
-          <p className="text-sm sm:text-base text-gray-600">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-ink">My Schedule</h1>
+          <p className="text-sm sm:text-base text-ink/70">
             Add your classes to get personalized spot suggestions during breaks
           </p>
         </div>
         <div className="flex gap-2">
           {schedule.classes.length > 0 && (
-            <Link
-              href="/planner"
-              className="px-3 sm:px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors text-sm sm:text-base font-medium"
-            >
+            <Link href="/planner" className="receipt-btn w-auto px-3 sm:px-4 !bg-ink !text-cream">
               View Planner →
             </Link>
           )}
-          <button
-            onClick={() => setShowForm(true)}
-            className="px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm sm:text-base font-medium"
-          >
+          <button onClick={() => setShowForm(true)} className="receipt-btn w-auto px-3 sm:px-4 !border-accent !text-accent">
             + Add Class
           </button>
         </div>
       </div>
 
+      <div className="receipt-divider" />
+
       {/* Upload Schedule Section */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4 sm:p-6">
+      <div className="receipt-card p-4 sm:p-6">
         <div className="flex items-start gap-4">
           <div className="flex-1">
-            <h3 className="font-semibold text-blue-900 mb-1">Import from Quest</h3>
-            <p className="text-sm text-blue-700 mb-3">
+            <h3 className="font-bold uppercase tracking-wide text-ink mb-1">Import from Quest</h3>
+            <p className="text-sm text-ink/70 mb-3">
               Take a screenshot of your Quest schedule and upload it - we&apos;ll automatically extract your classes!
             </p>
-            
+
             <div className="flex flex-wrap items-center gap-3">
               <label className="relative cursor-pointer">
                 <input
@@ -181,11 +177,14 @@ export default function SchedulePage() {
                   disabled={uploading}
                   className="sr-only"
                 />
-                <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  uploading 
-                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    : "bg-white text-blue-700 hover:bg-blue-100 border border-blue-300"
-                }`}>
+                <span
+                  className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-bold uppercase tracking-wide transition-colors border-1.5 ${
+                    uploading
+                      ? "border-ink/30 text-ink/40 cursor-not-allowed"
+                      : "border-ink text-ink hover:bg-ink hover:text-cream"
+                  }`}
+                  style={{ borderWidth: "1.5px", borderStyle: "solid" }}
+                >
                   {uploading ? (
                     <>
                       <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
@@ -199,17 +198,17 @@ export default function SchedulePage() {
                   )}
                 </span>
               </label>
-              <span className="text-xs text-blue-600">PNG, JPG, or PDF</span>
+              <span className="text-[11px] uppercase tracking-wide text-ink/40">PNG, JPG, or PDF</span>
             </div>
 
             {uploadError && (
-              <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+              <div className="mt-3 p-3 border border-dashed border-accent text-sm text-accent">
                 {uploadError}
               </div>
             )}
-            
+
             {uploadSuccess && (
-              <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700">
+              <div className="mt-3 p-3 border border-dashed border-ink text-sm text-ink">
                 {uploadSuccess}
               </div>
             )}
@@ -219,14 +218,14 @@ export default function SchedulePage() {
 
       {/* Add Class Modal */}
       {showForm && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl p-4 sm:p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
-            <h2 className="text-lg sm:text-xl font-semibold mb-4">Add a Class</h2>
+        <div className="fixed inset-0 bg-ink/50 flex items-center justify-center z-50 p-4">
+          <div className="receipt-card p-4 sm:p-6 w-full max-w-md max-h-[90vh] overflow-y-auto !shadow-[8px_8px_0_#1B1A17]">
+            <h2 className="text-lg sm:text-xl font-bold uppercase tracking-wide mb-4">Add a Class</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Course Code */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Course Code <span className="text-red-500">*</span>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-ink/60 mb-1">
+                  Course Code <span className="text-accent">*</span>
                 </label>
                 <input
                   type="text"
@@ -234,13 +233,13 @@ export default function SchedulePage() {
                   value={formData.courseCode}
                   onChange={(e) => setFormData({ ...formData, courseCode: e.target.value.toUpperCase() })}
                   placeholder="e.g., CS 246"
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200"
+                  className="w-full px-1 py-2 bg-transparent border-0 border-b-2 border-ink text-sm focus:outline-none"
                 />
               </div>
 
               {/* Course Name */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-ink/60 mb-1">
                   Course Name
                 </label>
                 <input
@@ -248,17 +247,17 @@ export default function SchedulePage() {
                   value={formData.courseName}
                   onChange={(e) => setFormData({ ...formData, courseName: e.target.value })}
                   placeholder="e.g., Object-Oriented Software Development"
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200"
+                  className="w-full px-1 py-2 bg-transparent border-0 border-b-2 border-ink text-sm focus:outline-none"
                 />
               </div>
 
               {/* Type */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-ink/60 mb-1">Type</label>
                 <select
                   value={formData.type}
                   onChange={(e) => setFormData({ ...formData, type: e.target.value as ClassSession["type"] })}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 bg-white"
+                  className="w-full px-1 py-2 bg-transparent border-0 border-b-2 border-ink text-sm focus:outline-none"
                 >
                   {classTypes.map((type) => (
                     <option key={type} value={type}>
@@ -270,11 +269,11 @@ export default function SchedulePage() {
 
               {/* Day */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Day</label>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-ink/60 mb-1">Day</label>
                 <select
                   value={formData.day}
                   onChange={(e) => setFormData({ ...formData, day: e.target.value as ClassSession["day"] })}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 bg-white"
+                  className="w-full px-1 py-2 bg-transparent border-0 border-b-2 border-ink text-sm focus:outline-none"
                 >
                   {weekdays.map((day) => (
                     <option key={day} value={day}>
@@ -287,11 +286,11 @@ export default function SchedulePage() {
               {/* Time */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Start Time</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-ink/60 mb-1">Start Time</label>
                   <select
                     value={formData.startTime}
                     onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 bg-white"
+                    className="w-full px-1 py-2 bg-transparent border-0 border-b-2 border-ink text-sm focus:outline-none"
                   >
                     {timeOptions.map((time) => (
                       <option key={time} value={time}>
@@ -301,11 +300,11 @@ export default function SchedulePage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">End Time</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-ink/60 mb-1">End Time</label>
                   <select
                     value={formData.endTime}
                     onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 bg-white"
+                    className="w-full px-1 py-2 bg-transparent border-0 border-b-2 border-ink text-sm focus:outline-none"
                   >
                     {timeOptions.map((time) => (
                       <option key={time} value={time}>
@@ -319,11 +318,11 @@ export default function SchedulePage() {
               {/* Building & Room */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Building</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-ink/60 mb-1">Building</label>
                   <select
                     value={formData.building}
                     onChange={(e) => setFormData({ ...formData, building: e.target.value as Building })}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 bg-white"
+                    className="w-full px-1 py-2 bg-transparent border-0 border-b-2 border-ink text-sm focus:outline-none"
                   >
                     {Object.entries(uwBuildings).map(([code, info]) => (
                       <option key={code} value={code}>
@@ -333,30 +332,23 @@ export default function SchedulePage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Room</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-ink/60 mb-1">Room</label>
                   <input
                     type="text"
                     value={formData.room}
                     onChange={(e) => setFormData({ ...formData, room: e.target.value })}
                     placeholder="e.g., 2017"
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200"
+                    className="w-full px-1 py-2 bg-transparent border-0 border-b-2 border-ink text-sm focus:outline-none"
                   />
                 </div>
               </div>
 
               {/* Buttons */}
               <div className="flex gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowForm(false)}
-                  className="flex-1 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-                >
+                <button type="button" onClick={() => setShowForm(false)} className="receipt-btn flex-1">
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className="flex-1 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
-                >
+                <button type="submit" className="receipt-btn flex-1 !bg-ink !text-cream">
                   Add Class
                 </button>
               </div>
@@ -367,48 +359,45 @@ export default function SchedulePage() {
 
       {/* Schedule Display */}
       {schedule.classes.length === 0 ? (
-        <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8 text-center">
-          <p className="text-gray-600 mb-2">No classes added yet</p>
-          <p className="text-sm text-gray-500 mb-4">
+        <div className="receipt-card p-6 sm:p-8 text-center">
+          <p className="text-ink/70 mb-2">No classes added yet</p>
+          <p className="text-sm text-ink/50 mb-4">
             Add your classes to get smart spot suggestions during your free time
           </p>
-          <button
-            onClick={() => setShowForm(true)}
-            className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
-          >
+          <button onClick={() => setShowForm(true)} className="receipt-btn inline-flex w-auto px-4 !bg-ink !text-cream">
             Add Your First Class
           </button>
         </div>
       ) : (
         <div className="space-y-4">
           {weekdays.map((day) => (
-            <div key={day} className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-              <div className="px-4 py-3 bg-gray-50 border-b border-gray-200">
-                <h3 className="font-semibold text-gray-900">{dayLabels[day]}</h3>
+            <div key={day} className="receipt-card overflow-hidden">
+              <div className="px-4 py-3 border-b-2 border-ink">
+                <h3 className="font-bold uppercase tracking-wide text-ink">{dayLabels[day]}</h3>
               </div>
               {classesByDay[day].length === 0 ? (
-                <div className="px-4 py-6 text-center text-gray-500 text-sm">
+                <div className="px-4 py-6 text-center text-ink/40 text-sm">
                   No classes
                 </div>
               ) : (
-                <div className="divide-y divide-gray-100">
+                <div className="divide-y divide-dashed divide-ink/30">
                   {classesByDay[day].map((classSession) => (
                     <div
                       key={classSession.id}
-                      className="px-4 py-3 flex items-center justify-between hover:bg-gray-50"
+                      className="px-4 py-3 flex items-center justify-between hover:bg-cream"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="text-sm text-gray-500 w-24">
+                        <div className="text-sm text-ink/50 w-24">
                           {formatTime(classSession.startTime)} - {formatTime(classSession.endTime)}
                         </div>
                         <div>
-                          <p className="font-medium text-gray-900">
+                          <p className="font-bold text-ink">
                             {classSession.courseCode}
                             {classSession.courseName && (
-                              <span className="font-normal text-gray-500"> - {classSession.courseName}</span>
+                              <span className="font-normal text-ink/50"> - {classSession.courseName}</span>
                             )}
                           </p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-ink/50">
                             {classSession.type.charAt(0).toUpperCase() + classSession.type.slice(1)} •{" "}
                             {classSession.building} {classSession.room}
                           </p>
@@ -416,7 +405,7 @@ export default function SchedulePage() {
                       </div>
                       <button
                         onClick={() => removeClass(classSession.id)}
-                        className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                        className="p-2 text-ink/30 hover:text-accent transition-colors"
                         title="Remove class"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -434,12 +423,12 @@ export default function SchedulePage() {
 
       {/* Tips */}
       {schedule.classes.length > 0 && (
-        <div className="bg-green-50 rounded-xl p-4 sm:p-6 border border-green-100">
-          <h3 className="font-semibold text-green-800 mb-2 text-sm sm:text-base">
+        <div className="receipt-card p-4 sm:p-6">
+          <h3 className="font-bold uppercase tracking-wide text-ink mb-2 text-sm sm:text-base">
             {schedule.classes.length} classes added
           </h3>
-          <p className="text-sm text-green-700">
-            Head to the <Link href="/planner" className="underline font-medium">Daily Planner</Link> to see
+          <p className="text-sm text-ink/70">
+            Head to the <Link href="/planner" className="underline font-bold text-accent">Daily Planner</Link> to see
             personalized spot suggestions for your free time between classes!
           </p>
         </div>

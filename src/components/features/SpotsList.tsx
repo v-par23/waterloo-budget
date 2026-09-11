@@ -305,17 +305,17 @@ export function SpotsList({ filterCategory }: SpotsListProps) {
       <div className="relative" ref={searchRef}>
         <input
           type="text"
-          placeholder="Search by name, category, location..."
+          placeholder="SEARCH SPOTS, CATEGORY, LOCATION..."
           value={searchQuery}
           onChange={(e) => {
             setSearchQuery(e.target.value);
             setShowSuggestions(true);
           }}
           onFocus={() => setShowSuggestions(true)}
-          className="w-full px-4 py-3 pl-10 pr-10 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-200"
+          className="w-full px-4 py-3 pl-10 pr-10 bg-transparent border-0 border-b-2 border-ink text-sm uppercase tracking-wide placeholder:text-ink/50 focus:outline-none"
         />
         <svg
-          className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+          className="absolute left-1 top-1/2 transform -translate-y-1/2 w-4.5 h-4.5 text-ink"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -330,7 +330,7 @@ export function SpotsList({ filterCategory }: SpotsListProps) {
         {searchQuery ? (
           <button
             onClick={clearSearch}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 hover:text-gray-600"
+            className="absolute right-1 top-1/2 transform -translate-y-1/2 w-5 h-5 text-ink/60 hover:text-ink"
           >
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -341,8 +341,8 @@ export function SpotsList({ filterCategory }: SpotsListProps) {
             <button
               onClick={startListening}
               title="Search by voice"
-              className={`absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 transition-colors ${
-                isListening ? "text-red-500 animate-pulse" : "text-gray-400 hover:text-gray-600"
+              className={`absolute right-1 top-1/2 transform -translate-y-1/2 w-5 h-5 transition-colors ${
+                isListening ? "text-accent animate-pulse" : "text-ink/60 hover:text-ink"
               }`}
             >
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -359,26 +359,26 @@ export function SpotsList({ filterCategory }: SpotsListProps) {
 
         {/* Search Suggestions Dropdown */}
         {showSuggestions && suggestions.length > 0 && searchQuery.length >= 2 && (
-          <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+          <div className="absolute z-50 w-full mt-1 bg-paper border-1.5 border-ink shadow-[5px_5px_0_#1B1A17] overflow-hidden" style={{ borderWidth: "1.5px", borderStyle: "solid" }}>
             {suggestions.map((spot) => (
               <button
                 key={spot.id}
                 onClick={() => handleSuggestionClick(spot)}
-                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center gap-3 border-b border-gray-100 last:border-0"
+                className="w-full px-4 py-3 text-left hover:bg-cream flex items-center gap-3 border-b border-dashed border-ink/30 last:border-0"
               >
                 <span className="text-xl">{spot.emoji}</span>
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-gray-900 truncate">{spot.name}</p>
-                  <p className="text-xs text-gray-500">{categoryLabels[spot.category]} · {spot.neighborhood}</p>
+                  <p className="font-bold text-ink truncate">{spot.name}</p>
+                  <p className="text-[11px] uppercase tracking-wide text-ink/60">{categoryLabels[spot.category]} · {spot.neighborhood}</p>
                 </div>
-                <span className="text-sm text-gray-400">{spot.price}</span>
+                <span className="text-sm font-bold text-accent">{spot.price}</span>
               </button>
             ))}
           </div>
         )}
       </div>
-      {locationError && <p className="text-xs text-red-500">{locationError}</p>}
-      {voiceError && <p className="text-xs text-red-500">{voiceError}</p>}
+      {locationError && <p className="text-xs text-red-600">{locationError}</p>}
+      {voiceError && <p className="text-xs text-red-600">{voiceError}</p>}
 
       {/* Filters */}
       {!filterCategory && (
@@ -389,25 +389,31 @@ export function SpotsList({ filterCategory }: SpotsListProps) {
       )}
 
       {/* Near me + Compare */}
-      <div className="flex flex-wrap gap-1.5">
+      <div className="flex flex-wrap gap-2.5">
         <button
           onClick={handleNearMeClick}
           disabled={locating}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors disabled:opacity-60 ${
-            sortByDistance && location
-              ? "bg-blue-600 text-white"
-              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-          }`}
+          className="receipt-chip-dash flex items-center gap-1.5 disabled:opacity-60"
+          data-active={sortByDistance && !!location}
         >
-          {locating ? "Locating…" : sortByDistance && location ? "Sorted by distance" : "Near me"}
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+            <path d="M10 17.5S16 12 16 8a6 6 0 1 0-12 0c0 4 6 9.5 6 9.5Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+            <circle cx="10" cy="8" r="2.1" stroke="currentColor" strokeWidth="1.4" />
+          </svg>
+          {locating ? "LOCATING…" : sortByDistance && location ? "SORTED BY DISTANCE" : "NEAR ME"}
         </button>
         <button
           onClick={handleToggleCompareMode}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
-            compareMode ? "bg-[#1D9E75] text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-          }`}
+          className="receipt-chip-dash flex items-center gap-1.5"
+          data-active={compareMode}
         >
-          {compareMode ? "Comparing" : "Compare"}
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+            <line x1="10" y1="3" x2="10" y2="17" stroke="currentColor" strokeWidth="1.5" />
+            <path d="M6.2 5.8 3.5 10.3a2.7 2.7 0 0 0 5.4 0L6.2 5.8Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+            <path d="M13.8 5.8 11.1 10.3a2.7 2.7 0 0 0 5.4 0l-2.7-4.5Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+            <line x1="6.2" y1="5.8" x2="13.8" y2="5.8" stroke="currentColor" strokeWidth="1.4" />
+          </svg>
+          {compareMode ? "COMPARING" : "COMPARE"}
         </button>
       </div>
 
@@ -417,25 +423,24 @@ export function SpotsList({ filterCategory }: SpotsListProps) {
           <button
             key={neighborhood}
             onClick={() => setSelectedNeighborhood(neighborhood)}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
-              selectedNeighborhood === neighborhood
-                ? "bg-gray-800 text-white"
-                : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
-            }`}
+            className="receipt-chip-dash"
+            data-active={selectedNeighborhood === neighborhood}
           >
-            {neighborhood}
+            {neighborhood.toUpperCase()}
           </button>
         ))}
       </div>
 
+      <div className="receipt-divider-dash" />
+
       {/* Results count */}
-      <p className="text-sm text-gray-500">
+      <p className="text-[11px] uppercase tracking-widest text-ink/60">
         {filteredSpots.length} {filteredSpots.length === 1 ? 'spot' : 'spots'}
         {searchQuery && ` for "${searchQuery}"`}
       </p>
 
       {/* Spots grid */}
-      <div className={`grid gap-4 md:grid-cols-2 xl:grid-cols-3 ${compareMode ? "pb-20" : ""}`}>
+      <div className={`grid gap-6 md:grid-cols-2 xl:grid-cols-3 ${compareMode ? "pb-20" : ""}`}>
         {filteredSpots.map((spot) => (
           <SpotCard
             key={spot.id}
@@ -453,153 +458,136 @@ export function SpotsList({ filterCategory }: SpotsListProps) {
       {/* Floating compare bar */}
       {compareMode && (
         <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 flex items-center gap-3">
-          <div className="relative" ref={filtersRef}>
-            <button
-              onClick={() => setShowFilters((prev) => !prev)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap shadow-lg transition-colors ${
-                showFilters || activeFilterCount > 0
-                  ? "bg-[#1D9E75] text-white"
-                  : "bg-gray-900 text-gray-200 hover:bg-gray-800"
-              }`}
-            >
-              🔧 Filters{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
-              <svg
-                className={`w-3 h-3 transition-transform ${showFilters ? "" : "rotate-180"}`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-
-            {showFilters && (
-              <div className="absolute z-40 bottom-full mb-2 left-0 w-72 bg-white border border-gray-200 rounded-xl shadow-lg p-4 space-y-4">
-                {availableCuisines.length > 0 && (
-                  <div>
-                    <p className="text-xs font-medium text-gray-500 mb-1.5">Cuisine</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      <button
-                        onClick={() => setSelectedCuisine("all")}
-                        className={`px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
-                          selectedCuisine === "all"
-                            ? "bg-gray-800 text-white"
-                            : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
-                        }`}
-                      >
-                        Any
-                      </button>
-                      {availableCuisines.map((cuisine) => (
-                        <button
-                          key={cuisine}
-                          onClick={() => setSelectedCuisine(cuisine)}
-                          className={`px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
-                            selectedCuisine === cuisine
-                              ? "bg-gray-800 text-white"
-                              : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
-                          }`}
-                        >
-                          {cuisine}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <div>
-                  <p className="text-xs font-medium text-gray-500 mb-1.5">Price</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    <button
-                      onClick={() => setSelectedPriceLevel("all")}
-                      className={`px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
-                        selectedPriceLevel === "all"
-                          ? "bg-gray-800 text-white"
-                          : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
-                      }`}
-                    >
-                      Any
-                    </button>
-                    {priceLevels.map(({ level, label }) => (
-                      <button
-                        key={level}
-                        onClick={() => setSelectedPriceLevel(level)}
-                        className={`px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
-                          selectedPriceLevel === level
-                            ? "bg-gray-800 text-white"
-                            : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
-                        }`}
-                      >
-                        {label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <p className="text-xs font-medium text-gray-500 mb-1.5">Typical vibe</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    <button
-                      onClick={() => setSelectedVibe("all")}
-                      className={`px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
-                        selectedVibe === "all"
-                          ? "bg-gray-800 text-white"
-                          : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
-                      }`}
-                    >
-                      Any
-                    </button>
-                    {(Object.keys(vibeConfig) as VibeLevel[]).map((vibe) => (
-                      <button
-                        key={vibe}
-                        onClick={() => setSelectedVibe(vibe)}
-                        className={`px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
-                          selectedVibe === vibe
-                            ? "bg-gray-800 text-white"
-                            : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
-                        }`}
-                      >
-                        {vibeConfig[vibe].label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {activeFilterCount > 0 && (
+          <div className="bg-ink text-cream border-1.5 border-ink shadow-[5px_5px_0_#FF5A1F] px-4 py-2.5 flex items-center gap-3" style={{ borderWidth: "1.5px", borderStyle: "solid" }}>
+              {compareIds.length > 0 && (
+                <>
+                  <span className="text-xs font-bold uppercase tracking-wide whitespace-nowrap">
+                    {compareIds.length} / {MAX_COMPARE} selected
+                  </span>
                   <button
-                    onClick={() => {
-                      setSelectedCuisine("all");
-                      setSelectedPriceLevel("all");
-                      setSelectedVibe("all");
-                    }}
-                    className="text-xs text-gray-400 hover:text-red-500"
+                    onClick={() => setCompareIds([])}
+                    className="text-xs font-bold uppercase text-cream/60 hover:text-cream"
                   >
-                    Clear filters
+                    Clear
                   </button>
+                </>
+              )}
+
+              <div className="relative" ref={filtersRef}>
+                <button
+                  onClick={() => setShowFilters((prev) => !prev)}
+                  className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide whitespace-nowrap text-accent hover:text-cream"
+                >
+                  Filters{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
+                  <svg
+                    className={`w-3 h-3 transition-transform ${showFilters ? "" : "rotate-180"}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {showFilters && (
+                  <div className="absolute z-40 bottom-full mb-3 right-0 w-72 receipt-card p-4 space-y-4 text-ink">
+                    {availableCuisines.length > 0 && (
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-ink/60 mb-1.5">Cuisine</p>
+                        <div className="flex flex-wrap gap-1.5">
+                          <button
+                            onClick={() => setSelectedCuisine("all")}
+                            className="receipt-chip-dash"
+                            data-active={selectedCuisine === "all"}
+                          >
+                            Any
+                          </button>
+                          {availableCuisines.map((cuisine) => (
+                            <button
+                              key={cuisine}
+                              onClick={() => setSelectedCuisine(cuisine)}
+                              className="receipt-chip-dash"
+                              data-active={selectedCuisine === cuisine}
+                            >
+                              {cuisine}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-ink/60 mb-1.5">Price</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        <button
+                          onClick={() => setSelectedPriceLevel("all")}
+                          className="receipt-chip-dash"
+                          data-active={selectedPriceLevel === "all"}
+                        >
+                          Any
+                        </button>
+                        {priceLevels.map(({ level, label }) => (
+                          <button
+                            key={level}
+                            onClick={() => setSelectedPriceLevel(level)}
+                            className="receipt-chip-dash"
+                            data-active={selectedPriceLevel === level}
+                          >
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-ink/60 mb-1.5">Typical vibe</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        <button
+                          onClick={() => setSelectedVibe("all")}
+                          className="receipt-chip-dash"
+                          data-active={selectedVibe === "all"}
+                        >
+                          Any
+                        </button>
+                        {(Object.keys(vibeConfig) as VibeLevel[]).map((vibe) => (
+                          <button
+                            key={vibe}
+                            onClick={() => setSelectedVibe(vibe)}
+                            className="receipt-chip-dash"
+                            data-active={selectedVibe === vibe}
+                          >
+                            {vibeConfig[vibe].label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {activeFilterCount > 0 && (
+                      <button
+                        onClick={() => {
+                          setSelectedCuisine("all");
+                          setSelectedPriceLevel("all");
+                          setSelectedVibe("all");
+                        }}
+                        className="text-[11px] font-bold uppercase text-ink/50 hover:text-accent"
+                      >
+                        Clear filters
+                      </button>
+                    )}
+                  </div>
                 )}
               </div>
-            )}
-          </div>
 
-          {compareIds.length > 0 && (
-            <div className="bg-gray-900 text-white rounded-full shadow-lg px-4 py-2.5 flex items-center gap-3">
-              <span className="text-sm font-medium whitespace-nowrap">
-                {compareIds.length} / {MAX_COMPARE} selected
-              </span>
-              <button
-                onClick={() => setCompareIds([])}
-                className="text-xs text-gray-300 hover:text-white"
-              >
-                Clear
-              </button>
-              <button
-                onClick={() => setShowCompareModal(true)}
-                disabled={compareIds.length < 2}
-                className="px-3 py-1.5 bg-[#1D9E75] rounded-full text-sm font-medium hover:bg-[#178a66] disabled:opacity-40 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
-              >
-                Compare
-              </button>
-            </div>
-          )}
+              {compareIds.length > 0 && (
+                <button
+                  onClick={() => setShowCompareModal(true)}
+                  disabled={compareIds.length < 2}
+                  className="receipt-btn !border-cream !text-cream disabled:opacity-40 disabled:cursor-not-allowed px-3"
+                >
+                  Compare
+                </button>
+              )}
+          </div>
         </div>
       )}
 
@@ -613,17 +601,17 @@ export function SpotsList({ filterCategory }: SpotsListProps) {
       )}
 
       {filteredSpots.length === 0 && (
-        <div className="text-center py-12 space-y-4">
-          <p className="text-gray-500">No spots found matching your criteria.</p>
+        <div className="text-center py-12 space-y-4 border-1.5 border-dashed border-ink/40" style={{ borderWidth: "1.5px" }}>
+          <p className="text-sm uppercase tracking-wide text-ink/60">No spots found matching your criteria.</p>
           {searchQuery && (
             <div className="space-y-2">
-              <p className="text-sm text-gray-400">Try searching for:</p>
+              <p className="text-[11px] uppercase tracking-widest text-ink/40">Try searching for:</p>
               <div className="flex flex-wrap gap-2 justify-center">
                 {["coffee", "food", "gym", "free", "UW Plaza"].map((term) => (
                   <button
                     key={term}
                     onClick={() => setSearchQuery(term)}
-                    className="px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200"
+                    className="receipt-chip-dash"
                   >
                     {term}
                   </button>

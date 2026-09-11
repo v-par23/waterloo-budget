@@ -103,26 +103,25 @@ export function LeafletMap({ spots, center, zoom, onSpotSelect, selectedSpotId, 
           border: none !important;
         }
         .emoji-marker {
-          font-size: 24px;
+          font-size: 20px;
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 40px;
-          height: 40px;
-          background: white;
-          border-radius: 50%;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+          width: 36px;
+          height: 36px;
+          background: #FBF8F1;
+          border: 1.5px solid #1B1A17;
+          box-shadow: 3px 3px 0 #1B1A17;
           cursor: pointer;
-          transition: transform 0.2s, box-shadow 0.2s;
+          transition: transform 0.15s;
         }
         .emoji-marker:hover {
-          transform: scale(1.2);
-          box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+          transform: translate(-1px, -1px);
         }
         .emoji-marker.selected {
-          transform: scale(1.3);
-          box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-          border: 3px solid #3b82f6;
+          border-color: #FF5A1F;
+          box-shadow: 3px 3px 0 #FF5A1F;
+          background: #F3EFE4;
         }
         .leaflet-container {
           height: 100%;
@@ -130,12 +129,20 @@ export function LeafletMap({ spots, center, zoom, onSpotSelect, selectedSpotId, 
           font-family: inherit;
         }
         .leaflet-popup-content-wrapper {
-          border-radius: 12px;
+          border-radius: 0;
           padding: 0;
+          background: #FBF8F1;
+          border: 1.5px solid #1B1A17;
+          box-shadow: 5px 5px 0 #1B1A17;
         }
         .leaflet-popup-content {
           margin: 0;
-          min-width: 200px;
+          min-width: 220px;
+        }
+        .leaflet-popup-tip {
+          border-radius: 0;
+          background: #FBF8F1;
+          box-shadow: none;
         }
         .custom-user-location-marker {
           background: none !important;
@@ -151,10 +158,10 @@ export function LeafletMap({ spots, center, zoom, onSpotSelect, selectedSpotId, 
         .user-location-dot {
           width: 14px;
           height: 14px;
-          background: #3b82f6;
-          border: 3px solid white;
+          background: #FF5A1F;
+          border: 3px solid #F3EFE4;
           border-radius: 50%;
-          box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3);
+          box-shadow: 0 0 0 4px rgba(255, 90, 31, 0.3);
         }
       `}</style>
       <MapContainer
@@ -192,37 +199,36 @@ export function LeafletMap({ spots, center, zoom, onSpotSelect, selectedSpotId, 
             }}
           >
             <Popup>
-              <div className="p-3 min-w-52">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xl">{spot.emoji}</span>
-                  <span className="font-semibold text-gray-900">{spot.name}</span>
-                </div>
-                <p className="text-sm text-gray-500 mb-1">{spot.neighborhood}</p>
-                {spot.description && (
-                  <p className="text-sm text-gray-600 mb-2">{spot.description}</p>
-                )}
-                <div className="flex flex-wrap items-center gap-2 mb-2">
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${categoryConfig[spot.category]?.color || "bg-gray-100"}`}>
+              <div className="p-4 min-w-56 font-[inherit]">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="bg-[#1B1A17] text-[#F3EFE4] text-[10px] font-bold tracking-widest px-2 py-1 uppercase">
                     {categoryConfig[spot.category]?.label}
                   </span>
-                  <span className="text-sm font-medium text-gray-700">{spot.price}</span>
-                  {spot.isFree && (
-                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">Free</span>
-                  )}
-                  {userLocation && (
-                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-600">
-                      📍 {formatDistance(
-                        haversineDistanceMeters(userLocation.lat, userLocation.lng, spot.lat, spot.lng)
-                      )}
-                    </span>
-                  )}
+                  <span className="font-bold text-base text-[#FF5A1F]">
+                    {spot.isFree ? "Free" : spot.price}
+                  </span>
                 </div>
+                <div className="text-lg font-bold leading-tight flex items-center gap-2 mb-1">
+                  <span>{spot.emoji}</span>
+                  <span>{spot.name}</span>
+                </div>
+                <p className="text-[11px] uppercase tracking-wide text-[#1B1A17]/60 mb-2">{spot.neighborhood}</p>
+                {spot.description && (
+                  <p className="text-[13px] leading-snug text-[#1B1A17]/80 mb-2">{spot.description}</p>
+                )}
+                {userLocation && (
+                  <span className="inline-block mb-2 text-[10px] font-bold uppercase tracking-wide border border-dashed border-[#1B1A17] px-2 py-1">
+                    {formatDistance(
+                      haversineDistanceMeters(userLocation.lat, userLocation.lng, spot.lat, spot.lng)
+                    )} away
+                  </span>
+                )}
+                <div style={{ height: 0, borderTop: "1.5px dashed #1B1A17", margin: "4px 0 10px" }} />
                 <SpotReviewsSection
                   spotId={spot.id}
                   spotName={spot.name}
                   lat={spot.lat}
                   lng={spot.lng}
-                  className="pt-2 border-t border-gray-100"
                 />
               </div>
             </Popup>

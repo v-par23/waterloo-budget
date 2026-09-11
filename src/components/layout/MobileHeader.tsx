@@ -26,17 +26,15 @@ export function MobileHeader() {
   const { user, loading, signOut } = useAuth();
 
   return (
-    <header className="lg:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50">
+    <header className="lg:hidden fixed top-0 left-0 right-0 bg-cream border-b-2 border-ink z-50">
       <div className="flex items-center justify-between h-14 px-4">
-        <Link href="/" className="flex items-center">
-          <span className="font-bold text-lg">
-            <span className="text-gray-900">Waterloo</span>
-            <span className="text-[#1D9E75]">Budget</span>
-          </span>
+        <Link href="/" className="flex flex-col leading-none">
+          <span className="text-[13px] font-bold tracking-tight">WATERLOO</span>
+          <span className="text-[13px] font-bold tracking-tight">BUDGET</span>
         </Link>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="p-2 text-gray-600"
+          className="p-2 text-ink"
         >
           <svg
             className="w-6 h-6"
@@ -63,27 +61,26 @@ export function MobileHeader() {
         </button>
       </div>
       {isOpen && (
-        <nav className="px-4 py-3 bg-white border-t border-gray-100 max-h-[80vh] overflow-y-auto">
+        <nav className="px-4 py-3 bg-cream border-t border-dashed border-ink/40 max-h-[80vh] overflow-y-auto">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               onClick={() => setIsOpen(false)}
-              className={`flex items-center px-3 py-2.5 rounded-lg text-sm font-medium ${
+              className={`block px-3 py-2.5 text-[11px] font-bold uppercase tracking-wider ${
                 pathname === item.href
-                  ? "bg-[#1D9E75]/10 text-[#1D9E75]"
-                  : "text-gray-600"
+                  ? "bg-ink text-cream"
+                  : "text-ink/70"
               }`}
             >
               {item.label}
             </Link>
           ))}
 
-          {/* User navigation */}
           {user && (
             <>
-              <div className="my-2 border-t border-gray-100"></div>
-              <p className="px-3 py-1 text-xs font-medium text-gray-400 uppercase">
+              <div className="my-2 border-t border-dashed border-ink/40"></div>
+              <p className="px-3 py-1 text-[10px] font-bold text-ink/50 uppercase tracking-widest">
                 My Stuff
               </p>
               {userNavItems.map((item) => (
@@ -91,10 +88,10 @@ export function MobileHeader() {
                   key={item.href}
                   href={item.href}
                   onClick={() => setIsOpen(false)}
-                  className={`flex items-center px-3 py-2.5 rounded-lg text-sm font-medium ${
+                  className={`block px-3 py-2.5 text-[11px] font-bold uppercase tracking-wider ${
                     pathname === item.href || pathname.startsWith(item.href + "/")
-                      ? "bg-[#1D9E75]/10 text-[#1D9E75]"
-                      : "text-gray-600"
+                      ? "bg-ink text-cream"
+                      : "text-ink/70"
                   }`}
                 >
                   {item.label}
@@ -103,17 +100,16 @@ export function MobileHeader() {
             </>
           )}
 
-          {/* Auth section */}
-          <div className="mt-2 pt-2 border-t border-gray-100">
+          <div className="mt-2 pt-2 border-t border-dashed border-ink/40">
             {loading ? (
-              <div className="h-10 bg-gray-100 rounded-lg animate-pulse"></div>
+              <div className="h-10 border border-dashed border-ink/40 animate-pulse"></div>
             ) : user ? (
               <div className="space-y-1">
                 <div className="flex items-center gap-2 px-3 py-2">
-                  <div className="w-7 h-7 bg-[#1D9E75]/10 rounded-full flex items-center justify-center text-xs font-medium text-[#1D9E75]">
+                  <div className="w-7 h-7 border-1.5 border-ink flex items-center justify-center text-xs font-bold" style={{ borderWidth: "1.5px", borderStyle: "solid" }}>
                     {(user.user_metadata?.name || user.email || "U")[0].toUpperCase()}
                   </div>
-                  <p className="text-sm font-medium text-gray-900 truncate">
+                  <p className="text-sm font-bold uppercase tracking-wide truncate">
                     {user.user_metadata?.name || user.email?.split("@")[0]}
                   </p>
                 </div>
@@ -122,7 +118,7 @@ export function MobileHeader() {
                     signOut();
                     setIsOpen(false);
                   }}
-                  className="w-full px-3 py-2 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition-colors text-left"
+                  className="w-full receipt-btn text-left justify-start px-3"
                 >
                   Sign out
                 </button>
@@ -131,7 +127,7 @@ export function MobileHeader() {
               <Link
                 href="/login"
                 onClick={() => setIsOpen(false)}
-                className="block w-full px-4 py-2.5 text-center bg-[#1D9E75] text-white rounded-lg text-sm font-medium"
+                className="receipt-btn w-full !bg-ink !text-cream"
               >
                 Sign in
               </Link>

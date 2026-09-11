@@ -28,10 +28,10 @@ interface InsightsData {
 }
 
 const typeColors: Record<string, string> = {
-  budget: "bg-green-50 border-green-200 text-green-800",
-  time: "bg-blue-50 border-blue-200 text-blue-800",
-  study: "bg-purple-50 border-purple-200 text-purple-800",
-  social: "bg-orange-50 border-orange-200 text-orange-800",
+  budget: "border-ink text-ink",
+  time: "border-ink text-ink",
+  study: "border-ink text-ink",
+  social: "border-ink text-ink",
 };
 
 const typeLabels: Record<string, string> = {
@@ -107,16 +107,13 @@ export function AIInsights({ compact = false, autoLoad = true }: AIInsightsProps
     return (
       <div className={`${compact ? "py-3" : "py-5"} px-2 sm:px-3`}>
         <div className="flex items-center justify-between gap-3 mb-2">
-          <h3 className="text-sm sm:text-base font-semibold text-gray-900">AI Insights</h3>
-          <span className="text-xs text-gray-400">On demand</span>
+          <h3 className="text-sm sm:text-base font-bold uppercase tracking-wide text-ink">AI Insights</h3>
+          <span className="text-[10px] uppercase tracking-widest text-ink/40">On demand</span>
         </div>
-        <p className="text-sm text-gray-600 mb-3">
+        <p className="text-sm text-ink/70 mb-3">
           Generate recommendations whenever you want a fresh set of ideas.
         </p>
-        <button
-          onClick={fetchInsights}
-          className="px-4 py-2 text-sm font-medium rounded-lg bg-gray-900 text-white hover:bg-gray-800 hover:shadow-sm cursor-pointer transition-colors"
-        >
+        <button onClick={fetchInsights} className="receipt-btn px-4 !bg-ink !text-cream">
           Get AI Insights
         </button>
       </div>
@@ -127,7 +124,7 @@ export function AIInsights({ compact = false, autoLoad = true }: AIInsightsProps
     return (
       <div className={`${compact ? "py-4" : "py-8"} text-center`}>
         <div className="animate-pulse">
-          <p className="text-sm text-gray-500">Generating AI insights...</p>
+          <p className="text-sm text-ink/50">Generating AI insights...</p>
         </div>
       </div>
     );
@@ -135,7 +132,7 @@ export function AIInsights({ compact = false, autoLoad = true }: AIInsightsProps
 
   if (error || !data) {
     return (
-      <div className={`${compact ? "py-4" : "py-8"} text-center text-gray-500`}>
+      <div className={`${compact ? "py-4" : "py-8"} text-center text-ink/50`}>
         <p>Unable to load insights right now</p>
       </div>
     );
@@ -149,14 +146,14 @@ export function AIInsights({ compact = false, autoLoad = true }: AIInsightsProps
       {!compact && (
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
           <div>
-            <div className="flex items-center gap-2 text-sm text-gray-500 mb-1">
-              <span className="capitalize">{data.timeContext.period}</span>
+            <div className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-ink/50 mb-1">
+              <span>{data.timeContext.period}</span>
               <span>•</span>
-              <span className="capitalize">{data.seasonContext.season}</span>
+              <span>{data.seasonContext.season}</span>
             </div>
-            <p className="text-sm sm:text-base text-gray-600">{data.timeContext.description}</p>
+            <p className="text-sm sm:text-base text-ink/80">{data.timeContext.description}</p>
           </div>
-          <div className="text-left sm:text-right text-sm text-gray-400 flex sm:flex-col gap-2 sm:gap-0">
+          <div className="text-left sm:text-right text-[11px] uppercase tracking-widest text-ink/40 flex sm:flex-col gap-2 sm:gap-0">
             <p>{data.stats.totalSpots} spots</p>
             <p>{data.stats.freeSpots} free</p>
           </div>
@@ -166,8 +163,8 @@ export function AIInsights({ compact = false, autoLoad = true }: AIInsightsProps
       {/* Compact header */}
       {compact && (
         <div className="flex items-center justify-between mb-3">
-          <h3 className="font-semibold text-gray-900">AI Insights</h3>
-          <Link href="/discover" className="text-sm text-gray-500 hover:text-gray-700">
+          <h3 className="font-bold uppercase tracking-wide text-ink">AI Insights</h3>
+          <Link href="/discover" className="text-xs font-bold uppercase tracking-wide text-accent hover:text-ink">
             View all →
           </Link>
         </div>
@@ -178,14 +175,15 @@ export function AIInsights({ compact = false, autoLoad = true }: AIInsightsProps
         {displayInsights.map((insight, index) => (
           <div
             key={index}
-            className={`p-3 sm:p-4 rounded-xl border ${typeColors[insight.type] || "bg-gray-50 border-gray-200"}`}
+            className={`p-3 sm:p-4 border-1.5 ${typeColors[insight.type] || "border-ink text-ink"}`}
+            style={{ borderWidth: "1.5px", borderStyle: "solid" }}
           >
             <div className="flex items-start gap-2 sm:gap-3">
               <span className="text-xl sm:text-2xl flex-shrink-0">{insight.emoji}</span>
               <div className="flex-1 min-w-0">
                 <div className="flex flex-wrap items-center gap-1 sm:gap-2 mb-1">
-                  <h4 className="font-semibold text-sm sm:text-base">{insight.title}</h4>
-                  <span className="text-xs px-1.5 sm:px-2 py-0.5 rounded-full bg-white/50">
+                  <h4 className="font-bold text-sm sm:text-base">{insight.title}</h4>
+                  <span className="text-[9px] font-bold uppercase tracking-wide px-1.5 py-0.5 border border-ink/30">
                     {typeLabels[insight.type]}
                   </span>
                 </div>
@@ -195,7 +193,7 @@ export function AIInsights({ compact = false, autoLoad = true }: AIInsightsProps
                     {insight.spots.map((spot) => (
                       <span
                         key={spot}
-                        className="text-xs px-1.5 sm:px-2 py-0.5 bg-white/70 rounded-full truncate max-w-[120px] sm:max-w-none"
+                        className="text-[10px] uppercase tracking-wide px-1.5 py-0.5 border border-dashed border-ink/30 truncate max-w-[120px] sm:max-w-none"
                       >
                         {spot}
                       </span>
@@ -212,7 +210,7 @@ export function AIInsights({ compact = false, autoLoad = true }: AIInsightsProps
       {compact && (
         <Link
           href="/ask"
-          className="mt-3 block text-center py-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+          className="mt-3 block text-center py-2 text-xs font-bold uppercase tracking-wide text-ink/60 hover:text-accent transition-colors"
         >
           Ask AI for personalized recommendations
         </Link>

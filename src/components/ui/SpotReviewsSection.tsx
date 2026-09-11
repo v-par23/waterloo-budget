@@ -32,7 +32,7 @@ export function SpotReviewsSection({ spotId, spotName, lat, lng, className = "" 
       <div className="flex items-center justify-between gap-2">
         <button
           onClick={handleReviewsClick}
-          className="text-xs font-medium text-gray-500 hover:text-gray-700 flex items-center gap-1"
+          className="text-[11px] font-bold uppercase tracking-wide text-ink/80 hover:text-ink flex items-center gap-1"
         >
           {showReviews
             ? "Hide reviews"
@@ -45,30 +45,30 @@ export function SpotReviewsSection({ spotId, spotName, lat, lng, className = "" 
           target="_blank"
           rel="noopener noreferrer"
           onClick={(e) => e.stopPropagation()}
-          className="text-xs font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1 flex-shrink-0"
+          className="text-[11px] font-bold uppercase tracking-wide text-accent hover:text-ink flex items-center gap-1 flex-shrink-0"
         >
-          🧭 Directions
+          Directions →
         </a>
       </div>
 
       {showReviews && (
         <div className="mt-2 space-y-2" onClick={(e) => e.stopPropagation()}>
-          {reviewsLoading && <p className="text-xs text-gray-400">Loading reviews…</p>}
-          {reviewsError && <p className="text-xs text-red-500">{reviewsError}</p>}
+          {reviewsLoading && <p className="text-xs text-ink/50">Loading reviews…</p>}
+          {reviewsError && <p className="text-xs text-red-600">{reviewsError}</p>}
           {reviewsData && !reviewsData.rating && (
-            <p className="text-xs text-gray-400">No Yelp listing found for this spot.</p>
+            <p className="text-xs text-ink/50">No Yelp listing found for this spot.</p>
           )}
           {reviewsData?.rating != null && reviewsData.reviews.length === 0 && (
-            <p className="text-xs text-gray-400">
+            <p className="text-xs text-ink/50">
               {reviewsData.reviewCount} review{reviewsData.reviewCount === 1 ? "" : "s"} on Yelp — tap below to read them.
             </p>
           )}
           {reviewsData?.reviews.map((review, i) => (
-            <div key={i} className="text-xs bg-gray-50 rounded-lg p-2">
-              <p className="font-medium text-gray-700">
+            <div key={i} className="text-xs border border-dashed border-ink/30 p-2">
+              <p className="font-bold text-ink">
                 {review.author} · {"⭐".repeat(Math.round(review.rating))}
               </p>
-              <p className="text-gray-500 mt-0.5 line-clamp-3">{review.text}</p>
+              <p className="text-ink/60 mt-0.5 line-clamp-3">{review.text}</p>
             </div>
           ))}
           {reviewsData?.url && (
@@ -76,7 +76,7 @@ export function SpotReviewsSection({ spotId, spotName, lat, lng, className = "" 
               href={reviewsData.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-blue-500 hover:underline inline-block"
+              className="text-xs font-bold text-accent hover:underline inline-block"
             >
               View on Yelp →
             </a>

@@ -18,12 +18,12 @@ export function CompareModal({ spotIds, distances, onClose, onRemove }: CompareM
     .filter((s): s is Spot => Boolean(s));
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl w-full max-w-5xl max-h-[85vh] flex flex-col">
-        <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-          <h2 className="text-lg font-semibold">Compare spots</h2>
-          <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded">
-            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div className="fixed inset-0 bg-ink/50 flex items-center justify-center z-50 p-4">
+      <div className="receipt-card w-full max-w-5xl max-h-[85vh] flex flex-col !shadow-[8px_8px_0_#1B1A17]">
+        <div className="p-4 border-b-2 border-ink flex items-center justify-between">
+          <h2 className="text-lg font-bold uppercase tracking-wide">Compare spots</h2>
+          <button onClick={onClose} className="p-1 hover:text-accent">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
@@ -31,7 +31,7 @@ export function CompareModal({ spotIds, distances, onClose, onRemove }: CompareM
 
         <div className="flex-1 overflow-auto p-4">
           {resolved.length === 0 ? (
-            <p className="text-sm text-gray-500 text-center py-8">
+            <p className="text-sm text-ink/50 text-center py-8 uppercase tracking-wide">
               No spots selected. Close this and pick some from the list.
             </p>
           ) : (
@@ -45,13 +45,13 @@ export function CompareModal({ spotIds, distances, onClose, onRemove }: CompareM
                 <div key={spot.id} className="text-center space-y-1">
                   <button
                     onClick={() => onRemove(spot.id)}
-                    className="text-xs text-gray-400 hover:text-red-500"
+                    className="text-[10px] font-bold uppercase tracking-wide text-ink/40 hover:text-accent"
                     title="Remove from comparison"
                   >
                     ✕ Remove
                   </button>
                   <div className="text-2xl">{spot.emoji}</div>
-                  <p className="text-sm font-semibold text-gray-900 leading-tight">{spot.name}</p>
+                  <p className="text-sm font-bold leading-tight">{spot.name}</p>
                 </div>
               ))}
 
@@ -59,7 +59,7 @@ export function CompareModal({ spotIds, distances, onClose, onRemove }: CompareM
                 label="Category"
                 spots={resolved}
                 render={(spot) => (
-                  <span className={`text-xs px-2 py-0.5 rounded-full ${categoryConfig[spot.category].color}`}>
+                  <span className="bg-ink text-cream text-[10px] font-bold tracking-widest px-2 py-1 uppercase">
                     {categoryConfig[spot.category].label}
                   </span>
                 )}
@@ -68,21 +68,21 @@ export function CompareModal({ spotIds, distances, onClose, onRemove }: CompareM
               <CompareRow
                 label="Cuisine / type"
                 spots={resolved}
-                render={(spot) => <span className="text-sm text-gray-700">{spot.cuisine ?? "—"}</span>}
+                render={(spot) => <span className="text-sm text-ink/80">{spot.cuisine ?? "—"}</span>}
               />
 
               <CompareRow
                 label="Price"
                 spots={resolved}
                 render={(spot) => (
-                  <span className="text-sm text-gray-700">{spot.isFree ? "Free" : spot.price}</span>
+                  <span className="text-sm font-bold text-accent">{spot.isFree ? "Free" : spot.price}</span>
                 )}
               />
 
               <CompareRow
                 label="Location"
                 spots={resolved}
-                render={(spot) => <span className="text-sm text-gray-700">{spot.neighborhood}</span>}
+                render={(spot) => <span className="text-sm text-ink/80">{spot.neighborhood}</span>}
               />
 
               <CompareRow
@@ -91,7 +91,7 @@ export function CompareModal({ spotIds, distances, onClose, onRemove }: CompareM
                 render={(spot) => {
                   const d = distances?.[spot.id];
                   return (
-                    <span className="text-sm text-gray-700">
+                    <span className="text-sm text-ink/80">
                       {typeof d === "number" ? formatDistance(d) : "—"}
                     </span>
                   );
@@ -103,11 +103,7 @@ export function CompareModal({ spotIds, distances, onClose, onRemove }: CompareM
                 hint="Estimate, not live data"
                 spots={resolved}
                 render={(spot) => (
-                  <span
-                    className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-md border ${
-                      spot.vibe ? vibeConfig[spot.vibe].color : "border-gray-100 text-gray-400"
-                    }`}
-                  >
+                  <span className="receipt-chip-dash text-[10px]">
                     {spot.vibe ? vibeConfig[spot.vibe].label : "—"}
                   </span>
                 )}
@@ -124,15 +120,15 @@ export function CompareModal({ spotIds, distances, onClose, onRemove }: CompareM
                 spots={resolved}
                 render={(spot) => {
                   const coords = spotCoordinates[spot.id];
-                  if (!coords) return <span className="text-sm text-gray-400">—</span>;
+                  if (!coords) return <span className="text-sm text-ink/30">—</span>;
                   return (
                     <a
                       href={googleMapsDirectionsUrl(coords.lat, coords.lng)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm font-medium text-blue-600 hover:text-blue-700"
+                      className="text-sm font-bold uppercase tracking-wide text-accent hover:text-ink"
                     >
-                      🧭 Directions
+                      Directions →
                     </a>
                   );
                 }}
@@ -158,14 +154,14 @@ function CompareRow({
 }) {
   return (
     <>
-      <div className="text-xs font-medium text-gray-500 py-2.5 border-t border-gray-100 flex items-start">
+      <div className="text-[11px] font-bold uppercase tracking-wide text-ink/60 py-2.5 border-t border-dashed border-ink/30 flex items-start">
         <span>
           {label}
-          {hint && <span className="block text-[10px] text-gray-400 font-normal">{hint}</span>}
+          {hint && <span className="block text-[9px] text-ink/40 font-normal normal-case tracking-normal">{hint}</span>}
         </span>
       </div>
       {rowSpots.map((spot) => (
-        <div key={spot.id} className="py-2.5 border-t border-gray-100 text-center flex items-center justify-center">
+        <div key={spot.id} className="py-2.5 border-t border-dashed border-ink/30 text-center flex items-center justify-center">
           {render(spot)}
         </div>
       ))}
@@ -182,14 +178,14 @@ function RatingCell({ spotId, name }: { spotId: string; name: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [spotId]);
 
-  if (!coords) return <span className="text-sm text-gray-400">—</span>;
-  if (loading) return <span className="text-xs text-gray-400">Loading…</span>;
+  if (!coords) return <span className="text-sm text-ink/30">—</span>;
+  if (loading) return <span className="text-xs text-ink/40">Loading…</span>;
   if (data?.rating) {
     return (
-      <span className="text-sm text-gray-700">
+      <span className="text-sm text-ink/80">
         ⭐ {data.rating} ({data.reviewCount})
       </span>
     );
   }
-  return <span className="text-sm text-gray-400">No Yelp listing</span>;
+  return <span className="text-sm text-ink/30">No Yelp listing</span>;
 }

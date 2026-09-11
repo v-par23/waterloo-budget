@@ -85,10 +85,10 @@ export default function PlannerPage() {
     return (
       <div className="space-y-4 sm:space-y-6">
         <div className="space-y-1 sm:space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Daily Planner</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-ink">Daily Planner</h1>
         </div>
         <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-ink"></div>
         </div>
       </div>
     );
@@ -98,8 +98,8 @@ export default function PlannerPage() {
     return (
       <div className="space-y-4 sm:space-y-6">
         <div className="space-y-1 sm:space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Daily Planner</h1>
-          <p className="text-sm sm:text-base text-gray-600">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-ink">Daily Planner</h1>
+          <p className="text-sm sm:text-base text-ink/70">
             Your personalized day with smart spot suggestions
           </p>
         </div>
@@ -107,15 +107,12 @@ export default function PlannerPage() {
         {/* Route Planner still works without any classes — pure spot-to-spot chains */}
         <RoutePlanner day={selectedDay} />
 
-        <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8 text-center">
-          <p className="text-gray-600 mb-2">No schedule yet</p>
-          <p className="text-sm text-gray-500 mb-4">
+        <div className="receipt-card p-6 sm:p-8 text-center">
+          <p className="text-ink/80 mb-2">No schedule yet</p>
+          <p className="text-sm text-ink/50 mb-4">
             Add your classes to include them in your route and get personalized spot suggestions
           </p>
-          <Link
-            href="/schedule"
-            className="inline-block px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
-          >
+          <Link href="/schedule" className="receipt-btn inline-flex w-auto px-4 !bg-ink !text-cream">
             Add Your Schedule
           </Link>
         </div>
@@ -127,35 +124,31 @@ export default function PlannerPage() {
     <div className="space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="space-y-1 sm:space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Daily Planner</h1>
-          <p className="text-sm sm:text-base text-gray-600">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-ink">Daily Planner</h1>
+          <p className="text-sm sm:text-base text-ink/70">
             Your personalized day with smart spot suggestions
           </p>
         </div>
-        <Link
-          href="/schedule"
-          className="px-3 sm:px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-sm sm:text-base text-center"
-        >
+        <Link href="/schedule" className="receipt-btn w-auto px-4">
           Edit Schedule
         </Link>
       </div>
 
+      <div className="receipt-divider" />
+
       {/* Day Selector */}
-      <div className="flex gap-2 overflow-x-auto pb-2">
+      <div className="flex gap-2.5 overflow-x-auto pb-2">
         {weekdays.map((day) => {
           const classCount = schedule.classes.filter((c) => c.day === day).length;
           return (
             <button
               key={day}
               onClick={() => setSelectedDay(day)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors flex flex-col items-center min-w-[80px] ${
-                selectedDay === day
-                  ? "bg-gray-900 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
+              className="receipt-chip flex flex-col items-center min-w-[80px] normal-case"
+              data-active={selectedDay === day}
             >
-              <span>{dayLabels[day].slice(0, 3)}</span>
-              <span className="text-xs opacity-75">{classCount} classes</span>
+              <span className="uppercase">{dayLabels[day].slice(0, 3)}</span>
+              <span className="text-[10px] opacity-75 normal-case">{classCount} classes</span>
             </button>
           );
         })}
@@ -165,35 +158,32 @@ export default function PlannerPage() {
       <RoutePlanner day={selectedDay} />
 
       {/* Timeline */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         {timelineItems.length === 0 ? (
-          <div className="bg-white border border-gray-200 rounded-xl p-6 text-center">
-            <p className="text-gray-500">No classes on {dayLabels[selectedDay]}</p>
-            <p className="text-sm text-gray-400 mt-1">The whole day is yours!</p>
+          <div className="receipt-card p-6 text-center">
+            <p className="text-ink/70">No classes on {dayLabels[selectedDay]}</p>
+            <p className="text-sm text-ink/40 mt-1">The whole day is yours!</p>
           </div>
         ) : (
           timelineItems.map((item, index) => {
             if (item.type === "class") {
               const classData = item.data;
               return (
-                <div
-                  key={classData.id}
-                  className="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-4"
-                >
-                  <div className="w-2 h-12 bg-gray-900 rounded-full flex-shrink-0"></div>
+                <div key={classData.id} className="receipt-card p-4 flex items-center gap-4">
+                  <div className="w-1.5 self-stretch bg-ink flex-shrink-0"></div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-semibold text-gray-900">{classData.courseCode}</span>
-                      <span className="text-xs px-2 py-0.5 bg-gray-100 rounded-full text-gray-600">
+                      <span className="font-bold text-ink">{classData.courseCode}</span>
+                      <span className="text-[9px] font-bold uppercase tracking-wide px-2 py-0.5 border border-ink/30">
                         {classData.type}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-ink/60">
                       {formatTime(classData.startTime)} - {formatTime(classData.endTime)} •{" "}
                       {classData.building} {classData.room}
                     </p>
                     {classData.courseName && (
-                      <p className="text-xs text-gray-400 mt-1">{classData.courseName}</p>
+                      <p className="text-xs text-ink/40 mt-1">{classData.courseName}</p>
                     )}
                   </div>
                 </div>
@@ -201,26 +191,23 @@ export default function PlannerPage() {
             } else {
               const { gap, suggestions, description } = item.data;
               return (
-                <div
-                  key={`gap-${index}`}
-                  className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-4"
-                >
+                <div key={`gap-${index}`} className="receipt-card p-4">
                   <div className="flex items-start gap-4">
-                    <div className="w-2 h-full min-h-[60px] bg-green-400 rounded-full flex-shrink-0"></div>
+                    <div className="w-1.5 self-stretch min-h-[60px] bg-accent flex-shrink-0"></div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="text-green-800 font-medium">Free Time</span>
-                        <span className="text-xs text-green-600">
+                        <span className="text-ink font-bold uppercase tracking-wide text-sm">Free Time</span>
+                        <span className="text-xs text-accent font-bold">
                           {formatTime(gap.startTime)} - {formatTime(gap.endTime)}
                         </span>
                       </div>
-                      <p className="text-sm text-green-700 mb-3">{description}</p>
+                      <p className="text-sm text-ink/70 mb-3">{description}</p>
 
                       {/* Categorized Suggestions - 3 columns */}
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {/* Work Spots Column */}
                         <div className="space-y-2">
-                          <p className="text-xs font-medium text-blue-800 uppercase tracking-wider flex items-center gap-1">
+                          <p className="text-[10px] font-bold text-ink/60 uppercase tracking-widest">
                             Study Spots
                           </p>
                           {suggestions.workSpots.map((suggestion) => {
@@ -229,14 +216,14 @@ export default function PlannerPage() {
                             return (
                               <div
                                 key={suggestion.spotId}
-                                className="bg-white/70 rounded-lg p-2.5 flex items-center gap-2"
+                                className="border border-dashed border-ink/30 p-2.5 flex items-center gap-2"
                               >
                                 <span className="text-lg">{spot.emoji}</span>
                                 <div className="flex-1 min-w-0">
-                                  <p className="font-medium text-gray-900 text-sm truncate">
+                                  <p className="font-bold text-ink text-sm truncate">
                                     {spot.name}
                                   </p>
-                                  <p className="text-xs text-gray-500 truncate">
+                                  <p className="text-xs text-ink/50 truncate">
                                     {suggestion.reason}
                                   </p>
                                 </div>
@@ -244,13 +231,13 @@ export default function PlannerPage() {
                             );
                           })}
                           {suggestions.workSpots.length === 0 && (
-                            <p className="text-xs text-gray-400 italic">No spots nearby</p>
+                            <p className="text-xs text-ink/40 italic">No spots nearby</p>
                           )}
                         </div>
 
                         {/* Food/Coffee Column */}
                         <div className="space-y-2">
-                          <p className="text-xs font-medium text-orange-800 uppercase tracking-wider flex items-center gap-1">
+                          <p className="text-[10px] font-bold text-ink/60 uppercase tracking-widest">
                             Food & Coffee
                           </p>
                           {suggestions.foodCoffeeSpots.map((suggestion) => {
@@ -259,14 +246,14 @@ export default function PlannerPage() {
                             return (
                               <div
                                 key={suggestion.spotId}
-                                className="bg-white/70 rounded-lg p-2.5 flex items-center gap-2"
+                                className="border border-dashed border-ink/30 p-2.5 flex items-center gap-2"
                               >
                                 <span className="text-lg">{spot.emoji}</span>
                                 <div className="flex-1 min-w-0">
-                                  <p className="font-medium text-gray-900 text-sm truncate">
+                                  <p className="font-bold text-ink text-sm truncate">
                                     {spot.name}
                                   </p>
-                                  <p className="text-xs text-gray-500 truncate">
+                                  <p className="text-xs text-ink/50 truncate">
                                     {suggestion.reason}
                                   </p>
                                 </div>
@@ -274,13 +261,13 @@ export default function PlannerPage() {
                             );
                           })}
                           {suggestions.foodCoffeeSpots.length === 0 && (
-                            <p className="text-xs text-gray-400 italic">No spots nearby</p>
+                            <p className="text-xs text-ink/40 italic">No spots nearby</p>
                           )}
                         </div>
 
                         {/* Wellness Column (2 Gym + 1 Grocery) */}
                         <div className="space-y-2">
-                          <p className="text-xs font-medium text-purple-800 uppercase tracking-wider flex items-center gap-1">
+                          <p className="text-[10px] font-bold text-ink/60 uppercase tracking-widest">
                             Wellness
                           </p>
                           {suggestions.wellnessSpots.map((suggestion) => {
@@ -289,14 +276,14 @@ export default function PlannerPage() {
                             return (
                               <div
                                 key={suggestion.spotId}
-                                className="bg-white/70 rounded-lg p-2.5 flex items-center gap-2"
+                                className="border border-dashed border-ink/30 p-2.5 flex items-center gap-2"
                               >
                                 <span className="text-lg">{spot.emoji}</span>
                                 <div className="flex-1 min-w-0">
-                                  <p className="font-medium text-gray-900 text-sm truncate">
+                                  <p className="font-bold text-ink text-sm truncate">
                                     {spot.name}
                                   </p>
-                                  <p className="text-xs text-gray-500 truncate">
+                                  <p className="text-xs text-ink/50 truncate">
                                     {suggestion.reason}
                                   </p>
                                 </div>
@@ -304,14 +291,14 @@ export default function PlannerPage() {
                             );
                           })}
                           {suggestions.wellnessSpots.length === 0 && (
-                            <p className="text-xs text-gray-400 italic">No spots nearby</p>
+                            <p className="text-xs text-ink/40 italic">No spots nearby</p>
                           )}
                         </div>
                       </div>
 
                       {/* Building context */}
                       {gap.nearestBuilding && (
-                        <p className="text-xs text-green-600 mt-3">
+                        <p className="text-xs text-accent mt-3">
                           Near {gap.nearestBuilding} ({uwBuildings[gap.nearestBuilding].name})
                         </p>
                       )}

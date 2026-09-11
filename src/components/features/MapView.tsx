@@ -152,17 +152,17 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
       <div className="relative" ref={searchRef}>
         <input
           type="text"
-          placeholder="Search by name, category, location..."
+          placeholder="SEARCH SPOTS, CATEGORY, LOCATION..."
           value={searchQuery}
           onChange={(e) => {
             setSearchQuery(e.target.value);
             setShowSuggestions(true);
           }}
           onFocus={() => setShowSuggestions(true)}
-          className="w-full px-4 py-3 pl-10 pr-10 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-200"
+          className="w-full px-4 py-3 pl-10 pr-10 bg-transparent border-0 border-b-2 border-ink text-sm uppercase tracking-wide placeholder:text-ink/50 focus:outline-none"
         />
         <svg
-          className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+          className="absolute left-1 top-1/2 transform -translate-y-1/2 w-4.5 h-4.5 text-ink"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -177,7 +177,7 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
         {searchQuery ? (
           <button
             onClick={() => { setSearchQuery(""); setShowSuggestions(false); }}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 hover:text-gray-600"
+            className="absolute right-1 top-1/2 transform -translate-y-1/2 w-5 h-5 text-ink/60 hover:text-ink"
           >
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -188,8 +188,8 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
             <button
               onClick={startListening}
               title="Search by voice"
-              className={`absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 transition-colors ${
-                isListening ? "text-red-500 animate-pulse" : "text-gray-400 hover:text-gray-600"
+              className={`absolute right-1 top-1/2 transform -translate-y-1/2 w-5 h-5 transition-colors ${
+                isListening ? "text-accent animate-pulse" : "text-ink/60 hover:text-ink"
               }`}
             >
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -206,7 +206,7 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
 
         {/* Search Suggestions Dropdown */}
         {showSuggestions && suggestions.length > 0 && searchQuery.length >= 2 && (
-          <div className="absolute z-1000 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+          <div className="absolute z-1000 w-full mt-1 bg-paper border-1.5 border-ink shadow-[5px_5px_0_#1B1A17] overflow-hidden" style={{ borderWidth: "1.5px", borderStyle: "solid" }}>
             {suggestions.map((spot) => (
               <button
                 key={spot.id}
@@ -215,19 +215,19 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
                   setShowSuggestions(false);
                   setSelectedSpotId(spot.id);
                 }}
-                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center gap-3 border-b border-gray-100 last:border-0"
+                className="w-full px-4 py-3 text-left hover:bg-cream flex items-center gap-3 border-b border-dashed border-ink/30 last:border-0"
               >
                 <span className="text-xl">{spot.emoji}</span>
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-gray-900 truncate">{spot.name}</p>
-                  <p className="text-xs text-gray-500">{categoryLabels[spot.category]} · {spot.neighborhood}</p>
+                  <p className="font-bold text-ink truncate">{spot.name}</p>
+                  <p className="text-[11px] uppercase tracking-wide text-ink/60">{categoryLabels[spot.category]} · {spot.neighborhood}</p>
                 </div>
               </button>
             ))}
           </div>
         )}
       </div>
-      {voiceError && <p className="text-xs text-red-500">{voiceError}</p>}
+      {voiceError && <p className="text-xs text-red-600">{voiceError}</p>}
 
       {/* Filters */}
       {!filterCategory && (
@@ -242,13 +242,16 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
         <button
           onClick={requestLocation}
           disabled={locating}
-          className={`self-start flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors disabled:opacity-60 ${
-            location ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-          }`}
+          className="receipt-chip-dash self-start flex items-center gap-1.5 disabled:opacity-60"
+          data-active={!!location}
         >
-          {locating ? "Locating…" : location ? "Location on" : "Near me"}
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+            <path d="M10 17.5S16 12 16 8a6 6 0 1 0-12 0c0 4 6 9.5 6 9.5Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+            <circle cx="10" cy="8" r="2.1" stroke="currentColor" strokeWidth="1.4" />
+          </svg>
+          {locating ? "LOCATING…" : location ? "LOCATION ON" : "NEAR ME"}
         </button>
-        {locationError && <p className="text-xs text-red-500">{locationError}</p>}
+        {locationError && <p className="text-xs text-red-600">{locationError}</p>}
       </div>
 
       {/* Neighborhood filter */}
@@ -257,19 +260,18 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
           <button
             key={neighborhood}
             onClick={() => setSelectedNeighborhood(neighborhood)}
-            className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
-              selectedNeighborhood === neighborhood
-                ? "bg-gray-900 text-white"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-            }`}
+            className="receipt-chip-dash"
+            data-active={selectedNeighborhood === neighborhood}
           >
-            {neighborhood}
+            {neighborhood.toUpperCase()}
           </button>
         ))}
       </div>
 
+      <div className="receipt-divider-dash" />
+
       {/* Map Container */}
-      <div className="relative h-125 md:h-150 overflow-hidden">
+      <div className="relative h-125 md:h-150 overflow-hidden border-1.5 border-ink shadow-[5px_5px_0_#1B1A17]" style={{ borderWidth: "1.5px", borderStyle: "solid" }}>
         {MapComponent ? (
           <MapComponent
             spots={spotsWithCoords}
@@ -280,14 +282,14 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
             userLocation={location}
           />
         ) : (
-          <div className="flex items-center justify-center h-full">
-            <div className="text-gray-500">Loading map...</div>
+          <div className="flex items-center justify-center h-full bg-paper">
+            <div className="text-ink/50 text-sm uppercase tracking-wide">Loading map...</div>
           </div>
         )}
       </div>
 
       {/* Spots count */}
-      <p className="text-sm text-gray-500">
+      <p className="text-[11px] uppercase tracking-widest text-ink/60">
         {filteredSpots.length} spot{filteredSpots.length !== 1 ? "s" : ""} on map
       </p>
     </div>

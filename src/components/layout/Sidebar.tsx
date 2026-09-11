@@ -24,83 +24,80 @@ export function Sidebar() {
   const { user, loading, signOut } = useAuth();
 
   return (
-    <aside className="hidden lg:flex lg:flex-col lg:w-56 lg:fixed lg:inset-y-0 bg-white border-r border-gray-200">
-      <div className="flex items-center h-14 px-5 border-b border-gray-200">
-        <Link href="/" className="flex items-center gap-0">
-          <span className="font-bold text-lg">
-            <span className="text-gray-900">Waterloo</span>
-            <span className="text-[#1D9E75]">Budget</span>
-          </span>
+    <aside className="hidden lg:flex lg:flex-col lg:w-60 lg:fixed lg:inset-y-0 bg-cream border-r-2 border-ink">
+      <div className="flex items-center justify-between h-16 px-5 border-b-2 border-ink">
+        <Link href="/" className="flex flex-col leading-none">
+          <span className="text-[15px] font-bold tracking-tight">WATERLOO</span>
+          <span className="text-[15px] font-bold tracking-tight">BUDGET</span>
         </Link>
+        <svg width="26" height="26" viewBox="0 0 34 34" fill="none">
+          <path d="M7 4h20v24l-3-2-3 2-3-2-3 2-3-2-3 2-2-2Z" stroke="#1B1A17" strokeWidth="1.6" strokeLinejoin="round" />
+          <line x1="11" y1="11" x2="23" y2="11" stroke="#1B1A17" strokeWidth="1.4" />
+          <line x1="11" y1="15.5" x2="23" y2="15.5" stroke="#1B1A17" strokeWidth="1.4" />
+          <line x1="11" y1="20" x2="18" y2="20" stroke="#1B1A17" strokeWidth="1.4" />
+        </svg>
       </div>
-      <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+      <nav className="flex-1 px-4 py-5 space-y-2 overflow-y-auto">
         {navItems.map((item) => (
           <Link
             key={item.href}
             href={item.href}
-            className={`flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={`block px-3 py-2 text-[11px] font-bold uppercase tracking-wider border-1.5 transition-colors ${
               pathname === item.href
-                ? "bg-[#1D9E75]/10 text-[#1D9E75]"
-                : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                ? "bg-ink text-cream border-ink"
+                : "border-ink/0 text-ink/70 hover:border-ink hover:text-ink"
             }`}
+            style={{ borderWidth: "1.5px", borderStyle: "solid" }}
           >
             {item.label}
           </Link>
         ))}
 
-        {/* User navigation */}
         {user && (
-          <>
-            <div className="pt-4 mt-4 border-t border-gray-100">
-              <p className="px-3 text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">
-                My Stuff
-              </p>
-              {userNavItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    pathname === item.href || pathname.startsWith(item.href + "/")
-                      ? "bg-[#1D9E75]/10 text-[#1D9E75]"
-                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </div>
-          </>
+          <div className="pt-5 mt-5 border-t border-dashed border-ink/40">
+            <p className="px-3 text-[10px] font-bold text-ink/50 uppercase tracking-widest mb-2">
+              My Stuff
+            </p>
+            {userNavItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`block px-3 py-2 text-[11px] font-bold uppercase tracking-wider border-1.5 transition-colors ${
+                  pathname === item.href || pathname.startsWith(item.href + "/")
+                    ? "bg-ink text-cream border-ink"
+                    : "border-ink/0 text-ink/70 hover:border-ink hover:text-ink"
+                }`}
+                style={{ borderWidth: "1.5px", borderStyle: "solid" }}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
         )}
       </nav>
 
-      {/* Auth section */}
-      <div className="p-3 border-t border-gray-200">
+      <div className="p-4 border-t-2 border-ink">
         {loading ? (
-          <div className="h-9 bg-gray-100 rounded-lg animate-pulse"></div>
+          <div className="h-9 border border-dashed border-ink/40 animate-pulse" />
         ) : user ? (
-          <div className="space-y-1">
-            <div className="flex items-center gap-2 px-2 py-1">
-              <div className="w-7 h-7 bg-[#1D9E75]/10 rounded-full flex items-center justify-center text-xs font-medium text-[#1D9E75]">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 px-1">
+              <div className="w-6 h-6 border-1.5 border-ink flex items-center justify-center text-[10px] font-bold" style={{ borderWidth: "1.5px", borderStyle: "solid" }}>
                 {(user.user_metadata?.name || user.email || "U")[0].toUpperCase()}
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">
-                  {user.user_metadata?.name || user.email?.split("@")[0]}
-                </p>
-              </div>
+              <p className="text-[11px] font-bold uppercase tracking-wide truncate">
+                {user.user_metadata?.name || user.email?.split("@")[0]}
+              </p>
             </div>
             <button
               onClick={signOut}
-              className="w-full px-3 py-1.5 text-xs text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition-colors text-left"
+              className="w-full receipt-btn text-left justify-start px-3"
             >
               Sign out
             </button>
           </div>
         ) : (
-          <Link
-            href="/login"
-            className="block w-full px-3 py-2 text-center bg-[#1D9E75] text-white rounded-lg hover:bg-[#178a66] transition-colors text-sm font-medium"
-          >
+          <Link href="/login" className="receipt-btn w-full !bg-ink !text-cream">
             Sign in
           </Link>
         )}

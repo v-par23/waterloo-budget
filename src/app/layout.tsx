@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Space_Mono } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { MobileHeader } from "@/components/layout/MobileHeader";
@@ -8,8 +8,9 @@ import { SavedSpotsProvider } from "@/components/SavedSpotsProvider";
 import { ScheduleProvider } from "@/components/ScheduleProvider";
 import { BudgetProvider } from "@/components/BudgetProvider";
 
-const inter = Inter({
+const spaceMono = Space_Mono({
   subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
@@ -23,8 +24,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.className} h-full`}>
-      <body className="min-h-full bg-gray-50">
+    <html lang="en" className={`${spaceMono.className} h-full`}>
+      <body className="min-h-full bg-cream">
         <AuthProvider>
           <SavedSpotsProvider>
             <ScheduleProvider>

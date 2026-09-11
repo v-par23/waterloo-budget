@@ -119,10 +119,10 @@ export default function TeamsPage() {
     return (
       <div className="space-y-4 sm:space-y-6">
         <div className="space-y-1 sm:space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">My Teams</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-ink">My Teams</h1>
         </div>
         <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-ink"></div>
         </div>
       </div>
     );
@@ -132,14 +132,11 @@ export default function TeamsPage() {
     return (
       <div className="space-y-4 sm:space-y-6">
         <div className="space-y-1 sm:space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">My Teams</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-ink">My Teams</h1>
         </div>
-        <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8 text-center">
-          <p className="text-sm sm:text-base text-gray-600 mb-4">Sign in to create and join teams</p>
-          <Link
-            href="/login"
-            className="inline-block px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors text-sm sm:text-base"
-          >
+        <div className="receipt-card p-6 sm:p-8 text-center">
+          <p className="text-sm sm:text-base text-ink/70 mb-4">Sign in to create and join teams</p>
+          <Link href="/login" className="receipt-btn inline-flex w-auto px-4 !bg-ink !text-cream">
             Sign in
           </Link>
         </div>
@@ -151,63 +148,49 @@ export default function TeamsPage() {
     <div className="space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
         <div className="space-y-1 sm:space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">My Teams</h1>
-          <p className="text-sm sm:text-base text-gray-600">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-ink">My Teams</h1>
+          <p className="text-sm sm:text-base text-ink/70">
             Create teams to share and save spots with friends
           </p>
         </div>
         <div className="flex gap-2">
-          <button
-            onClick={() => setShowJoinModal(true)}
-            className="px-3 sm:px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-sm sm:text-base"
-          >
+          <button onClick={() => setShowJoinModal(true)} className="receipt-btn w-auto px-3 sm:px-4">
             Join Team
           </button>
-          <Link
-            href="/teams/create"
-            className="px-3 sm:px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors text-sm sm:text-base"
-          >
+          <Link href="/teams/create" className="receipt-btn w-auto px-3 sm:px-4 !bg-ink !text-cream">
             Create Team
           </Link>
         </div>
       </div>
 
+      <div className="receipt-divider" />
+
       {teams.length === 0 ? (
-        <div className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8 text-center">
-          <p className="text-sm sm:text-base text-gray-600 mb-4">You&apos;re not part of any teams yet</p>
-          <p className="text-xs sm:text-sm text-gray-500 mb-4">
+        <div className="receipt-card p-6 sm:p-8 text-center">
+          <p className="text-sm sm:text-base text-ink/70 mb-4">You&apos;re not part of any teams yet</p>
+          <p className="text-xs sm:text-sm text-ink/50 mb-4">
             Create a team to share favorite spots with friends, or join an existing team with an invite code
           </p>
           <div className="flex flex-col sm:flex-row gap-2 justify-center">
-            <button
-              onClick={() => setShowJoinModal(true)}
-              className="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-sm sm:text-base"
-            >
+            <button onClick={() => setShowJoinModal(true)} className="receipt-btn w-auto px-4">
               Join with Code
             </button>
-            <Link
-              href="/teams/create"
-              className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors text-sm sm:text-base"
-            >
+            <Link href="/teams/create" className="receipt-btn w-auto px-4 !bg-ink !text-cream">
               Create Team
             </Link>
           </div>
         </div>
       ) : (
-        <div className="grid gap-3 sm:gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
           {teams.map((team) => (
-            <Link
-              key={team.id}
-              href={`/teams/${team.id}`}
-              className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 hover:shadow-md transition-shadow"
-            >
-              <h3 className="font-semibold text-gray-900 text-base sm:text-lg">{team.name}</h3>
+            <Link key={team.id} href={`/teams/${team.id}`} className="receipt-card p-4 sm:p-6 block hover:-translate-x-0.5 hover:-translate-y-0.5 transition-transform">
+              <h3 className="font-bold text-ink text-base sm:text-lg">{team.name}</h3>
               {team.description && (
-                <p className="text-xs sm:text-sm text-gray-500 mt-1 line-clamp-2">
+                <p className="text-xs sm:text-sm text-ink/60 mt-1 line-clamp-2">
                   {team.description}
                 </p>
               )}
-              <div className="mt-3 sm:mt-4 flex items-center gap-4 text-xs sm:text-sm text-gray-500">
+              <div className="mt-3 sm:mt-4 flex items-center gap-4 text-[11px] uppercase tracking-wide text-ink/40">
                 <span>Code: {team.invite_code}</span>
               </div>
             </Link>
@@ -217,17 +200,17 @@ export default function TeamsPage() {
 
       {/* Join Team Modal */}
       {showJoinModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl p-6 w-full max-w-md">
-            <h2 className="text-xl font-semibold mb-4">Join a Team</h2>
+        <div className="fixed inset-0 bg-ink/50 flex items-center justify-center z-50 p-4">
+          <div className="receipt-card p-6 w-full max-w-md !shadow-[8px_8px_0_#1B1A17]">
+            <h2 className="text-xl font-bold uppercase tracking-wide mb-4">Join a Team</h2>
             <form onSubmit={handleJoinTeam} className="space-y-4">
               {joinError && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                <div className="border border-dashed border-accent text-accent px-4 py-3 text-sm">
                   {joinError}
                 </div>
               )}
               <div>
-                <label htmlFor="inviteCode" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="inviteCode" className="block text-[10px] font-bold uppercase tracking-widest text-ink/60 mb-1">
                   Invite Code
                 </label>
                 <input
@@ -235,9 +218,9 @@ export default function TeamsPage() {
                   type="text"
                   value={joinCode}
                   onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
-                  placeholder="Enter 6-character code"
+                  placeholder="ENTER 6-CHARACTER CODE"
                   maxLength={6}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-200 uppercase tracking-widest text-center text-lg font-mono"
+                  className="w-full px-4 py-2 bg-transparent border-0 border-b-2 border-ink focus:outline-none uppercase tracking-widest text-center text-lg"
                 />
               </div>
               <div className="flex gap-2">
@@ -248,15 +231,11 @@ export default function TeamsPage() {
                     setJoinCode("");
                     setJoinError(null);
                   }}
-                  className="flex-1 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="receipt-btn flex-1"
                 >
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  disabled={joining || joinCode.length < 6}
-                  className="flex-1 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50"
-                >
+                <button type="submit" disabled={joining || joinCode.length < 6} className="receipt-btn flex-1 !bg-ink !text-cream disabled:opacity-50">
                   {joining ? "Joining..." : "Join Team"}
                 </button>
               </div>
