@@ -1,6 +1,6 @@
 # WaterlooBudget — Launch Video Notes
 
-**Positioning / tagline:** The Ultimate Budget Guide to Waterloo — made by a local Waterloo resident.
+**Positioning / tagline:** The Ultimate Budget Guide to Waterloo — made by a Waterlooian.
 
 Use this as the framing for the LinkedIn launch video/post: this isn't a generic template app, it's built by someone who actually lives here, for the specific budget-friendly spots, classes, and student life around Waterloo/Kitchener.
 
