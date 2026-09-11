@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# draft output from scripts/discover-spots.ts -- reviewed by hand, not meant to be committed
+/scripts/output/
