@@ -440,7 +440,7 @@ export function SpotsList({ filterCategory }: SpotsListProps) {
       </p>
 
       {/* Spots grid */}
-      <div className={`grid gap-6 md:grid-cols-2 xl:grid-cols-3 ${compareMode ? "pb-20" : ""}`}>
+      <div className={`grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3 ${compareMode ? "pb-20" : ""}`}>
         {filteredSpots.map((spot) => (
           <SpotCard
             key={spot.id}

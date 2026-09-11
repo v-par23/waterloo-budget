@@ -66,7 +66,7 @@ export default function SavedPage() {
           </Link>
         </div>
       ) : (
-        <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
           {savedSpots.map((spot) => (
             <SpotCard key={spot.id} spot={spot} />
           ))}

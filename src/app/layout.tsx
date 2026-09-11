@@ -7,6 +7,7 @@ import { AuthProvider } from "@/components/AuthProvider";
 import { SavedSpotsProvider } from "@/components/SavedSpotsProvider";
 import { ScheduleProvider } from "@/components/ScheduleProvider";
 import { BudgetProvider } from "@/components/BudgetProvider";
+import { ResponsiveGuard } from "@/components/dev/ResponsiveGuard";
 
 const spaceMono = Space_Mono({
   subsets: ["latin"],
@@ -37,6 +38,7 @@ export default function RootLayout({
                     {children}
                   </div>
                 </main>
+                <ResponsiveGuard />
               </BudgetProvider>
             </ScheduleProvider>
           </SavedSpotsProvider>

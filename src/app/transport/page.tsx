@@ -10,7 +10,7 @@ export default function TransportPage() {
         </p>
       </div>
 
-      <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2">
         {/* GRT */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
           <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">

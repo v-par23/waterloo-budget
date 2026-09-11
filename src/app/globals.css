@@ -25,6 +25,13 @@ body {
   font-family: var(--font-mono-receipt);
 }
 
+/* Tailwind gotcha: a `grid` with only responsive column classes (e.g. "grid md:grid-cols-2")
+   has no explicit column below that breakpoint, so the implicit column sizes to its
+   widest child's content instead of the viewport -- causing horizontal overflow on phones.
+   Always pair a responsive grid-cols-N with a base grid-cols-1 (or similar) for the
+   smallest breakpoint. The dev-only ResponsiveGuard component will flag it in console
+   if this regresses. */
+
 a {
   color: var(--color-accent);
 }

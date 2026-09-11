@@ -274,7 +274,7 @@ export default function TeamDetailPage({ params }: { params: Promise<{ id: strin
             </button>
           </div>
         ) : (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {spotsInTeam.map((spot) => (
               <div key={spot.id} className="relative group">
                 <SpotCard spot={spot} showSaveButton={false} />

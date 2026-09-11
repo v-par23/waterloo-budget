@@ -181,7 +181,7 @@ export default function TeamsPage() {
           </div>
         </div>
       ) : (
-        <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
           {teams.map((team) => (
             <Link key={team.id} href={`/teams/${team.id}`} className="receipt-card p-4 sm:p-6 block hover:-translate-x-0.5 hover:-translate-y-0.5 transition-transform">
               <h3 className="font-bold text-ink text-base sm:text-lg">{team.name}</h3>
