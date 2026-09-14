@@ -202,7 +202,7 @@ export default function AskPage() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="ASK ABOUT PLACES IN WATERLOO..."
-          className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-transparent border-0 border-b-2 border-ink uppercase tracking-wide placeholder:text-ink/50 focus:outline-none text-ink"
+          className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base bg-transparent border-0 border-b-2 border-ink tracking-wide placeholder:uppercase placeholder:text-ink/50 focus:outline-none text-ink"
           disabled={isLoading}
         />
         {voiceSupported && (

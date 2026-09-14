@@ -159,7 +159,7 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
             setShowSuggestions(true);
           }}
           onFocus={() => setShowSuggestions(true)}
-          className="w-full px-4 py-3 pl-10 pr-10 bg-transparent border-0 border-b-2 border-ink text-sm uppercase tracking-wide placeholder:text-ink/50 focus:outline-none"
+          className="w-full px-4 py-3 pl-10 pr-10 bg-transparent border-0 border-b-2 border-ink text-sm tracking-wide placeholder:uppercase placeholder:text-ink/50 focus:outline-none"
         />
         <svg
           className="absolute left-1 top-1/2 transform -translate-y-1/2 w-4.5 h-4.5 text-ink"

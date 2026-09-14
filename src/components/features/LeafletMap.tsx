@@ -212,16 +212,16 @@ export function LeafletMap({ spots, center, zoom, onSpotSelect, selectedSpotId, 
                   <span>{spot.emoji}</span>
                   <span>{spot.name}</span>
                 </div>
-                <p className="text-[11px] uppercase tracking-wide text-[#1B1A17]/60 mb-2">{spot.neighborhood}</p>
+                <p className="text-[13px] text-[#1B1A17]/55 mb-2">{spot.neighborhood}</p>
                 {spot.description && (
                   <p className="text-[13px] leading-snug text-[#1B1A17]/80 mb-2">{spot.description}</p>
                 )}
                 {userLocation && (
-                  <span className="inline-block mb-2 text-[10px] font-bold uppercase tracking-wide border border-dashed border-[#1B1A17] px-2 py-1">
+                  <p className="mb-2 text-[10px] uppercase tracking-wide text-[#1B1A17]/45">
                     {formatDistance(
                       haversineDistanceMeters(userLocation.lat, userLocation.lng, spot.lat, spot.lng)
                     )} away
-                  </span>
+                  </p>
                 )}
                 <div style={{ height: 0, borderTop: "1.5px dashed #1B1A17", margin: "4px 0 10px" }} />
                 <SpotReviewsSection

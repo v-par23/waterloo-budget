@@ -259,7 +259,7 @@ function ExpenseList() {
                 <p className="text-sm font-bold text-ink truncate">
                   {spot?.name ?? expense.note ?? "Spend"}
                 </p>
-                <p className="text-[11px] uppercase tracking-wide text-ink/40 truncate">
+                <p className="text-[13px] text-ink/45 truncate">
                   {new Date(`${expense.spentAt}T00:00:00`).toLocaleDateString(undefined, {
                     month: "short",
                     day: "numeric",

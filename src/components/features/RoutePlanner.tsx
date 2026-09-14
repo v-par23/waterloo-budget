@@ -296,7 +296,7 @@ function AddStopModal({
               placeholder="SEARCH SPOTS..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full mt-3 px-4 py-2 bg-transparent border-0 border-b-2 border-ink text-sm uppercase tracking-wide placeholder:text-ink/50 focus:outline-none"
+              className="w-full mt-3 px-4 py-2 bg-transparent border-0 border-b-2 border-ink text-sm tracking-wide placeholder:uppercase placeholder:text-ink/50 focus:outline-none"
             />
           )}
         </div>

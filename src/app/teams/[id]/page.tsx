@@ -347,7 +347,7 @@ function AddSpotModal({
             placeholder="SEARCH SPOTS..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full px-1 py-2 bg-transparent border-0 border-b-2 border-ink text-sm uppercase tracking-wide placeholder:text-ink/50 focus:outline-none"
+            className="w-full px-1 py-2 bg-transparent border-0 border-b-2 border-ink text-sm tracking-wide placeholder:uppercase placeholder:text-ink/50 focus:outline-none"
           />
         </div>
         <div className="flex-1 overflow-y-auto p-4 space-y-2">
