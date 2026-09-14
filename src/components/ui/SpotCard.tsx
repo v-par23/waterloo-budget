@@ -18,6 +18,14 @@ interface SpotCardProps {
   onToggleCompare?: (spotId: string) => void;
 }
 
+// Vibe dot color, kept within the ink/accent palette (no new hues) but graduated
+// so quiet/moderate/busy still read as distinct at a glance without a full chip.
+const vibeDotClass: Record<string, string> = {
+  quiet: "bg-ink/25",
+  moderate: "bg-ink/55",
+  busy: "bg-accent",
+};
+
 // Highlight matching text in search results
 function highlightMatch(text: string, query: string): React.ReactNode {
   if (!query || query.length < 2) return text;
@@ -154,26 +162,25 @@ export function SpotCard({
       </div>
 
       {/* Location + cuisine */}
-      <div className="text-[11px] uppercase tracking-wide text-ink/60 -mt-1.5">
+      <div className="text-[13px] text-ink/55 -mt-1.5">
         {highlightMatch(spot.neighborhood, searchQuery)}
         {spot.cuisine && <> · {spot.cuisine}</>}
       </div>
 
-      {/* Distance */}
-      {typeof distanceMeters === "number" && (
-        <span className="receipt-chip-dash self-start text-[10px]">
-          {formatDistance(distanceMeters)} away
-        </span>
-      )}
-
-      {/* Vibe (hand-curated estimate, not live data) */}
-      {spot.vibe && (
-        <span
-          title="Estimated typical vibe — not live crowd data"
-          className="receipt-chip-dash self-start text-[10px]"
-        >
-          {vibeConfig[spot.vibe].label}
-        </span>
+      {/* Distance + vibe (hand-curated estimate, not live data) - plain meta row, not another pair of boxes */}
+      {(typeof distanceMeters === "number" || spot.vibe) && (
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] uppercase tracking-wide text-ink/45">
+          {typeof distanceMeters === "number" && <span>{formatDistance(distanceMeters)} away</span>}
+          {spot.vibe && (
+            <span
+              title="Estimated typical vibe — not live crowd data"
+              className="inline-flex items-center gap-1.5"
+            >
+              <span className={`inline-block w-1.5 h-1.5 rounded-full ${vibeDotClass[spot.vibe]}`} />
+              {vibeConfig[spot.vibe].label}
+            </span>
+          )}
+        </div>
       )}
 
       {/* Description */}

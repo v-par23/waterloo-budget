@@ -32,7 +32,7 @@ export function SpotReviewsSection({ spotId, spotName, lat, lng, className = "" 
       <div className="flex items-center justify-between gap-2">
         <button
           onClick={handleReviewsClick}
-          className="text-[11px] font-bold uppercase tracking-wide text-ink/80 hover:text-ink flex items-center gap-1"
+          className="text-[12px] text-ink/65 hover:text-ink flex items-center gap-1"
         >
           {showReviews
             ? "Hide reviews"
@@ -45,7 +45,7 @@ export function SpotReviewsSection({ spotId, spotName, lat, lng, className = "" 
           target="_blank"
           rel="noopener noreferrer"
           onClick={(e) => e.stopPropagation()}
-          className="text-[11px] font-bold uppercase tracking-wide text-accent hover:text-ink flex items-center gap-1 flex-shrink-0"
+          className="text-[12px] font-bold text-accent hover:text-ink flex items-center gap-1 flex-shrink-0"
         >
           Directions →
         </a>

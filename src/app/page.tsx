@@ -7,7 +7,7 @@ export default function Home() {
     <div className="space-y-6">
       {/* Hero Section */}
       <div className="space-y-2">
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+        <h1 className="text-4xl sm:text-6xl font-bold tracking-tight leading-none">
           <span className="text-ink">Waterloo</span>
           <span className="text-accent">Budget</span>
         </h1>
