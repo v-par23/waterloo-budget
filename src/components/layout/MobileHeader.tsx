@@ -29,8 +29,8 @@ export function MobileHeader() {
     <header className="lg:hidden fixed top-0 left-0 right-0 bg-cream border-b-2 border-ink z-50">
       <div className="flex items-center justify-between h-14 px-4">
         <Link href="/" className="flex flex-col leading-none">
-          <span className="text-[13px] font-bold tracking-tight">WATERLOO</span>
-          <span className="text-[13px] font-bold tracking-tight">BUDGET</span>
+          <span className="text-[13px] font-bold tracking-tight text-ink">WATERLOO</span>
+          <span className="text-[13px] font-bold tracking-tight text-accent">BUDGET</span>
         </Link>
         <button
           onClick={() => setIsOpen(!isOpen)}

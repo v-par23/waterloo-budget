@@ -27,8 +27,8 @@ export function Sidebar() {
     <aside className="hidden lg:flex lg:flex-col lg:w-60 lg:fixed lg:inset-y-0 bg-cream border-r-2 border-ink">
       <div className="flex items-center justify-between h-16 px-5 border-b-2 border-ink">
         <Link href="/" className="flex flex-col leading-none">
-          <span className="text-[15px] font-bold tracking-tight">WATERLOO</span>
-          <span className="text-[15px] font-bold tracking-tight">BUDGET</span>
+          <span className="text-[15px] font-bold tracking-tight text-ink">WATERLOO</span>
+          <span className="text-[15px] font-bold tracking-tight text-accent">BUDGET</span>
         </Link>
         <svg width="26" height="26" viewBox="0 0 34 34" fill="none">
           <path d="M7 4h20v24l-3-2-3 2-3-2-3 2-3-2-3 2-2-2Z" stroke="#1B1A17" strokeWidth="1.6" strokeLinejoin="round" />
