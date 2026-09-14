@@ -7,6 +7,7 @@ import { AuthProvider } from "@/components/AuthProvider";
 import { SavedSpotsProvider } from "@/components/SavedSpotsProvider";
 import { ScheduleProvider } from "@/components/ScheduleProvider";
 import { BudgetProvider } from "@/components/BudgetProvider";
+import { ResponsiveGuard } from "@/components/dev/ResponsiveGuard";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -36,6 +37,7 @@ export default function RootLayout({
                     {children}
                   </div>
                 </main>
+                <ResponsiveGuard />
               </BudgetProvider>
             </ScheduleProvider>
           </SavedSpotsProvider>
