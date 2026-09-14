@@ -228,8 +228,12 @@ export default function AskPage() {
             </svg>
           </button>
         )}
-        <button type="submit" disabled={isLoading || !input.trim()} className="receipt-btn w-auto px-4 sm:px-6 !bg-ink !text-cream disabled:opacity-50 disabled:cursor-not-allowed">
-          {isLoading ? "..." : "Ask"}
+        <button
+          type="submit"
+          disabled={isLoading || !input.trim()}
+          className="receipt-btn w-auto px-6 sm:px-10 py-3 sm:py-4 text-base sm:text-lg !bg-ink !text-cream disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+        >
+          {isLoading ? "..." : "Ask →"}
         </button>
       </form>
       {voiceError && <p className="text-center text-xs text-red-600 mt-1">{voiceError}</p>}
