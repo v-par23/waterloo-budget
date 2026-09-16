@@ -7,7 +7,7 @@ export default function MapPage() {
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-ink">
           Map View
         </h1>
-        <p className="text-sm sm:text-base text-ink/70 max-w-2xl">
+        <p className="text-sm sm:text-base text-ink/70 max-w-4xl">
           Explore budget-friendly spots in Waterloo on the map. Click a marker to see details.
         </p>
       </div>
