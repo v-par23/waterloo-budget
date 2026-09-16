@@ -6,6 +6,7 @@ import { useEffect, useRef } from "react";
 import { Category, categoryConfig } from "@/data/spots";
 import { haversineDistanceMeters, formatDistance } from "@/lib/geo";
 import { SpotReviewsSection } from "@/components/ui/SpotReviewsSection";
+import { CategoryIcon } from "@/components/ui/CategoryIcon";
 
 import "leaflet/dist/leaflet.css";
 
@@ -37,13 +38,29 @@ interface LeafletMapProps {
   userLocation?: UserLocation | null;
 }
 
-// Custom emoji marker
-function createEmojiIcon(emoji: string, isSelected: boolean) {
+// Inner SVG markup per category - raw strings (not JSX) since Leaflet's divIcon
+// needs plain HTML, not a React tree. Kept visually in sync with the
+// CategoryIcon component used everywhere else spots render as JSX.
+const categoryMarkerPaths: Record<Category, string> = {
+  food: `<circle cx="10" cy="10" r="6"/><circle cx="10" cy="10" r="2.5"/>`,
+  housing: `<polyline points="4,10 10,4 16,10"/><path d="M6 9v7h8V9"/>`,
+  workspots: `<rect x="4" y="5" width="12" height="8"/><line x1="2.5" y1="15" x2="17.5" y2="15"/>`,
+  coffee: `<path d="M5 8h9v5a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V8Z"/><path d="M14 9.5h1.5a2 2 0 0 1 0 4H14"/><line x1="7" y1="4" x2="7" y2="6"/><line x1="10" y1="4" x2="10" y2="6"/>`,
+  accelerators: `<line x1="10" y1="16" x2="10" y2="4"/><polyline points="6,8 10,4 14,8"/>`,
+  gym: `<line x1="6" y1="10" x2="14" y2="10"/><rect x="3" y="7.5" width="3" height="5"/><rect x="14" y="7.5" width="3" height="5"/>`,
+  bars: `<polyline points="4,4 10,11 16,4"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="6" y1="17" x2="14" y2="17"/>`,
+  grocery: `<path d="M4 7h12l-1.5 8h-9L4 7Z"/><line x1="6" y1="7" x2="8" y2="3"/><line x1="14" y1="7" x2="12" y2="3"/>`,
+};
+
+// Category-glyph marker (replaces the old per-spot emoji, which rendered
+// inconsistently across OS/browser emoji fonts and didn't match the design).
+function createCategoryIcon(category: Category, isSelected: boolean) {
+  const svg = `<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${categoryMarkerPaths[category]}</svg>`;
   return divIcon({
-    html: `<div class="emoji-marker ${isSelected ? 'selected' : ''}">${emoji}</div>`,
+    html: `<div class="dot-marker ${isSelected ? 'selected' : ''}">${svg}</div>`,
     className: "custom-emoji-marker",
-    iconSize: [40, 40],
-    iconAnchor: [20, 20],
+    iconSize: [28, 28],
+    iconAnchor: [14, 14],
   });
 }
 
@@ -103,7 +120,7 @@ export function LeafletMap({ spots, center, zoom, onSpotSelect, selectedSpotId, 
           border: none !important;
         }
         .emoji-marker {
-          font-size: 20px;
+          color: #1B1A17;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -119,9 +136,89 @@ export function LeafletMap({ spots, center, zoom, onSpotSelect, selectedSpotId, 
           transform: translate(-1px, -1px);
         }
         .emoji-marker.selected {
+          color: #FF5A1F;
           border-color: #FF5A1F;
           box-shadow: 3px 3px 0 #FF5A1F;
           background: #F3EFE4;
+        }
+        /* --- experimental pin variant (teardrop) --- */
+        .pin-marker {
+          width: 32px;
+          height: 32px;
+          background: #FBF8F1;
+          border: 1.5px solid #1B1A17;
+          border-radius: 50% 50% 50% 0;
+          transform: rotate(-45deg);
+          box-shadow: 2px 2px 0 #1B1A17;
+          cursor: pointer;
+          transition: transform 0.15s;
+        }
+        .pin-marker:hover {
+          transform: rotate(-45deg) translate(1px, -1px);
+        }
+        .pin-marker.selected {
+          border-color: #FF5A1F;
+          box-shadow: 2px 2px 0 #FF5A1F;
+          background: #F3EFE4;
+        }
+        .pin-marker-icon {
+          color: #1B1A17;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transform: rotate(45deg);
+        }
+        .pin-marker.selected .pin-marker-icon {
+          color: #FF5A1F;
+        }
+        /* --- experimental tag variant (ribbon/price-tag shape) - kept for reference, not active
+        .tag-marker {
+          width: 34px;
+          height: 34px;
+          background: #FBF8F1;
+          border: 1.5px solid #1B1A17;
+          clip-path: polygon(0% 0%, 100% 0%, 100% 68%, 50% 100%, 0% 68%);
+          filter: drop-shadow(2px 2px 0 #1B1A17);
+          color: #1B1A17;
+          cursor: pointer;
+          display: flex;
+          align-items: flex-start;
+          justify-content: center;
+          padding-top: 5px;
+          transition: transform 0.15s;
+        }
+        .tag-marker:hover {
+          transform: translate(-1px, -1px);
+        }
+        .tag-marker.selected {
+          color: #FF5A1F;
+          border-color: #FF5A1F;
+          filter: drop-shadow(2px 2px 0 #FF5A1F);
+        }
+        --- end experimental tag variant --- */
+        /* --- dot variant (minimal, inverted colors) - active --- */
+        .dot-marker {
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          background: #1B1A17;
+          color: #F3EFE4;
+          border: 1.5px solid #1B1A17;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: transform 0.15s;
+        }
+        .dot-marker:hover {
+          transform: scale(1.12);
+        }
+        .dot-marker.selected {
+          background: #FF5A1F;
+          border-color: #FF5A1F;
+          color: #F3EFE4;
         }
         .leaflet-container {
           height: 100%;
@@ -189,7 +286,7 @@ export function LeafletMap({ spots, center, zoom, onSpotSelect, selectedSpotId, 
           <Marker
             key={spot.id}
             position={[spot.lat, spot.lng]}
-            icon={createEmojiIcon(spot.emoji, spot.id === selectedSpotId)}
+            icon={createCategoryIcon(spot.category, spot.id === selectedSpotId)}
             ref={(instance) => {
               if (instance) markerRefs.current[spot.id] = instance;
               else delete markerRefs.current[spot.id];
@@ -209,7 +306,7 @@ export function LeafletMap({ spots, center, zoom, onSpotSelect, selectedSpotId, 
                   </span>
                 </div>
                 <div className="text-lg font-bold leading-tight flex items-center gap-2 mb-1">
-                  <span>{spot.emoji}</span>
+                  <CategoryIcon category={spot.category} className="w-4 h-4 text-[#1B1A17]/70 flex-shrink-0" />
                   <span>{spot.name}</span>
                 </div>
                 <p className="text-[13px] text-[#1B1A17]/55 mb-2">{spot.neighborhood}</p>

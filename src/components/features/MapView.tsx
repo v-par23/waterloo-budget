@@ -3,6 +3,7 @@
 import { useEffect, useState, useMemo, useRef } from "react";
 import { spots, Category, neighborhoods, spotCoordinates } from "@/data/spots";
 import { CategoryFilter } from "@/components/ui/CategoryFilter";
+import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { useUserLocation } from "@/lib/hooks/useUserLocation";
 import { useSpeechRecognition } from "@/lib/hooks/useSpeechRecognition";
 
@@ -217,7 +218,7 @@ export function MapView({ filterCategory, showFreeOnly }: MapViewProps) {
                 }}
                 className="w-full px-4 py-3 text-left hover:bg-cream flex items-center gap-3 border-b border-dashed border-ink/30 last:border-0"
               >
-                <span className="text-xl">{spot.emoji}</span>
+                <CategoryIcon category={spot.category} className="w-4 h-4 text-ink/70 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="font-bold text-ink truncate">{spot.name}</p>
                   <p className="text-[11px] uppercase tracking-wide text-ink/60">{categoryLabels[spot.category]} · {spot.neighborhood}</p>

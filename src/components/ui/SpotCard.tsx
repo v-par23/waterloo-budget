@@ -156,9 +156,8 @@ export function SpotCard({
       </div>
 
       {/* Name */}
-      <div className="text-lg font-bold leading-tight flex items-center gap-2">
-        <span>{spot.emoji}</span>
-        <span className="truncate">{highlightMatch(spot.name, searchQuery)}</span>
+      <div className="text-lg font-bold leading-tight truncate">
+        {highlightMatch(spot.name, searchQuery)}
       </div>
 
       {/* Location + cuisine */}

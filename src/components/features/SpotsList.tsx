@@ -4,6 +4,7 @@ import { useState, useMemo, useRef, useEffect } from "react";
 import { spots, Category, neighborhoods, Spot, spotCoordinates, VibeLevel, vibeConfig } from "@/data/spots";
 import { SpotCard } from "@/components/ui/SpotCard";
 import { CategoryFilter } from "@/components/ui/CategoryFilter";
+import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { CompareModal } from "@/components/features/CompareModal";
 import { useUserLocation } from "@/lib/hooks/useUserLocation";
 import { haversineDistanceMeters } from "@/lib/geo";
@@ -366,7 +367,7 @@ export function SpotsList({ filterCategory }: SpotsListProps) {
                 onClick={() => handleSuggestionClick(spot)}
                 className="w-full px-4 py-3 text-left hover:bg-cream flex items-center gap-3 border-b border-dashed border-ink/30 last:border-0"
               >
-                <span className="text-xl">{spot.emoji}</span>
+                <CategoryIcon category={spot.category} className="w-4 h-4 text-ink/70 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="font-bold text-ink truncate">{spot.name}</p>
                   <p className="text-[11px] uppercase tracking-wide text-ink/60">{categoryLabels[spot.category]} · {spot.neighborhood}</p>

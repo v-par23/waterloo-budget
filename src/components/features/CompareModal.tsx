@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { Spot, spots, spotCoordinates, categoryConfig, vibeConfig } from "@/data/spots";
 import { googleMapsDirectionsUrl, formatDistance } from "@/lib/geo";
 import { useSpotReviews } from "@/lib/hooks/useSpotReviews";
+import { CategoryIcon } from "@/components/ui/CategoryIcon";
 
 interface CompareModalProps {
   spotIds: string[];
@@ -50,7 +51,9 @@ export function CompareModal({ spotIds, distances, onClose, onRemove }: CompareM
                   >
                     ✕ Remove
                   </button>
-                  <div className="text-2xl">{spot.emoji}</div>
+                  <div className="flex justify-center">
+                    <CategoryIcon category={spot.category} className="w-6 h-6 text-ink/70" />
+                  </div>
                   <p className="text-sm font-bold leading-tight">{spot.name}</p>
                 </div>
               ))}
