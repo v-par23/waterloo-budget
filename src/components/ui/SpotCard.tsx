@@ -102,7 +102,7 @@ export function SpotCard({
   return (
     <div
       onClick={compareMode ? handleCardClick : undefined}
-      className={`receipt-card p-5 flex flex-col gap-2.5 transition-opacity ${
+      className={`receipt-card p-5 flex flex-col gap-2.5 h-full transition-opacity ${
         compareMode
           ? compareDisabled && !isCompareSelected
             ? "opacity-40 cursor-not-allowed"
