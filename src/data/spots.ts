@@ -3,7 +3,6 @@ export type Category =
   | "housing"
   | "workspots"
   | "coffee"
-  | "accelerators"
   | "gym"
   | "bars"
   | "grocery";
@@ -44,7 +43,6 @@ export const categoryConfig: Record<
   housing: { label: "Housing", emoji: "🏠", color: "bg-blue-100 text-blue-800", iconBg: "bg-blue-50" },
   workspots: { label: "Work Spots", emoji: "💻", color: "bg-purple-100 text-purple-800", iconBg: "bg-purple-50" },
   coffee: { label: "Coffee", emoji: "☕", color: "bg-amber-100 text-amber-800", iconBg: "bg-amber-50" },
-  accelerators: { label: "Accelerators", emoji: "🚀", color: "bg-emerald-100 text-emerald-800", iconBg: "bg-emerald-50" },
   gym: { label: "Gym & Fitness", emoji: "💪", color: "bg-red-100 text-red-800", iconBg: "bg-red-50" },
   bars: { label: "Bars & Drinks", emoji: "🍺", color: "bg-yellow-100 text-yellow-800", iconBg: "bg-yellow-50" },
   grocery: { label: "Grocery", emoji: "🛒", color: "bg-teal-100 text-teal-800", iconBg: "bg-teal-50" },
@@ -1605,66 +1603,6 @@ export const spots: Spot[] = [
     vibe: "moderate",
   },
 
-  // ACCELERATORS & STARTUP RESOURCES
-  {
-    id: "acc-1",
-    name: "Velocity",
-    category: "accelerators",
-    neighborhood: "Downtown Kitchener",
-    price: "Free",
-    priceLevel: 0,
-    emoji: "🚀",
-    description: "UW's startup incubator, top in Canada",
-    isFree: true,
-  },
-  {
-    id: "acc-2",
-    name: "Communitech",
-    category: "accelerators",
-    neighborhood: "Downtown Kitchener",
-    price: "Free",
-    priceLevel: 0,
-    emoji: "🚀",
-    description: "Regional tech hub and accelerator",
-    isFree: true,
-  },
-
-  {
-    id: "acc-4",
-    name: "Next 36/Next AI",
-    category: "accelerators",
-    neighborhood: "Virtual",
-    price: "Free",
-    priceLevel: 0,
-    emoji: "🚀",
-    description: "For Canadian entrepreneurs",
-    isFree: true,
-  },
-  {
-    id: "acc-5",
-    name: "GreenHouse",
-    category: "accelerators",
-    neighborhood: "UW Campus",
-    price: "Free",
-    priceLevel: 0,
-    emoji: "🚀",
-    description: "Social impact incubator",
-    isFree: true,
-  },
-  {
-    id: "acc-6",
-    name: "Concept",
-    category: "accelerators",
-    neighborhood: "UW Campus",
-    price: "Free",
-    priceLevel: 0,
-    emoji: "🚀",
-    description: "UW startup pitch competition",
-    isFree: true,
-  },
-
-
-
   // GYM & FITNESS
   {
     id: "gym-1",
@@ -2194,7 +2132,6 @@ export const neighborhoods = [
   "Northdale",
   "Kitchener",
   "Various",
-  "Virtual",
 ];
 
 // Distinct cuisine/type tags actually used in `spots`, for the Compare filters.
@@ -2346,13 +2283,6 @@ export const spotCoordinates: Record<string, { lat: number; lng: number }> = {
   "coffee-26": { lat: 43.47762, lng: -80.52565 },
   "coffee-27": { lat: 43.44738, lng: -80.48305 },
   "coffee-28": { lat: 43.45116741310192, lng: -80.49840137794999 },
-
-  // ACCELERATORS - Verified
-  "acc-1": { lat: 43.4520, lng: -80.5009 }, // Velocity
-  "acc-2": { lat: 43.4502, lng: -80.4928 }, // Communitech
-  "acc-4": { lat: 43.4504, lng: -80.4930 }, // Next 36/Next AI
-  "acc-5": { lat: 43.4695, lng: -80.5403 }, // GreenHouse
-  "acc-6": { lat: 43.4695, lng: -80.5403 }, // Concept
 
   // GYM - Verified from Google Maps
   "gym-1": { lat: 43.4722, lng: -80.5461 }, // PAC - 200 University Ave W

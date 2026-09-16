@@ -35,7 +35,6 @@ const categoryLabels: Record<Category, string> = {
   housing: "Housing",
   workspots: "Work Spots",
   coffee: "Coffee",
-  accelerators: "Accelerators",
   gym: "Gym",
   bars: "Bars",
   grocery: "Grocery",
