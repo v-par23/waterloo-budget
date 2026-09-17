@@ -6,14 +6,14 @@ import { Category } from "@/data/spots";
 const categoryPaths: Record<Category, React.ReactNode> = {
   food: (
     <>
-      <circle cx="10" cy="11" r="6" />
-      <line x1="3.5" y1="2" x2="3.5" y2="6" />
-      <line x1="5.5" y1="2" x2="5.5" y2="6" />
-      <line x1="7.5" y1="2" x2="7.5" y2="6" />
-      <path d="M3.5 6c0 2 1.5 2.5 2 2.5s2-.5 2-2.5" />
-      <line x1="5.5" y1="8.5" x2="5.5" y2="18.5" />
-      <ellipse cx="14.5" cy="5.2" rx="2.2" ry="3.2" />
-      <line x1="14.5" y1="8.4" x2="14.5" y2="18.5" />
+      <circle cx="10" cy="12" r="6" />
+      <line x1="3.5" y1="1.5" x2="3.5" y2="5.5" />
+      <line x1="5.5" y1="1.5" x2="5.5" y2="5.5" />
+      <line x1="7.5" y1="1.5" x2="7.5" y2="5.5" />
+      <path d="M3.5 5.5c0 2 1.5 2.5 2 2.5s2-.5 2-2.5" />
+      <line x1="5.5" y1="8" x2="5.5" y2="18" />
+      <path d="M14.5 1.3L15.6 7.7H13.4Z" />
+      <line x1="14.5" y1="7.7" x2="14.5" y2="18" />
     </>
   ),
   housing: (
