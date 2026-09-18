@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Space_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { MobileHeader } from "@/components/layout/MobileHeader";
@@ -43,6 +44,7 @@ export default function RootLayout({
             </ScheduleProvider>
           </SavedSpotsProvider>
         </AuthProvider>
+        <Analytics />
       </body>
     </html>
   );
