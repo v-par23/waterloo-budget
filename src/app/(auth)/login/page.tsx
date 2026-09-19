@@ -1,22 +1,36 @@
 "use client";
 
 import { useState, Suspense } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { login } from "../actions";
+import { createClient } from "@/lib/supabase/client";
 
 function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const supabase = createClient();
 
   async function handleSubmit(formData: FormData) {
     setLoading(true);
     setError(null);
-    
-    const result = await login(formData);
-    if (result?.error) {
-      setError(result.error);
+
+    // Signed in through the browser client (not a server action) so
+    // AuthProvider's onAuthStateChange listener picks it up immediately -
+    // otherwise the nav's "My Stuff" section only appeared after a reload.
+    const { error } = await supabase.auth.signInWithPassword({
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
+    });
+
+    if (error) {
+      setError(error.message);
       setLoading(false);
+      return;
     }
+
+    router.push("/");
+    router.refresh();
   }
 
   return (
