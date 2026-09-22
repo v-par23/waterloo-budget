@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>WaterlooBudget — Brag</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #f3efe4;
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      #root > div[data-composition-src] {
+        position: absolute;
+        inset: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="root"
+      data-start="0"
+      data-width="1920"
+      data-height="1080"
+      data-duration="19"
+    >
+      <!-- Scene 1 — Receipt hook -->
+      <div
+        id="el-scene1"
+        data-composition-id="scene1"
+        data-composition-src="compositions/scene1.html"
+        data-start="0"
+        data-duration="3"
+        data-track-index="1"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Scene 2 — Spots feature -->
+      <div
+        id="el-scene2"
+        data-composition-id="scene2"
+        data-composition-src="compositions/scene2.html"
+        data-start="3"
+        data-duration="4.5"
+        data-track-index="1"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Scene 3 — Map feature -->
+      <div
+        id="el-scene3"
+        data-composition-id="scene3"
+        data-composition-src="compositions/scene3.html"
+        data-start="7.5"
+        data-duration="4"
+        data-track-index="1"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Scene 4 — Teams feature -->
+      <div
+        id="el-scene4"
+        data-composition-id="scene4"
+        data-composition-src="compositions/scene4.html"
+        data-start="11.5"
+        data-duration="4.5"
+        data-track-index="1"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Scene 5 — Outro / CTA -->
+      <div
+        id="el-scene5"
+        data-composition-id="scene5"
+        data-composition-src="compositions/scene5.html"
+        data-start="16"
+        data-duration="3"
+        data-track-index="1"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <!-- Music bed: fades in, holds low under the feature scenes, fades out under the outro -->
+      <audio
+        id="bg-music"
+        src="assets/music/happy-beats-business-moves-vol-11-by-ende-dot-app.mp3"
+        data-start="0"
+        data-duration="19"
+        data-track-index="10"
+        data-volume="0.35"
+        data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":0.5,"v":0.35},{"t":17,"v":0.35},{"t":19,"v":0}]}]}'
+      ></audio>
+
+      <!-- SFX: soft print tick on the wordmark hook settling -->
+      <audio
+        id="sfx-hook"
+        src="assets/sfx/interface/drop_001.ogg"
+        data-start="0.35"
+        data-duration="1"
+        data-track-index="11"
+        data-volume="0.7"
+      ></audio>
+
+      <!-- SFX: card-arrival tick, beat-locked to 3.70s -->
+      <audio
+        id="sfx-card"
+        src="assets/sfx/interface/drop_002.ogg"
+        data-start="3.70"
+        data-duration="1"
+        data-track-index="12"
+        data-volume="0.7"
+      ></audio>
+
+      <!-- SFX: marker-drop tick, beat-locked to 8.96s -->
+      <audio
+        id="sfx-marker"
+        src="assets/sfx/interface/drop_003.ogg"
+        data-start="8.96"
+        data-duration="1"
+        data-track-index="13"
+        data-volume="0.7"
+      ></audio>
+
+      <!-- SFX: two SETTLED check ticks -->
+      <audio
+        id="sfx-settle-1"
+        src="assets/sfx/interface/click_002.ogg"
+        data-start="12.65"
+        data-duration="1"
+        data-track-index="14"
+        data-volume="0.65"
+      ></audio>
+      <audio
+        id="sfx-settle-2"
+        src="assets/sfx/interface/click_003.ogg"
+        data-start="13.05"
+        data-duration="1"
+        data-track-index="15"
+        data-volume="0.65"
+      ></audio>
+
+      <!-- SFX: outro bell, natural timing (matches the wordmark's settle, prioritized over the 17.91s cue for scene5 readability) -->
+      <audio
+        id="sfx-outro"
+        src="assets/sfx/impact/impactBell_heavy_000.ogg"
+        data-start="16.55"
+        data-duration="1.2"
+        data-track-index="16"
+        data-volume="0.6"
+      ></audio>
+    </div>
+    <script>
+      // Root timeline is intentionally empty — all animation lives in the sub-compositions.
+      window.__timelines["root"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>
