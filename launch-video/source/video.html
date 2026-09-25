@@ -1,0 +1,234 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:SM;font-weight:400;src:url(space-mono-latin-400-normal.woff2)}
+@font-face{font-family:SM;font-weight:700;src:url(space-mono-latin-700-normal.woff2)}
+:root{--cream:#f3efe4;--paper:#fbf8f1;--ink:#1b1a17;--acc:#ff5a1f}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1920px;height:1080px;overflow:hidden;background:var(--cream);font-family:SM,"Noto Color Emoji",monospace;color:var(--ink)}
+#stage{position:absolute;inset:0;overflow:hidden;transform-origin:50% 50%}
+.scene{position:absolute;inset:0;display:none;overflow:hidden}
+.abs{position:absolute}
+.center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.H{font-weight:700;letter-spacing:-.04em;line-height:.95;text-transform:uppercase}
+.acc{color:var(--acc)}
+.bg-grid{position:absolute;inset:-200px;background-image:linear-gradient(rgba(27,26,23,.07) 2px,transparent 2px),linear-gradient(90deg,rgba(27,26,23,.07) 2px,transparent 2px);background-size:80px 80px}
+.card{background:var(--paper);border:3px solid var(--ink);box-shadow:12px 12px 0 var(--ink)}
+.win{position:absolute;overflow:hidden;background:var(--cream);border:3px solid var(--ink);box-shadow:16px 16px 0 var(--ink)}
+.win .bar{position:absolute;left:0;right:0;top:0;height:44px;background:var(--ink);display:flex;align-items:center;gap:10px;padding:0 16px;z-index:3}
+.win .bar i{width:14px;height:14px;border-radius:50%;background:var(--cream);opacity:.35;display:block}
+.win .bar span{margin-left:14px;color:var(--cream);opacity:.7;font-size:17px;letter-spacing:.05em}
+.win .vp{position:absolute;left:0;right:0;top:44px;bottom:0;overflow:hidden}
+.win .cam{position:absolute;left:0;top:0;transform-origin:0 0}
+.win .cam img{display:block;width:3200px;height:1800px}
+.hlbox{position:absolute;border:8px solid var(--acc);box-shadow:0 0 0 4000px rgba(27,26,23,0)}
+.tag{display:inline-block;font-weight:700;font-size:26px;letter-spacing:.14em;text-transform:uppercase;border:3px solid var(--ink);padding:8px 18px;background:var(--cream)}
+.tag.ink{background:var(--ink);color:var(--cream)}
+.tag.o{background:var(--acc);color:var(--paper);border-color:var(--acc)}
+.dash{border-top:3px dashed var(--ink)}
+.stamp{border:10px solid var(--acc);color:var(--acc);font-weight:700;text-transform:uppercase;padding:10px 40px;letter-spacing:.02em}
+.rc{position:absolute;background:var(--paper);box-shadow:14px 14px 0 var(--ink);border:3px solid var(--ink);border-bottom:none;padding:50px 60px 70px;
+  -webkit-mask:linear-gradient(#000,#000) top/100% calc(100% - 22px) no-repeat,conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/44px 22px repeat-x}
+.row{display:flex;justify-content:space-between;gap:30px;font-size:40px;font-weight:700;white-space:nowrap}
+.row .d{flex:1;border-bottom:4px dotted rgba(27,26,23,.35);transform:translateY(-12px)}
+#flash{position:absolute;inset:0;background:var(--acc);opacity:0;pointer-events:none;mix-blend-mode:multiply}
+#wipe{position:absolute;inset:0;background:var(--ink);pointer-events:none;transform:translateX(-100%)}
+.logo{font-weight:700;letter-spacing:-.03em;white-space:nowrap;line-height:1}
+.barcode{height:90px;background:repeating-linear-gradient(90deg,var(--ink) 0 4px,transparent 4px 7px,var(--ink) 7px 9px,transparent 9px 14px,var(--ink) 14px 20px,transparent 20px 23px)}
+</style></head>
+<body>
+<div id="stage">
+  <div class="bg-grid" id="grid"></div>
+  <div id="scenes"></div>
+  <div id="wipe"></div>
+  <div id="flash"></div>
+</div>
+<script>
+const BPM=128,B=60/BPM,BAR=4*B;
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const P=(t,s,d)=>clamp((t-s)/d);
+const eo=p=>1-Math.pow(1-p,3), ex=p=>p>=1?1:1-Math.pow(2,-10*p), eio=p=>p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;
+const back=p=>{const c1=2,c3=c1+1;return 1+c3*Math.pow(p-1,3)+c1*Math.pow(p-1,2)};
+const lerp=(a,b,p)=>a+(b-a)*p;
+const $=h=>{const d=document.createElement('div');d.innerHTML=h.trim();return d.firstElementChild};
+const S=document.getElementById('scenes');const scenes=[];
+function scene(b0,b1,html,update,opt={}){const el=$(`<div class="scene" style="${opt.bg?'background:'+opt.bg:''}">${html}</div>`);S.appendChild(el);scenes.push({t0:b0*BAR,t1:b1*BAR,el,update,q:s=>el.querySelector(s),qa:s=>[...el.querySelectorAll(s)]});}
+function st(el,o){if(!el)return;el.style.transform=`translate(${o.x||0}px,${o.y||0}px) scale(${o.s??1}) rotate(${o.r||0}deg)`;if(o.o!==undefined)el.style.opacity=o.o;}
+const pop=(t,s,d=.3)=>back(P(t,s,d));
+/* browser window with camera keyframes. kf: [[t,cx,cy,s],...] source coords (3200x1800), s = window px per source px */
+function win(id,img,x,y,w,h,url,hl=''){return `<div class="win" id="${id}" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px"><div class="bar"><i></i><i></i><i></i><span>waterloo-budget.vercel.app${url}</span></div><div class="vp"><div class="cam"><img src="../screens/${img}.png">${hl}</div></div></div>`}
+function cam(el,t,kf){const vp=el.querySelector('.vp');const W=vp.clientWidth||+el.style.width.replace('px','')-6,H=(+el.style.height.replace('px',''))-50;
+  let a=kf[0],b=kf[kf.length-1],p=0;for(let i=0;i<kf.length-1;i++){if(t>=kf[i][0]&&t<=kf[i+1][0]){a=kf[i];b=kf[i+1];p=eio((t-a[0])/Math.max(1e-6,b[0]-a[0]));break}} if(t>kf[kf.length-1][0]){a=b;p=1}
+  const cx=lerp(a[1],b[1],p),cy=lerp(a[2],b[2],p),s=lerp(a[3],b[3],p);el.querySelector('.cam').style.transform=`translate(${W/2-cx*s}px,${H/2-cy*s}px) scale(${s})`;}
+const hl=(x,y,w,h,cls='')=>`<div class="hlbox ${cls}" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px;opacity:0"></div>`;
+function hlShow(e,p){if(!e)return;e.style.opacity=p>0?1:0;e.style.clipPath=`inset(0 ${100-100*ex(p)}% 0 0)`}
+/* headline block helper: words stagger in */
+const words=(txt,cls='')=>txt.split('|').map(l=>`<div class="ln ${cls}" style="overflow:hidden"><div class="lw">${l}</div></div>`).join('');
+function wordsIn(sc,t,t0,step=B/2){sc.qa('.lw').forEach((e,i)=>{const p=P(t,t0+i*step,.35);st(e,{y:lerp(130,0,ex(p)),o:p>0?1:0})})}
+
+/* ===== S1: receipt of pain (bars 0-2) ===== */
+const pain=[["RENT (1 ROOM)","$1,100"],["TEXTBOOKS","$240"],["OAT LATTE","$8"],["LATE-NIGHT UBER","$27"]];
+scene(0,2,`<div class="rc" id="r1" style="left:560px;top:-40px;width:800px">
+ <div style="text-align:center;font-weight:700;font-size:34px;letter-spacing:.3em">WATERLOO, ON</div>
+ <div style="text-align:center;font-size:24px;opacity:.6;margin:10px 0 26px">STUDENT LIFE · TERM TOTAL</div><div class="dash" style="margin-bottom:26px"></div>
+ ${pain.map(r=>`<div class="row it" style="margin:18px 0"><span>${r[0]}</span><span class="d"></span><span>${r[1]}</span></div>`).join('')}
+ <div class="dash it" style="margin:30px 0"></div>
+ <div class="row it" style="font-size:56px"><span>TOTAL</span><span class="d"></span><span class="acc">TOO MUCH</span></div>
+ <div class="barcode it" style="margin-top:40px"></div></div>
+<div class="abs stamp H" id="st1" style="left:1130px;top:760px;font-size:110px;transform:rotate(-12deg)">OUCH.</div>`,function(t){
+  const r=this.q('#r1');const pr=ex(P(t,0,.5));st(r,{y:lerp(-900,60,pr)+t*14});
+  this.qa('.it').forEach((e,i)=>{const s=B*(i+1)-.02;const p=P(t,s,.12);e.style.opacity=p>0?1:0;e.style.clipPath=`inset(0 ${100-100*p}% 0 0)`});
+  const sp=P(t,7*B,.18);st(this.q('#st1'),{s:lerp(3,1,ex(sp)),r:-12,o:sp>0?1:0});
+});
+
+/* ===== S2: what if Waterloo cost less (bars 2-4) ===== */
+scene(2,4,`<div class="center" style="align-items:flex-start;padding-left:160px">
+ <div class="H w2" style="font-size:190px;color:var(--cream)">WHAT IF</div>
+ <div class="H w2" style="font-size:190px;color:var(--cream)">WATERLOO</div>
+ <div class="H w2" style="font-size:190px;color:var(--cream);display:flex;gap:50px">COST <span id="less" style="background:var(--acc);padding:0 24px;color:var(--ink)">LESS?</span></div></div>`,function(t){
+  const T=[0,B,2*B,4*B];this.qa('.w2').forEach((e,i)=>{const p=P(t,T[i],.25);st(e,{x:lerp(-300,0,ex(p)),o:p>0?1:0})});
+  const l=P(t,4*B+B,.25);st(this.q('#less'),{s:lerp(.4,1,back(l)),r:lerp(-12,-3,ex(l)),o:l>0?1:0});
+  const z=P(t,7*B,B);const c=this.q('.center');st(c,{s:1+Math.pow(z,3)*6,o:1-z*z});
+},{bg:'#1b1a17'});
+
+/* ===== S3: DROP logo (bars 4-6) ===== */
+scene(4,6,`<div class="center"><div class="tag ink" id="lt">WATERLOO, ON · EST. FOR STUDENTS</div>
+ <div class="logo" id="lg" style="font-size:200px;margin-top:40px;display:flex">${[..."Waterloo"].map(c=>`<span class="L">${c}</span>`).join('')}<span class="acc" style="display:flex">${[..."Budget"].map(c=>`<span class="L">${c}</span>`).join('')}</span></div>
+ <div class="dash" id="ld" style="width:1500px;margin:40px 0;transform-origin:left"></div>
+ <div id="sub" style="font-size:44px;text-align:center;line-height:1.35">Curated spots for students, founders, and builders<br>in Canada's tech hub.</div>
+ <div id="chips" style="display:flex;gap:18px;margin-top:50px">${["FOOD","COFFEE","WORK SPOTS","HOUSING","GYM & FITNESS","BARS & DRINKS","GROCERY"].map((c,i)=>`<div class="tag ${i==0?'ink':''}" style="font-size:24px">${c}</div>`).join('')}</div></div>`,function(t){
+  st(this.q('#lt'),{o:P(t,0,.2),y:lerp(-40,0,ex(P(t,0,.3)))});
+  this.qa('.L').forEach((e,i)=>{const p=P(t,.05+i*.03,.3);st(e,{y:lerp(-300,0,back(p)),o:p>0?1:0})});
+  this.q('#ld').style.transform=`scaleX(${ex(P(t,2*B,.4))})`;
+  const s=P(t,2*B+.1,.35);st(this.q('#sub'),{y:lerp(30,0,ex(s)),o:s});
+  this.qa('#chips .tag').forEach((e,i)=>{const p=P(t,4*B+i*B*.5,.25);st(e,{s:back(p),o:p>0?1:0})});
+  st(this.q('.center'),{s:1+t*.012});
+});
+
+/* ===== S4: 172 spots (bars 6-8) ===== */
+scene(6,8,`${win('w4','home2',760,110,1080,860,'/')}
+<div class="abs" style="left:90px;top:190px;width:640px"><div class="tag o lw0">Spots</div>
+ <div class="H" id="n172" style="font-size:260px;margin-top:20px">172</div>
+ ${words('CURATED|SPOTS.|<span class="acc">REAL</span>|<span class="acc">PRICES.</span>')}</div>`,function(t){
+  const w=this.q('#w4');st(w,{x:lerp(1100,0,ex(P(t,0,.45))),r:lerp(6,0,ex(P(t,0,.45)))});
+  cam(w,t,[[0,1850,700,.62],[1.3,1850,700,.62],[2.4,1500,560,.9],[3.75,1800,1100,.9]]);
+  st(this.q('.lw0'),{o:P(t,0,.2)});
+  this.q('#n172').textContent=Math.round(172*eo(P(t,.05,1.0)));
+  this.qa('.ln').forEach(e=>e.querySelector('.lw').style.fontSize='96px');wordsIn(this,t,.6,B/2);
+  this.qa('.lw').forEach(e=>e.classList.add('H'));
+});
+
+/* ===== S5: near me + compare (bars 8-10) ===== */
+scene(8,10,`${win('w5a','nearme',80,150,1120,780,'/','')}${win('w5b','compare',760,120,1100,820,'/')}
+<div class="abs" id="h5a" style="right:90px;top:260px;width:620px;text-align:right">${words('NEAR ME.|<span class="acc">40 M</span>|AWAY.','a')}</div>
+<div class="abs" id="h5b" style="left:90px;top:300px;width:620px">${words('COMPARE|UP TO|<span class="acc">4</span> SPOTS.','b')}</div>`,function(t){
+  const a=this.q('#w5a'),b=this.q('#w5b');
+  st(a,{x:lerp(-1300,0,ex(P(t,0,.4)))+lerp(0,-1400,eio(P(t,BAR-.25,.35)))});
+  cam(a,t,[[0,1850,900,.55],[1.1,1100,700,1.25],[1.85,1100,700,1.3]]);
+  st(b,{x:lerp(1400,0,ex(P(t,BAR,.4)))});cam(b,t,[[BAR,1600,900,.5],[BAR+.9,1600,880,.58],[2*BAR,1650,900,.62]]);
+  this.qa('.ln.a .lw').forEach((e,i)=>{e.classList.add('H');e.style.fontSize='110px';const p=P(t,.2+i*B/2,.3);st(e,{y:lerp(130,0,ex(p)),o:p>0&&t<BAR?1:0})});
+  this.qa('.ln.b .lw').forEach((e,i)=>{e.classList.add('H');e.style.fontSize='110px';const p=P(t,BAR+.2+i*B/2,.3);st(e,{y:lerp(130,0,ex(p)),o:p>0?1:0})});
+});
+
+/* ===== S6: map (bars 10-12) ===== */
+scene(10,12,`${win('w6','mappop',60,60,1800,960,'/map',hl(850,1540-800+0,0,0))}
+<div class="abs card" id="h6" style="right:90px;bottom:90px;padding:40px 50px"><div class="tag o">Map View</div><div class="H" style="font-size:96px;margin-top:18px">EVERY SPOT.</div><div class="H acc" style="font-size:96px">ONE MAP.</div><div style="font-size:30px;margin-top:16px;font-weight:700">+ One-tap directions →</div></div>`,function(t){
+  const w=this.q('#w6');st(w,{s:lerp(1.1,1,ex(P(t,0,.4))),o:P(t,0,.15)});
+  cam(w,t,[[0,1900,1050,.6],[1.2,1900,1050,.62],[2.6,1300,1050,1.35],[3.75,1180,1000,1.5]]);
+  const h=P(t,.4,.35);st(this.q('#h6'),{x:lerp(800,0,ex(h))});
+});
+
+/* ===== S7: AI (bars 12-14) ===== */
+scene(12,14,`${win('w7a','insights',80,120,1180,840,'/')}${win('w7b','ask',660,110,1180,860,'/ask')}
+<div class="abs" style="right:80px;top:250px;width:560px;text-align:right" id="h7a">${words('AI|INSIGHTS,|<span class="acc">ON DEMAND.</span>','a')}</div>
+<div class="abs" style="left:80px;top:250px;width:560px" id="h7b">${words('JUST|<span class="acc">ASK.</span>|OUT LOUD.','b')}<div id="mic" class="tag ink" style="margin-top:30px;font-size:30px">🎙 VOICE + READ ALOUD</div></div>`,function(t){
+  const a=this.q('#w7a'),b=this.q('#w7b');
+  st(a,{y:lerp(1100,0,ex(P(t,0,.4)))+lerp(0,1200,eio(P(t,BAR-.25,.35)))});cam(a,t,[[0,1700,900,.4],[.9,1850,1150,.72],[1.85,1850,1150,.75]]);
+  st(b,{y:lerp(-1200,0,ex(P(t,BAR,.4)))});cam(b,t,[[BAR,1850,700,.5],[BAR+1,1850,560,.72],[2*BAR,1850,560,.74]]);
+  this.qa('.ln.a .lw').forEach((e,i)=>{e.classList.add('H');e.style.fontSize='96px';const p=P(t,.2+i*B/2,.3);st(e,{y:lerp(130,0,ex(p)),o:p>0&&t<BAR?1:0})});
+  this.qa('.ln.b .lw').forEach((e,i)=>{e.classList.add('H');e.style.fontSize='120px';const p=P(t,BAR+.2+i*B/2,.3);st(e,{y:lerp(130,0,ex(p)),o:p>0?1:0})});
+  const m=P(t,BAR+1.6*B,.3);st(this.q('#mic'),{s:back(m),o:m>0?1:0});
+});
+
+/* ===== S8: schedule -> planner (bars 14-16) ===== */
+scene(14,16,`${win('w8a','schedule',70,250,900,700,'/schedule',hl(690,300,2530,300))}${win('w8b','planner2',1000,250,850,700,'/planner',hl(650,740,2440,700))}
+<div class="abs" style="left:0;right:0;top:50px;text-align:center"><div class="H l8" style="font-size:88px">SNAP YOUR QUEST SCHEDULE.</div><div class="H l8 acc" style="font-size:88px">WE FILL THE GAPS.</div></div>
+<div class="abs H" id="ar8" style="left:930px;top:520px;font-size:120px;color:var(--acc);z-index:5">→</div>`,function(t){
+  const a=this.q('#w8a'),b=this.q('#w8b');
+  st(a,{x:lerp(-1100,0,ex(P(t,0,.4))),r:lerp(-5,-1.5,ex(P(t,0,.4)))});cam(a,t,[[0,1850,700,.4],[1.2,1850,550,.4],[2.4,1500,750,.55],[3.75,1450,800,.56]]);
+  hlShow(a.querySelector('.hlbox'),P(t,.8,.3));
+  st(b,{x:lerp(1100,0,ex(P(t,1.9,.4))),r:lerp(5,1.5,ex(P(t,1.9,.4)))});cam(b,t,[[1.9,1850,1000,.4],[3,1700,1100,.5],[3.75,1650,1100,.52]]);
+  hlShow(b.querySelector('.hlbox'),P(t,2.5,.3));
+  this.qa('.l8').forEach((e,i)=>{const p=P(t,i*1.9,.3);st(e,{y:lerp(-60,0,ex(p)),o:p})});
+  const ar=P(t,1.75,.25);st(this.q('#ar8'),{x:lerp(-60,0,ex(ar))+Math.sin(t*12)*6,o:ar});
+});
+
+/* ===== S9: route planner (bar 16-17) ===== */
+scene(16,17,`${win('w9','planner',520,60,1340,960,'/planner',hl(2710,1645,330,100))}
+<div class="abs" style="left:80px;top:260px;width:560px">${words('BUILD|YOUR|<span class="acc">ROUTE.</span>')}<div class="tag ink" id="gm" style="margin-top:30px;font-size:26px">6 STOPS · ~12 MIN WALK</div></div>`,function(t){
+  const w=this.q('#w9');st(w,{y:lerp(1100,0,ex(P(t,0,.35)))});cam(w,t,[[0,1850,1150,.5],[.9,1850,1150,.52],[1.875,2150,1350,.6]]);
+  hlShow(w.querySelector('.hlbox'),P(t,1.2,.3));
+  this.qa('.lw').forEach((e,i)=>{e.classList.add('H');e.style.fontSize='120px';const p=P(t,.1+i*B/2,.3);st(e,{y:lerp(130,0,ex(p)),o:p>0?1:0})});
+  const g=P(t,3*B,.25);st(this.q('#gm'),{s:back(g),o:g>0?1:0});
+});
+
+/* ===== S10: budget tracker (bars 17-19) ===== */
+scene(17,19,`${win('w10','budget',760,140,1100,820,'/budget')}
+<div class="abs" style="left:90px;top:200px;width:640px">${words('TRACK|EVERY|<span class="acc">DOLLAR.</span>')}
+ <div class="card" id="bt" style="margin-top:50px;padding:30px 36px"><div style="font-size:26px;font-weight:700;letter-spacing:.1em">THIS WEEK</div><div class="H" style="font-size:90px;margin-top:10px"><span id="amt">$0.00</span> <span style="font-size:40px;opacity:.45">/ $120</span></div><div style="height:22px;border:3px solid var(--ink);margin-top:20px"><div id="bar" style="height:100%;background:#16a34a;width:0"></div></div></div></div>`,function(t){
+  const w=this.q('#w10');st(w,{x:lerp(1100,0,ex(P(t,0,.4)))});cam(w,t,[[0,1850,900,.36],[1.4,1850,650,.4],[2.6,1750,1350,.42],[3.75,1750,1350,.44]]);
+  this.qa('.lw').forEach((e,i)=>{e.classList.add('H');e.style.fontSize='120px';const p=P(t,.1+i*B/2,.3);st(e,{y:lerp(130,0,ex(p)),o:p>0?1:0})});
+  const b=P(t,4*B,.35);st(this.q('#bt'),{s:back(b),o:b>0?1:0});const v=eo(P(t,4*B,1.2));this.q('#amt').textContent='$'+(62.15*v).toFixed(2);this.q('#bar').style.width=(51.8*v)+'%';
+});
+
+/* ===== S11: teams split (bars 19-21) ===== */
+scene(19,21,`${win('w11','team',60,120,1060,850,'/teams',hl(650,780,2440,430))}
+<div class="abs" style="right:80px;top:200px;width:620px;text-align:right">${words('SPLIT|THE BILL.|<span class="acc">NOT THE</span>|<span class="acc">FRIENDSHIP.</span>')}
+ <div style="margin-top:40px;display:flex;justify-content:flex-end;gap:14px;flex-wrap:wrap" id="tt"><div class="tag">TEAMS</div><div class="tag">INVITE CODES</div><div class="tag o">$40 ÷ 4 = $10</div></div></div>`,function(t){
+  const w=this.q('#w11');st(w,{x:lerp(-1300,0,ex(P(t,0,.4)))});cam(w,t,[[0,1850,900,.37],[1.2,1850,700,.37],[2.4,1850,1050,.5],[3.75,1850,1100,.52]]);
+  hlShow(w.querySelector('.hlbox'),P(t,2.5,.3));
+  this.qa('.lw').forEach((e,i)=>{e.classList.add('H');e.style.fontSize='92px';const p=P(t,.1+i*B/2,.3);st(e,{y:lerp(130,0,ex(p)),o:p>0?1:0})});
+  this.qa('#tt .tag').forEach((e,i)=>{const p=P(t,5*B+i*B/2,.25);st(e,{s:back(p),o:p>0?1:0})});
+});
+
+/* ===== S12: rapid-fire (bar 21-22) ===== */
+const rf=[["01","SAVED SPOTS","#ff5a1f","#fbf8f1"],["02","VOICE SEARCH","#1b1a17","#f3efe4"],["03","YELP REVIEWS","#fbf8f1","#1b1a17"],["04","SUGGEST A SPOT","#ff5a1f","#1b1a17"]];
+scene(21,22,rf.map(m=>`<div class="center rf" style="background:${m[2]};color:${m[3]};display:none"><div style="display:flex;align-items:center;gap:60px"><div class="em H" style="font-size:150px;border:10px solid currentColor;padding:10px 30px">${m[0]}</div><div class="H" style="font-size:170px;max-width:1300px">${m[1]}</div></div></div>`).join(''),function(t){
+  const bi=Math.min(3,Math.floor(t/B)),bl=t-bi*B;this.qa('.rf').forEach((e,i)=>e.style.display=i==bi?'flex':'none');
+  const e=this.qa('.rf')[bi];const p=ex(P(bl,0,.18));st(e.firstChild,{s:lerp(1.4,1,p)+bl*.06,x:(bi%2?1:-1)*lerp(200,0,p)});st(e.querySelector('.em'),{r:lerp(-30,0,back(P(bl,0,.3)))});
+});
+
+/* ===== S13: end receipt (bars 22-25) ===== */
+const endRows=[["CURATED SPOTS","172"],["CATEGORIES","7"],["AI GUIDE","INCLUDED"],["BUDGET STRESS","$0.00"]];
+scene(22,25,`<div class="rc" id="r2" style="left:120px;top:60px;width:760px">
+ <div style="text-align:center;font-weight:700;font-size:30px;letter-spacing:.3em">WATERLOOBUDGET</div><div style="text-align:center;font-size:22px;opacity:.6;margin:8px 0 24px">RECEIPT #2026 · WATERLOO, ON</div><div class="dash" style="margin-bottom:20px"></div>
+ ${endRows.map(r=>`<div class="row it2" style="margin:16px 0;font-size:34px"><span>${r[0]}</span><span class="d"></span><span>${r[1]}</span></div>`).join('')}
+ <div class="dash it2" style="margin:26px 0"></div><div class="row it2" style="font-size:50px"><span>YOU SAVE</span><span class="d"></span><span class="acc">A LOT</span></div>
+ <div class="barcode it2" style="margin-top:34px;height:80px"></div><div class="it2" style="text-align:center;font-size:22px;margin-top:12px;letter-spacing:.2em">THANK YOU · COME AGAIN</div></div>
+<div class="abs" style="left:990px;top:250px;width:880px">
+ <div class="logo" id="el" style="font-size:100px">Waterloo<span class="acc">Budget</span></div>
+ <div class="dash" id="ed" style="margin:34px 0;transform-origin:left"></div>
+ <div class="H" id="et1" style="font-size:92px">LIVE LARGE.</div><div class="H acc" id="et2" style="font-size:92px">SPEND SMALL.</div>
+ <div id="es" style="font-size:38px;font-weight:700;margin-top:34px">The best budget guide to Waterloo.</div>
+ <div class="tag ink" id="eu" style="margin-top:40px;font-size:32px;letter-spacing:.04em;text-transform:none">waterloo-budget.vercel.app →</div></div>
+<div id="fade" class="abs" style="inset:0;background:var(--ink);opacity:0"></div>`,function(t){
+  st(this.q('#r2'),{y:lerp(-1000,0,ex(P(t,0,.5)))+t*6});
+  this.qa('.it2').forEach((e,i)=>{const p=P(t,.35+i*B*.5,.12);e.style.opacity=p>0?1:0;e.style.clipPath=`inset(0 ${100-100*p}% 0 0)`});
+  const l=P(t,.2,.4);st(this.q('#el'),{s:lerp(1.4,1,ex(l)),o:l});this.q('#el').style.transformOrigin='left center';
+  this.q('#ed').style.transform=`scaleX(${ex(P(t,2*B,.4))})`;
+  [['#et1',3*B],['#et2',4*B],['#es',6*B],['#eu',8*B]].forEach(([id,s])=>{const p=P(t,s,.3);st(this.q(id),{y:lerp(50,0,ex(p)),o:p})});
+  this.q('#fade').style.opacity=eio(P(t,2.55*BAR,.45*BAR));
+});
+
+const TOTAL=25*BAR;window.TOTAL=TOTAL;
+const cuts=[2,4,6,8,10,12,14,16,17,19,21,22].map(b=>b*BAR);
+window.render=function(t){
+  document.getElementById('grid').style.transform=`translate(${(t*30)%80}px,${(t*20)%80}px)`;
+  let f=0,pu=0;for(const c of cuts){const d=t-c;if(d>=0&&d<.22){f=Math.max(f,(1-d/.22)*(c==4*BAR||c==22*BAR?.85:.3));pu=Math.max(pu,1-d/.22)}}
+  document.getElementById('flash').style.opacity=f;
+  const beatP=(t%B)/B,drop=t>=4*BAR&&t<22*BAR;const sh=drop?Math.exp(-beatP*8)*.008:0;
+  document.getElementById('stage').style.transform=`scale(${1+pu*.04+sh})`;
+  for(const s of scenes){const on=t>=s.t0&&t<s.t1;s.el.style.display=on?'block':'none';if(on)s.update.call(s,t-s.t0)}
+};
+render(0);
+</script></body></html>
