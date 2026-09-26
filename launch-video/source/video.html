@@ -128,12 +128,19 @@ scene(8,10,`${win('w5a','nearme',80,150,1120,780,'/','')}${win('w5b','compare',7
   this.qa('.ln.b .lw').forEach((e,i)=>{e.classList.add('H');e.style.fontSize='110px';const p=P(t,BAR+.2+i*B/2,.3);st(e,{y:lerp(130,0,ex(p)),o:p>0?1:0})});
 });
 
-/* ===== S6: map (bars 10-12) ===== */
-scene(10,12,`${win('w6','mappop',60,60,1800,960,'/map',hl(850,1540-800+0,0,0))}
-<div class="abs card" id="h6" style="right:90px;bottom:90px;padding:40px 50px"><div class="tag o">Map View</div><div class="H" style="font-size:96px;margin-top:18px">EVERY SPOT.</div><div class="H acc" style="font-size:96px">ONE MAP.</div><div style="font-size:30px;margin-top:16px;font-weight:700">+ One-tap directions →</div></div>`,function(t){
+/* ===== S6: map -> directions (bars 10-12) ===== */
+scene(10,12,`${win('w6','mappop',60,60,1800,960,'/map')}
+<div class="win" id="w6b" style="left:60px;top:60px;width:1800px;height:960px"><div class="bar"><i></i><i></i><i></i><span>google.com/maps</span></div><div class="vp"><div class="cam"><img src="../screens/gmaps.png"></div></div></div>
+<div class="abs card" id="h6" style="right:90px;bottom:90px;padding:40px 50px"><div class="tag o">Map View</div><div class="H" style="font-size:96px;margin-top:18px">EVERY SPOT.</div><div class="H acc" style="font-size:96px">ONE MAP.</div><div style="font-size:30px;margin-top:16px;font-weight:700">+ One-tap directions →</div></div>
+<div class="abs tag ink" id="gmtag" style="left:90px;bottom:90px;font-size:30px">→ STRAIGHT INTO GOOGLE MAPS</div>`,function(t){
   const w=this.q('#w6');st(w,{s:lerp(1.1,1,ex(P(t,0,.4))),o:P(t,0,.15)});
-  cam(w,t,[[0,1900,1050,.6],[1.2,1900,1050,.62],[2.6,1300,1050,1.35],[3.75,1180,1000,1.5]]);
-  const h=P(t,.4,.35);st(this.q('#h6'),{x:lerp(800,0,ex(h))});
+  cam(w,t,[[0,1900,1050,.6],[1.2,1900,1050,.62],[2.6,1300,1050,1.35],[2.95,1300,1050,1.35]]);
+  const h=P(t,.4,.35);const hOut=ex(P(t,2.8,.25));st(this.q('#h6'),{x:lerp(800,0,ex(h)),o:1-hOut});
+
+  const b=this.q('#w6b');const bp=ex(P(t,2.95,.3));
+  st(b,{y:lerp(1000,0,bp),o:bp});
+  cam(b,t,[[2.95,1200,500,.75],[3.75,2125,875,2.2]]);
+  const g=P(t,3.15,.25);st(this.q('#gmtag'),{s:back(g),o:g>0?1:0});
 });
 
 /* ===== S7: AI (bars 12-14) ===== */
