@@ -211,7 +211,7 @@ export default function AskPage() {
             onClick={startListening}
             disabled={isLoading}
             title="Ask by voice"
-            className={`px-3 sm:px-4 py-2.5 sm:py-3 border-1.5 transition-colors disabled:opacity-50 flex items-center justify-center ${
+            className={`w-12 py-2.5 sm:py-3 border-1.5 transition-colors disabled:opacity-50 flex items-center justify-center ${
               isListening
                 ? "bg-accent/10 border-accent text-accent animate-pulse"
                 : "border-ink text-ink/60 hover:text-ink"
@@ -231,7 +231,7 @@ export default function AskPage() {
         <button
           type="submit"
           disabled={isLoading || !input.trim()}
-          className="receipt-btn w-auto px-6 sm:px-10 py-3 sm:py-4 text-base sm:text-lg !bg-ink !text-cream disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+          className="receipt-btn w-[4.5rem] py-3 sm:py-4 text-base sm:text-lg !bg-ink !text-cream disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
         >
           {isLoading ? "..." : "Ask →"}
         </button>
