@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Spot, categoryConfig, spotCoordinates, vibeConfig } from "@/data/spots";
 import { useAuth } from "@/components/AuthProvider";
 import { useSavedSpots } from "@/components/SavedSpotsProvider";
@@ -61,6 +62,7 @@ export function SpotCard({
   const isSaved = isSpotSaved(spot.id);
   const config = categoryConfig[spot.category];
   const coords = spotCoordinates[spot.id];
+  const [saving, setSaving] = useState(false);
 
   const handleSaveClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -70,7 +72,10 @@ export function SpotCard({
       return;
     }
 
+    if (saving) return;
+    setSaving(true);
     const result = await toggleSave(spot.id);
+    setSaving(false);
     if (result.error) {
       console.error("Save error:", result.error);
       alert(`Error saving spot: ${result.error}`);
@@ -130,8 +135,9 @@ export function SpotCard({
       {showSaveButton && !compareMode && (
         <button
           onClick={handleSaveClick}
+          disabled={saving}
           title={isSaved ? "Remove from saved" : "Save spot"}
-          className={`receipt-tag absolute -top-3 right-4 z-10 ${isSaved ? "!bg-accent !text-cream !border-accent" : ""}`}
+          className={`receipt-tag absolute -top-3 right-4 z-10 disabled:opacity-50 ${isSaved ? "!bg-accent !text-cream !border-accent" : ""}`}
         >
           <svg width="11" height="11" viewBox="0 0 20 20" fill="none">
             <path

@@ -73,10 +73,14 @@ export function SavedSpotsProvider({ children }: { children: ReactNode }) {
           spot_id: spotId,
         });
 
-        if (!error) {
+        // A duplicate-key error here just means it was already saved (e.g.
+        // a race from a fast double-click, or local state lagging the DB) -
+        // treat that as success instead of surfacing a raw constraint error.
+        if (!error || error.code === "23505") {
           setSavedSpotIds((prev) => new Set(prev).add(spotId));
+          return { error: null };
         }
-        return { error: error?.message || null };
+        return { error: error.message };
       }
     },
     [user, savedSpotIds, supabase]
