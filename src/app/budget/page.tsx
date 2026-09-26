@@ -125,7 +125,7 @@ function TermBudgetPlanner() {
               label={item.label}
               amount={item.amount}
               onAmountChange={(amount) => updateItem(item.id, { amount })}
-              onLabelChange={(label) => updateItem(item.id, { label })}
+              onLabelChange={item.category === "custom" ? (label) => updateItem(item.id, { label }) : undefined}
               onRemove={() => removeItem(item.id)}
             />
           ))}
@@ -153,7 +153,7 @@ function TermBudgetPlanner() {
               className="w-20 px-1 py-1 bg-transparent border-0 border-b-2 border-ink text-sm text-right focus:outline-none"
             />
           </div>
-          <button type="submit" className="receipt-btn w-auto px-3 !bg-ink !text-cream flex-shrink-0">
+          <button type="submit" className="receipt-btn w-20 py-2 !text-sm !bg-ink !text-cream flex-shrink-0">
             Add
           </button>
           <button
@@ -163,7 +163,7 @@ function TermBudgetPlanner() {
               setNewLabel("");
               setNewAmount("");
             }}
-            className="text-sm font-bold uppercase text-ink/40 hover:text-ink flex-shrink-0"
+            className="w-20 text-sm font-bold uppercase text-ink/40 hover:text-ink flex-shrink-0 text-center"
           >
             Cancel
           </button>
