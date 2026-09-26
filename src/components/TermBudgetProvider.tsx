@@ -49,9 +49,10 @@ export function TermBudgetProvider({ children }: { children: ReactNode }) {
 
       // First-ever visit: seed the example categories once so there's
       // something to start from. Presets are otherwise ordinary rows -
-      // editable and removable exactly like a custom item - so this only
-      // needs to run when nothing exists yet, guarded by a local flag to
-      // avoid re-seeding after someone deletes everything on purpose.
+      // editable and removable exactly like a custom item. Gated on
+      // "have we ever seeded", not "is the list currently empty" - someone
+      // could already have a custom item (or have deleted a preset on
+      // purpose) without that meaning presets were ever created for them.
       let alreadySeeded = true;
       try {
         alreadySeeded = localStorage.getItem(seededKey(user.id)) === "1";
@@ -61,7 +62,7 @@ export function TermBudgetProvider({ children }: { children: ReactNode }) {
         alreadySeeded = true;
       }
 
-      if (rows.length === 0 && !alreadySeeded) {
+      if (!alreadySeeded) {
         const { data: seeded } = await supabase
           .from("term_budget_items")
           .insert(
@@ -74,7 +75,7 @@ export function TermBudgetProvider({ children }: { children: ReactNode }) {
           )
           .select("id, category, label, amount");
 
-        if (seeded) rows = seeded;
+        if (seeded) rows = [...rows, ...seeded];
         try {
           localStorage.setItem(seededKey(user.id), "1");
         } catch {
