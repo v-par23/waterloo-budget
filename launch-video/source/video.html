@@ -128,23 +128,23 @@ scene(8,10,`${win('w5a','nearme',80,150,1120,780,'/','')}${win('w5b','compare',7
   this.qa('.ln.b .lw').forEach((e,i)=>{e.classList.add('H');e.style.fontSize='110px';const p=P(t,BAR+.2+i*B/2,.3);st(e,{y:lerp(130,0,ex(p)),o:p>0?1:0})});
 });
 
-/* ===== S6: map -> directions (bars 10-12) ===== */
-scene(10,12,`${win('w6','mappop',60,60,1800,960,'/map')}
+/* ===== S6: map -> directions (bars 10-13) ===== */
+scene(10,13,`${win('w6','mappop',60,60,1800,960,'/map')}
 <div class="win" id="w6b" style="left:60px;top:60px;width:1800px;height:960px"><div class="bar"><i></i><i></i><i></i><span>google.com/maps</span></div><div class="vp"><div class="cam"><img src="../screens/gmaps.png"></div></div></div>
 <div class="abs card" id="h6" style="right:90px;bottom:90px;padding:40px 50px"><div class="tag o">Map View</div><div class="H" style="font-size:96px;margin-top:18px">EVERY SPOT.</div><div class="H acc" style="font-size:96px">ONE MAP.</div><div style="font-size:30px;margin-top:16px;font-weight:700">+ One-tap directions →</div></div>
 <div class="abs tag ink" id="gmtag" style="left:90px;bottom:90px;font-size:30px">→ STRAIGHT INTO GOOGLE MAPS</div>`,function(t){
   const w=this.q('#w6');st(w,{s:lerp(1.1,1,ex(P(t,0,.4))),o:P(t,0,.15)});
-  cam(w,t,[[0,1900,1050,.6],[1.2,1900,1050,.62],[2.6,1300,1050,1.35],[2.95,1300,1050,1.35]]);
-  const h=P(t,.4,.35);const hOut=ex(P(t,2.8,.25));st(this.q('#h6'),{x:lerp(800,0,ex(h)),o:1-hOut});
+  cam(w,t,[[0,1900,1050,.6],[1.2,1900,1050,.62],[2.6,1300,1050,1.35],[3.0,1300,1050,1.35]]);
+  const h=P(t,.4,.35);const hOut=ex(P(t,2.9,.3));st(this.q('#h6'),{x:lerp(800,0,ex(h)),o:1-hOut});
 
-  const b=this.q('#w6b');const bp=ex(P(t,2.95,.3));
+  const b=this.q('#w6b');const bp=ex(P(t,3.1,.5));
   st(b,{y:lerp(1000,0,bp),o:bp});
-  cam(b,t,[[2.95,1200,500,.75],[3.75,2125,875,2.2]]);
-  const g=P(t,3.15,.25);st(this.q('#gmtag'),{s:back(g),o:g>0?1:0});
+  cam(b,t,[[3.1,1200,500,.75],[5.625,2125,875,2.2]]);
+  const g=P(t,3.6,.3);st(this.q('#gmtag'),{s:back(g),o:g>0?1:0});
 });
 
 /* ===== S7: AI (bars 12-14) ===== */
-scene(12,14,`${win('w7a','insights',80,120,1180,840,'/')}${win('w7b','ask',660,110,1180,860,'/ask')}
+scene(13,15,`${win('w7a','insights',80,120,1180,840,'/')}${win('w7b','ask',660,110,1180,860,'/ask')}
 <div class="abs" style="right:80px;top:250px;width:560px;text-align:right" id="h7a">${words('AI|INSIGHTS,|<span class="acc">ON DEMAND.</span>','a')}</div>
 <div class="abs" style="left:80px;top:250px;width:560px" id="h7b">${words('JUST|<span class="acc">ASK.</span>|OUT LOUD.','b')}<div id="mic" class="tag ink" style="margin-top:30px;font-size:30px">🎙 VOICE + READ ALOUD</div></div>`,function(t){
   const a=this.q('#w7a'),b=this.q('#w7b');
@@ -156,7 +156,7 @@ scene(12,14,`${win('w7a','insights',80,120,1180,840,'/')}${win('w7b','ask',660,1
 });
 
 /* ===== S8: schedule -> planner (bars 14-16) ===== */
-scene(14,16,`${win('w8a','schedule',70,250,900,700,'/schedule',hl(690,300,2530,300))}${win('w8b','planner2',1000,250,850,700,'/planner',hl(650,740,2440,700))}
+scene(15,17,`${win('w8a','schedule',70,250,900,700,'/schedule',hl(690,300,2530,300))}${win('w8b','planner2',1000,250,850,700,'/planner',hl(650,740,2440,700))}
 <div class="abs" style="left:0;right:0;top:50px;text-align:center"><div class="H l8" style="font-size:88px">SNAP YOUR QUEST SCHEDULE.</div><div class="H l8 acc" style="font-size:88px">WE FILL THE GAPS.</div></div>
 <div class="abs H" id="ar8" style="left:930px;top:520px;font-size:120px;color:var(--acc);z-index:5">→</div>`,function(t){
   const a=this.q('#w8a'),b=this.q('#w8b');
@@ -169,7 +169,7 @@ scene(14,16,`${win('w8a','schedule',70,250,900,700,'/schedule',hl(690,300,2530,3
 });
 
 /* ===== S9: term budget -> weekly tracker (bars 16-19) ===== */
-scene(16,19,`${win('wB','budget',760,140,1100,820,'/budget',hl(682,952,2350,90))}
+scene(17,20,`${win('wB','budget',760,140,1100,820,'/budget',hl(682,952,2350,90))}
 <div class="abs" style="left:90px;top:200px;width:640px">
  <div class="tb1">${words('PLAN THE|WHOLE <span class="acc">TERM.</span>')}</div>
  <div class="tb2" style="margin-top:34px">${words('+ TRACK WHAT|<span class="acc">YOU ACTUALLY</span>|SPEND.')}</div>
@@ -182,7 +182,7 @@ scene(16,19,`${win('wB','budget',760,140,1100,820,'/budget',hl(682,952,2350,90))
 });
 
 /* ===== S11: teams split (bars 19-21) ===== */
-scene(19,21,`${win('w11','team',60,120,1060,850,'/teams',hl(650,780,2440,430))}
+scene(20,22,`${win('w11','team',60,120,1060,850,'/teams',hl(650,780,2440,430))}
 <div class="abs" style="right:80px;top:200px;width:620px;text-align:right">${words('SPLIT|THE BILL.|<span class="acc">NOT THE</span>|<span class="acc">FRIENDSHIP.</span>')}
  <div style="margin-top:40px;display:flex;justify-content:flex-end;gap:14px;flex-wrap:wrap" id="tt"><div class="tag">TEAMS</div><div class="tag">INVITE CODES</div><div class="tag o">$40 ÷ 4 = $10</div></div></div>`,function(t){
   const w=this.q('#w11');st(w,{x:lerp(-1300,0,ex(P(t,0,.4)))});cam(w,t,[[0,1850,900,.37],[1.2,1850,700,.37],[2.4,1850,1050,.5],[3.75,1850,1100,.52]]);
@@ -193,14 +193,14 @@ scene(19,21,`${win('w11','team',60,120,1060,850,'/teams',hl(650,780,2440,430))}
 
 /* ===== S12: rapid-fire (bar 21-22) ===== */
 const rf=[["01","SAVED SPOTS","#ff5a1f","#fbf8f1"],["02","VOICE SEARCH","#1b1a17","#f3efe4"],["03","YELP REVIEWS","#fbf8f1","#1b1a17"],["04","SUGGEST A SPOT","#ff5a1f","#1b1a17"]];
-scene(21,22,rf.map(m=>`<div class="center rf" style="background:${m[2]};color:${m[3]};display:none"><div style="display:flex;align-items:center;gap:60px"><div class="em H" style="font-size:150px;border:10px solid currentColor;padding:10px 30px">${m[0]}</div><div class="H" style="font-size:170px;max-width:1300px">${m[1]}</div></div></div>`).join(''),function(t){
+scene(22,23,rf.map(m=>`<div class="center rf" style="background:${m[2]};color:${m[3]};display:none"><div style="display:flex;align-items:center;gap:60px"><div class="em H" style="font-size:150px;border:10px solid currentColor;padding:10px 30px">${m[0]}</div><div class="H" style="font-size:170px;max-width:1300px">${m[1]}</div></div></div>`).join(''),function(t){
   const bi=Math.min(3,Math.floor(t/B)),bl=t-bi*B;this.qa('.rf').forEach((e,i)=>e.style.display=i==bi?'flex':'none');
   const e=this.qa('.rf')[bi];const p=ex(P(bl,0,.18));st(e.firstChild,{s:lerp(1.4,1,p)+bl*.06,x:(bi%2?1:-1)*lerp(200,0,p)});st(e.querySelector('.em'),{r:lerp(-30,0,back(P(bl,0,.3)))});
 });
 
 /* ===== S13: end receipt (bars 22-25) ===== */
 const endRows=[["CURATED SPOTS","170+"],["CATEGORIES","7"],["AI GUIDE","INCLUDED"],["BUDGET STRESS","$0.00"]];
-scene(22,25,`<div class="rc" id="r2" style="left:120px;top:60px;width:760px">
+scene(23,26,`<div class="rc" id="r2" style="left:120px;top:60px;width:760px">
  <div style="text-align:center;font-weight:700;font-size:30px;letter-spacing:.3em">WATERLOOBUDGET</div><div style="text-align:center;font-size:22px;opacity:.6;margin:8px 0 24px">RECEIPT #2026 · WATERLOO, ON</div><div class="dash" style="margin-bottom:20px"></div>
  ${endRows.map(r=>`<div class="row it2" style="margin:16px 0;font-size:34px"><span>${r[0]}</span><span class="d"></span><span>${r[1]}</span></div>`).join('')}
  <div class="dash it2" style="margin:26px 0"></div><div class="row it2" style="font-size:50px"><span>YOU SAVE</span><span class="d"></span><span class="acc">A LOT</span></div>
@@ -220,8 +220,8 @@ scene(22,25,`<div class="rc" id="r2" style="left:120px;top:60px;width:760px">
   this.q('#fade').style.opacity=eio(P(t,2.55*BAR,.45*BAR));
 });
 
-const TOTAL=25*BAR;window.TOTAL=TOTAL;
-const cuts=[2,4,6,8,10,12,14,16,19,21,22].map(b=>b*BAR);
+const TOTAL=26*BAR;window.TOTAL=TOTAL;
+const cuts=[2,4,6,8,10,13,15,17,20,22,23].map(b=>b*BAR);
 window.render=function(t){
   let f=0,pu=0;for(const c of cuts){const d=t-c;if(d>=0&&d<.22){f=Math.max(f,(1-d/.22)*(c==4*BAR||c==22*BAR?.85:.3));pu=Math.max(pu,1-d/.22)}}
   document.getElementById('flash').style.opacity=f;

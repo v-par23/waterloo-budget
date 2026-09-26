@@ -1,5 +1,5 @@
 import numpy as np, scipy.signal as sg, wave
-SR=44100;BPM=128;B=60/BPM;BAR=4*B;BARS=25;N=int(BARS*BAR*SR)+SR
+SR=44100;BPM=128;B=60/BPM;BAR=4*B;BARS=26;N=int(BARS*BAR*SR)+SR
 L=np.zeros(N);R=np.zeros(N)
 rng=np.random.default_rng(7)
 def add(sig,t,g=1.0,pan=0.0):
@@ -96,21 +96,21 @@ for i in range(8):add(C,21*BAR+i*B/2,.35+i*.05)
 add(riser(BAR),21*BAR,.8)
 # transition impacts at section cuts
 for b_ in [6,8,10,12,14,16,17,19]:add(hat(.25)*1.5,b_*BAR-0.0,.35)
-# outro bars 22-25
+# outro bars 22-26
 add(impact(),22*BAR,1.0)
-addpad(chord(0,2.8*BAR,2500,.3),22*BAR)
-for bar in range(22,24):
+addpad(chord(0,3.8*BAR,2500,.3),22*BAR)
+for bar in range(22,25):
     for bt in range(4):
         t=bar*BAR+bt*B;add(K,t,.8);duck(t)
         if bt in(1,3):add(C,t,.5)
         add(hat(),t+B/2,.6)
     add(bassnote(roots[0],BAR*.9),bar*BAR,.8)
-add(K,24*BAR,.9);add(stab(0,.5),24*BAR)
+add(K,25*BAR,.9);add(stab(0,.5),25*BAR)
 mixL=L+padL*sc;mixR=R+padR*sc
 # fade last bar
-f0=int(24.3*BAR*SR);f1=int(25*BAR*SR);fade=np.ones(N);fade[f0:f1]=np.linspace(1,0,f1-f0);fade[f1:]=0
+f0=int(25.3*BAR*SR);f1=int(26*BAR*SR);fade=np.ones(N);fade[f0:f1]=np.linspace(1,0,f1-f0);fade[f1:]=0
 mixL*=fade;mixR*=fade
 m=np.stack([mixL,mixR],1);m=m/np.max(np.abs(m))*0.95;m=np.tanh(m*1.25)/np.tanh(1.25)
-m=m[:int(25*BAR*SR)]
+m=m[:int(26*BAR*SR)]
 w=wave.open('music.wav','wb');w.setnchannels(2);w.setsampwidth(2);w.setframerate(SR);w.writeframes((m*32767).astype(np.int16).tobytes());w.close()
 print(len(m)/SR)
