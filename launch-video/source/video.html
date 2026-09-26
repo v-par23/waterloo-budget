@@ -163,22 +163,17 @@ scene(14,16,`${win('w8a','schedule',70,250,900,700,'/schedule',hl(690,300,2530,3
   const ar=P(t,1.75,.25);st(this.q('#ar8'),{x:lerp(-60,0,ex(ar))+Math.sin(t*12)*6,o:ar});
 });
 
-/* ===== S9: route planner (bar 16-17) ===== */
-scene(16,17,`${win('w9','planner',520,60,1340,960,'/planner',hl(2710,1645,330,100))}
-<div class="abs" style="left:80px;top:260px;width:560px">${words('BUILD|YOUR|<span class="acc">ROUTE.</span>')}<div class="tag ink" id="gm" style="margin-top:30px;font-size:26px">6 STOPS · ~12 MIN WALK</div></div>`,function(t){
-  const w=this.q('#w9');st(w,{y:lerp(1100,0,ex(P(t,0,.35)))});cam(w,t,[[0,1850,1150,.5],[.9,1850,1150,.52],[1.875,2150,1350,.6]]);
-  hlShow(w.querySelector('.hlbox'),P(t,1.2,.3));
-  this.qa('.lw').forEach((e,i)=>{e.classList.add('H');e.style.fontSize='120px';const p=P(t,.1+i*B/2,.3);st(e,{y:lerp(130,0,ex(p)),o:p>0?1:0})});
-  const g=P(t,3*B,.25);st(this.q('#gm'),{s:back(g),o:g>0?1:0});
-});
-
-/* ===== S10: budget tracker (bars 17-19) ===== */
-scene(17,19,`${win('w10','budget',760,140,1100,820,'/budget')}
-<div class="abs" style="left:90px;top:200px;width:640px">${words('TRACK|EVERY|<span class="acc">DOLLAR.</span>')}
- <div class="card" id="bt" style="margin-top:50px;padding:30px 36px"><div style="font-size:26px;font-weight:700;letter-spacing:.1em">THIS WEEK</div><div class="H" style="font-size:90px;margin-top:10px"><span id="amt">$0.00</span> <span style="font-size:40px;opacity:.45">/ $120</span></div><div style="height:22px;border:3px solid var(--ink);margin-top:20px"><div id="bar" style="height:100%;background:#16a34a;width:0"></div></div></div></div>`,function(t){
-  const w=this.q('#w10');st(w,{x:lerp(1100,0,ex(P(t,0,.4)))});cam(w,t,[[0,1850,900,.36],[1.4,1850,650,.4],[2.6,1750,1350,.42],[3.75,1750,1350,.44]]);
-  this.qa('.lw').forEach((e,i)=>{e.classList.add('H');e.style.fontSize='120px';const p=P(t,.1+i*B/2,.3);st(e,{y:lerp(130,0,ex(p)),o:p>0?1:0})});
-  const b=P(t,4*B,.35);st(this.q('#bt'),{s:back(b),o:b>0?1:0});const v=eo(P(t,4*B,1.2));this.q('#amt').textContent='$'+(62.15*v).toFixed(2);this.q('#bar').style.width=(51.8*v)+'%';
+/* ===== S9: term budget -> weekly tracker (bars 16-19) ===== */
+scene(16,19,`${win('wB','budget',760,140,1100,820,'/budget',hl(682,952,2350,90))}
+<div class="abs" style="left:90px;top:200px;width:640px">
+ <div class="tb1">${words('PLAN THE|WHOLE <span class="acc">TERM.</span>')}</div>
+ <div class="tb2" style="margin-top:34px">${words('+ TRACK WHAT|<span class="acc">YOU ACTUALLY</span>|SPEND.')}</div>
+</div>`,function(t){
+  const w=this.q('#wB');st(w,{x:lerp(1100,0,ex(P(t,0,.4)))});
+  cam(w,t,[[0,1900,675,.43],[1.6,1900,675,.43],[2.3,1900,996,.43],[3.1,1900,996,.43],[4.0,1240,1260,.85],[5.3,1240,1260,.9]]);
+  const hb=w.querySelector('.hlbox');if(hb){const inP=ex(P(t,1.6,.4)),outP=1-ex(P(t,3.3,.3)),hp=Math.min(inP,outP);hb.style.opacity=hp;hb.style.clipPath=`inset(0 ${100-100*hp}% 0 0)`;}
+  this.qa('.tb1 .lw').forEach((e,i)=>{e.classList.add('H');e.style.fontSize='118px';const p=P(t,.1+i*B/2,.3);st(e,{y:lerp(130,0,ex(p)),o:p>0?1:0})});
+  this.qa('.tb2 .lw').forEach((e,i)=>{e.classList.add('H');e.style.fontSize='64px';const p=P(t,4.0+i*B/2,.3);st(e,{y:lerp(110,0,ex(p)),o:p>0?1:0})});
 });
 
 /* ===== S11: teams split (bars 19-21) ===== */
@@ -221,7 +216,7 @@ scene(22,25,`<div class="rc" id="r2" style="left:120px;top:60px;width:760px">
 });
 
 const TOTAL=25*BAR;window.TOTAL=TOTAL;
-const cuts=[2,4,6,8,10,12,14,16,17,19,21,22].map(b=>b*BAR);
+const cuts=[2,4,6,8,10,12,14,16,19,21,22].map(b=>b*BAR);
 window.render=function(t){
   document.getElementById('grid').style.transform=`translate(${(t*30)%80}px,${(t*20)%80}px)`;
   let f=0,pu=0;for(const c of cuts){const d=t-c;if(d>=0&&d<.22){f=Math.max(f,(1-d/.22)*(c==4*BAR||c==22*BAR?.85:.3));pu=Math.max(pu,1-d/.22)}}

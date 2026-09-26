@@ -18,6 +18,7 @@ const DATA={
  saved_spots:['food-2','coffee-1','work-2','gym-7','food-49','food-31'].map(s=>({spot_id:s})),
  expenses:[{id:'e1',spot_id:'food-2',amount:10.5,note:'Lunch after SYDE 192',spent_at:dd(0)},{id:'e2',spot_id:'coffee-1',amount:5.25,note:'Study fuel',spent_at:dd(1)},{id:'e3',spot_id:'grocery-3',amount:38.4,note:'Weekly groceries',spent_at:dd(2)},{id:'e4',spot_id:'food-49',amount:8,note:null,spent_at:dd(2)},{id:'e5',spot_id:'bar-1',amount:12,note:'Bomber trivia',spent_at:dd(3)},{id:'e6',spot_id:'food-31',amount:6.5,note:null,spent_at:dd(9)},{id:'e7',spot_id:'gym-4',amount:15,note:'Fit4Less',spent_at:dd(12)}],
  budget_goals:[{period:'weekly',amount:120},{period:'monthly',amount:450}],
+ term_budget_items:[{id:'tb1',category:'tuition',label:'Tuition',amount:3200},{id:'tb2',category:'rent',label:'Rent',amount:2600},{id:'tb3',category:'supplies',label:'Supplies',amount:180},{id:'tb4',category:'dining_out',label:'Dining Out',amount:450},{id:'tb5',category:'custom',label:'Activities',amount:150}],
  profiles,
  team_spots:[{id:'ts1',spot_id:'food-2',added_by:A,note:'Best $10 shawarma plate',created_at:d(1)},{id:'ts2',spot_id:'work-2',added_by:P,note:'Group study, 3rd floor',created_at:d(2)},{id:'ts3',spot_id:'coffee-4',added_by:J,note:null,created_at:d(3)}],
  team_expenses:[{id:'x1',spot_id:'food-2',description:'Dinner at Lazeez Shawarma',amount:40,paid_by:UID,created_at:d(1)},{id:'x2',spot_id:'grocery-3',description:'No Frills run',amount:60,paid_by:A,created_at:d(4)}],
