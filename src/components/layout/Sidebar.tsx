@@ -53,27 +53,34 @@ export function Sidebar() {
           </Link>
         ))}
 
-        {user && (
-          <div className="pt-5 mt-5 border-t border-dashed border-ink/40">
-            <p className="px-3 text-[10px] font-bold text-ink/50 uppercase tracking-widest mb-2">
-              My Stuff
-            </p>
-            {userNavItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`block px-3 py-2 text-[11px] font-bold uppercase tracking-wider border-1.5 transition-colors ${
-                  pathname === item.href || pathname.startsWith(item.href + "/")
+        <div className="pt-5 mt-5 border-t border-dashed border-ink/40">
+          <p className="px-3 text-[10px] font-bold text-ink/50 uppercase tracking-widest mb-2">
+            My Stuff
+          </p>
+          {userNavItems.map((item) => (
+            <Link
+              key={item.href}
+              href={user ? item.href : "/login"}
+              title={user ? undefined : "Sign in to unlock this"}
+              className={`flex items-center gap-1.5 px-3 py-2 text-[11px] font-bold uppercase tracking-wider border-1.5 transition-colors ${
+                !user
+                  ? "border-ink/0 text-ink/35 hover:text-ink/60"
+                  : pathname === item.href || pathname.startsWith(item.href + "/")
                     ? "bg-ink text-cream border-ink"
                     : "border-ink/0 text-ink/70 hover:border-ink hover:text-ink"
-                }`}
-                style={{ borderWidth: "1.5px", borderStyle: "solid" }}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
-        )}
+              }`}
+              style={{ borderWidth: "1.5px", borderStyle: "solid" }}
+            >
+              {item.label}
+              {!user && (
+                <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <rect x="5" y="11" width="14" height="9" rx="1" strokeWidth="2" />
+                  <path d="M8 11V7a4 4 0 018 0v4" strokeWidth="2" />
+                </svg>
+              )}
+            </Link>
+          ))}
+        </div>
       </nav>
 
       <div className="p-4 border-t-2 border-ink">

@@ -77,28 +77,33 @@ export function MobileHeader() {
             </Link>
           ))}
 
-          {user && (
-            <>
-              <div className="my-2 border-t border-dashed border-ink/40"></div>
-              <p className="px-3 py-1 text-[10px] font-bold text-ink/50 uppercase tracking-widest">
-                My Stuff
-              </p>
-              {userNavItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setIsOpen(false)}
-                  className={`block px-3 py-2.5 text-[11px] font-bold uppercase tracking-wider ${
-                    pathname === item.href || pathname.startsWith(item.href + "/")
-                      ? "bg-ink text-cream"
-                      : "text-ink/70"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </>
-          )}
+          <div className="my-2 border-t border-dashed border-ink/40"></div>
+          <p className="px-3 py-1 text-[10px] font-bold text-ink/50 uppercase tracking-widest">
+            My Stuff
+          </p>
+          {userNavItems.map((item) => (
+            <Link
+              key={item.href}
+              href={user ? item.href : "/login"}
+              onClick={() => setIsOpen(false)}
+              title={user ? undefined : "Sign in to unlock this"}
+              className={`flex items-center gap-1.5 px-3 py-2.5 text-[11px] font-bold uppercase tracking-wider ${
+                !user
+                  ? "text-ink/35"
+                  : pathname === item.href || pathname.startsWith(item.href + "/")
+                    ? "bg-ink text-cream"
+                    : "text-ink/70"
+              }`}
+            >
+              {item.label}
+              {!user && (
+                <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <rect x="5" y="11" width="14" height="9" rx="1" strokeWidth="2" />
+                  <path d="M8 11V7a4 4 0 018 0v4" strokeWidth="2" />
+                </svg>
+              )}
+            </Link>
+          ))}
 
           <div className="mt-2 pt-2 border-t border-dashed border-ink/40">
             {loading ? (
