@@ -218,7 +218,6 @@ export default function PlannerPage() {
                                 key={suggestion.spotId}
                                 className="border border-dashed border-ink/30 p-2.5 flex items-center gap-2"
                               >
-                                <span className="text-lg">{spot.emoji}</span>
                                 <div className="flex-1 min-w-0">
                                   <p className="font-bold text-ink text-sm truncate">
                                     {spot.name}
@@ -248,7 +247,6 @@ export default function PlannerPage() {
                                 key={suggestion.spotId}
                                 className="border border-dashed border-ink/30 p-2.5 flex items-center gap-2"
                               >
-                                <span className="text-lg">{spot.emoji}</span>
                                 <div className="flex-1 min-w-0">
                                   <p className="font-bold text-ink text-sm truncate">
                                     {spot.name}
@@ -278,7 +276,6 @@ export default function PlannerPage() {
                                 key={suggestion.spotId}
                                 className="border border-dashed border-ink/30 p-2.5 flex items-center gap-2"
                               >
-                                <span className="text-lg">{spot.emoji}</span>
                                 <div className="flex-1 min-w-0">
                                   <p className="font-bold text-ink text-sm truncate">
                                     {spot.name}

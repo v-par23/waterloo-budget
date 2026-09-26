@@ -16,7 +16,6 @@ interface ResolvedStop {
   stop: RouteStop;
   label: string;
   sublabel: string;
-  emoji: string;
   lat: number;
   lng: number;
 }
@@ -30,7 +29,6 @@ function resolveStop(stop: RouteStop, dayClasses: ClassSession[]): ResolvedStop 
       stop,
       label: spot.name,
       sublabel: spot.neighborhood,
-      emoji: spot.emoji,
       lat: coords.lat,
       lng: coords.lng,
     };
@@ -43,7 +41,6 @@ function resolveStop(stop: RouteStop, dayClasses: ClassSession[]): ResolvedStop 
     stop,
     label: `${cls.courseCode} — ${cls.building} ${cls.room}`,
     sublabel: `${formatTime(cls.startTime)} – ${formatTime(cls.endTime)}`,
-    emoji: "📚",
     lat: building.lat,
     lng: building.lng,
   };
@@ -123,7 +120,6 @@ export function RoutePlanner({ day }: { day: ClassSession["day"] }) {
                 <span className="w-6 h-6 border border-ink text-ink text-xs font-bold flex items-center justify-center flex-shrink-0">
                   {index + 1}
                 </span>
-                <span className="text-lg flex-shrink-0">{resolved.emoji}</span>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-bold text-ink truncate">{resolved.label}</p>
                   <p className="text-xs text-ink/50 truncate">{resolved.sublabel}</p>
@@ -314,7 +310,6 @@ function AddStopModal({
                     disabled={added}
                     className="w-full text-left p-3 border border-dashed border-ink/0 hover:border-ink/30 flex items-center gap-3 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <span className="text-xl">{spot.emoji}</span>
                     <div className="flex-1 min-w-0">
                       <div className="font-bold text-ink truncate">{spot.name}</div>
                       <div className="text-sm text-ink/50">{spot.neighborhood}</div>
@@ -336,7 +331,6 @@ function AddStopModal({
                   disabled={added}
                   className="w-full text-left p-3 border border-dashed border-ink/0 hover:border-ink/30 flex items-center gap-3 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <span className="text-xl">📚</span>
                   <div className="flex-1 min-w-0">
                     <div className="font-bold text-ink truncate">{cls.courseCode}</div>
                     <div className="text-sm text-ink/50">

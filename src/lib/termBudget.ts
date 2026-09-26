@@ -16,7 +16,7 @@ export const PRESET_TERM_BUDGET_CATEGORIES: {
   { category: "tuition", label: "Tuition" },
   { category: "rent", label: "Rent" },
   { category: "supplies", label: "Supplies" },
-  { category: "dining_out", label: "Dining Out" },
+  { category: "dining_out", label: "Eating Out" },
 ];
 
 export function sumTermBudgetItems(items: TermBudgetItem[]): number {
