@@ -8,6 +8,7 @@ import { AuthProvider } from "@/components/AuthProvider";
 import { SavedSpotsProvider } from "@/components/SavedSpotsProvider";
 import { ScheduleProvider } from "@/components/ScheduleProvider";
 import { BudgetProvider } from "@/components/BudgetProvider";
+import { TermBudgetProvider } from "@/components/TermBudgetProvider";
 import { ResponsiveGuard } from "@/components/dev/ResponsiveGuard";
 
 const spaceMono = Space_Mono({
@@ -32,14 +33,16 @@ export default function RootLayout({
           <SavedSpotsProvider>
             <ScheduleProvider>
               <BudgetProvider>
-                <Sidebar />
-                <MobileHeader />
-                <main className="lg:pl-64 pt-14 lg:pt-0">
-                  <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
-                    {children}
-                  </div>
-                </main>
-                <ResponsiveGuard />
+                <TermBudgetProvider>
+                  <Sidebar />
+                  <MobileHeader />
+                  <main className="lg:pl-64 pt-14 lg:pt-0">
+                    <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
+                      {children}
+                    </div>
+                  </main>
+                  <ResponsiveGuard />
+                </TermBudgetProvider>
               </BudgetProvider>
             </ScheduleProvider>
           </SavedSpotsProvider>

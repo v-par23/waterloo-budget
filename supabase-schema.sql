@@ -318,3 +318,40 @@ create index budget_goals_user_id_idx on public.budget_goals(user_id);
 create index team_expenses_team_id_idx on public.team_expenses(team_id);
 create index team_expense_splits_expense_id_idx on public.team_expense_splits(expense_id);
 create index team_expense_splits_user_id_idx on public.team_expense_splits(user_id);
+
+-- ============================================================
+-- Migration: term budget planner (run this separately if the
+-- tables above already exist in your project)
+-- ============================================================
+
+-- Term budget items: one-time/term-level line items (tuition, rent,
+-- supplies, dining out, plus arbitrary custom items like activities)
+create table public.term_budget_items (
+  id uuid default uuid_generate_v4() primary key,
+  user_id uuid references auth.users on delete cascade not null,
+  category text check (category in ('tuition', 'rent', 'supplies', 'dining_out', 'custom')) not null,
+  label text not null,
+  amount numeric(10,2) not null check (amount >= 0),
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- One row per preset category per user; unlimited custom items
+create unique index term_budget_items_user_category_idx
+  on public.term_budget_items(user_id, category)
+  where category <> 'custom';
+
+alter table public.term_budget_items enable row level security;
+
+create policy "Users can view own term budget items" on public.term_budget_items
+  for select using (auth.uid() = user_id);
+
+create policy "Users can insert own term budget items" on public.term_budget_items
+  for insert with check (auth.uid() = user_id);
+
+create policy "Users can update own term budget items" on public.term_budget_items
+  for update using (auth.uid() = user_id);
+
+create policy "Users can delete own term budget items" on public.term_budget_items
+  for delete using (auth.uid() = user_id);
+
+create index term_budget_items_user_id_idx on public.term_budget_items(user_id);

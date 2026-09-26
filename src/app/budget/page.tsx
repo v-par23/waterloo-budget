@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/components/AuthProvider";
 import { useBudget } from "@/components/BudgetProvider";
+import { useTermBudget } from "@/components/TermBudgetProvider";
 import { spots } from "@/data/spots";
 import {
   BudgetPeriod,
@@ -12,11 +13,178 @@ import {
   sumExpensesSince,
   budgetStatusColor,
 } from "@/lib/budget";
+import { sumTermBudgetItems } from "@/lib/termBudget";
 
 const PERIOD_LABEL: Record<BudgetPeriod, string> = {
   weekly: "This week",
   monthly: "This month",
 };
+
+// One line of the term budget "receipt" - a label plus an editable amount.
+// Custom items also get an editable label and a remove button; presets don't
+// (their category is fixed, so there's nothing to rename or delete).
+function TermBudgetRow({
+  label,
+  amount,
+  onAmountChange,
+  onLabelChange,
+  onRemove,
+}: {
+  label: string;
+  amount: number;
+  onAmountChange: (amount: number) => void;
+  onLabelChange?: (label: string) => void;
+  onRemove?: () => void;
+}) {
+  const [draftAmount, setDraftAmount] = useState(amount ? String(amount) : "");
+  const [draftLabel, setDraftLabel] = useState(label);
+
+  const commitAmount = () => {
+    const parsed = parseFloat(draftAmount);
+    const next = Number.isFinite(parsed) && parsed >= 0 ? parsed : 0;
+    setDraftAmount(next ? String(next) : "");
+    if (next !== amount) onAmountChange(next);
+  };
+
+  const commitLabel = () => {
+    const trimmed = draftLabel.trim();
+    if (trimmed && trimmed !== label) onLabelChange?.(trimmed);
+    else setDraftLabel(label);
+  };
+
+  return (
+    <div className="flex items-center gap-3 py-1.5">
+      {onLabelChange ? (
+        <input
+          value={draftLabel}
+          onChange={(e) => setDraftLabel(e.target.value)}
+          onBlur={commitLabel}
+          className="flex-1 min-w-0 bg-transparent border-0 text-sm text-ink focus:outline-none focus:underline"
+        />
+      ) : (
+        <span className="flex-1 min-w-0 text-sm text-ink">{label}</span>
+      )}
+      <div className="flex items-center gap-1.5 flex-shrink-0">
+        <span className="text-ink/50 text-sm">$</span>
+        <input
+          type="number"
+          step="0.01"
+          min="0"
+          value={draftAmount}
+          onChange={(e) => setDraftAmount(e.target.value)}
+          onBlur={commitAmount}
+          placeholder="0.00"
+          className="w-20 px-1 py-0.5 bg-transparent border-0 border-b-2 border-ink/20 focus:border-ink text-sm text-right focus:outline-none"
+        />
+      </div>
+      {onRemove && (
+        <button
+          onClick={onRemove}
+          title="Remove"
+          className="flex-shrink-0 text-ink/30 hover:text-accent transition-colors"
+        >
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      )}
+    </div>
+  );
+}
+
+function TermBudgetPlanner() {
+  const { items, addCustomItem, updateItem, removeItem } = useTermBudget();
+  const [addingCustom, setAddingCustom] = useState(false);
+  const [newLabel, setNewLabel] = useState("");
+  const [newAmount, setNewAmount] = useState("");
+
+  const total = sumTermBudgetItems(items);
+
+  const handleAddCustom = (e: FormEvent) => {
+    e.preventDefault();
+    const trimmed = newLabel.trim();
+    const parsed = parseFloat(newAmount);
+    if (!trimmed || !Number.isFinite(parsed) || parsed < 0) return;
+
+    addCustomItem(trimmed, parsed);
+    setNewLabel("");
+    setNewAmount("");
+    setAddingCustom(false);
+  };
+
+  return (
+    <div className="receipt-card p-4 sm:p-5">
+      <h3 className="font-bold uppercase tracking-wide text-ink mb-1">Term Budget</h3>
+      <p className="text-[13px] text-ink/60 mb-3">Estimate what the whole term will cost.</p>
+
+      {items.length > 0 && (
+        <div className="divide-y divide-dashed divide-ink/15">
+          {items.map((item) => (
+            <TermBudgetRow
+              key={item.id}
+              label={item.label}
+              amount={item.amount}
+              onAmountChange={(amount) => updateItem(item.id, { amount })}
+              onLabelChange={(label) => updateItem(item.id, { label })}
+              onRemove={() => removeItem(item.id)}
+            />
+          ))}
+        </div>
+      )}
+
+      {addingCustom ? (
+        <form onSubmit={handleAddCustom} className="flex items-center gap-2 mt-3">
+          <input
+            autoFocus
+            value={newLabel}
+            onChange={(e) => setNewLabel(e.target.value)}
+            placeholder="e.g. Activities"
+            className="flex-1 min-w-0 px-1 py-1 bg-transparent border-0 border-b-2 border-ink text-sm focus:outline-none"
+          />
+          <div className="flex items-center gap-1 flex-shrink-0">
+            <span className="text-ink/50 text-sm">$</span>
+            <input
+              type="number"
+              step="0.01"
+              min="0"
+              value={newAmount}
+              onChange={(e) => setNewAmount(e.target.value)}
+              placeholder="0.00"
+              className="w-20 px-1 py-1 bg-transparent border-0 border-b-2 border-ink text-sm text-right focus:outline-none"
+            />
+          </div>
+          <button type="submit" className="receipt-btn w-auto px-3 !bg-ink !text-cream flex-shrink-0">
+            Add
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setAddingCustom(false);
+              setNewLabel("");
+              setNewAmount("");
+            }}
+            className="text-sm font-bold uppercase text-ink/40 hover:text-ink flex-shrink-0"
+          >
+            Cancel
+          </button>
+        </form>
+      ) : (
+        <button
+          onClick={() => setAddingCustom(true)}
+          className="mt-3 text-sm font-bold text-accent hover:underline"
+        >
+          + Add other expense
+        </button>
+      )}
+
+      <div className="receipt-divider-dash mt-4 mb-2" />
+      <div className="flex items-center justify-between">
+        <span className="font-bold uppercase tracking-wide text-ink">Term total</span>
+        <span className="text-xl font-bold text-accent">${total.toFixed(2)}</span>
+      </div>
+    </div>
+  );
+}
 
 function BudgetProgressCard({ period }: { period: BudgetPeriod }) {
   const { expenses, goals, setGoal } = useBudget();
@@ -290,8 +458,9 @@ function ExpenseList() {
 function BudgetPageContent() {
   const { user, loading: authLoading } = useAuth();
   const { loading } = useBudget();
+  const { loading: termLoading } = useTermBudget();
 
-  if (authLoading || loading) {
+  if (authLoading || loading || termLoading) {
     return (
       <div className="flex items-center justify-center py-12">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-ink"></div>
@@ -314,6 +483,7 @@ function BudgetPageContent() {
 
   return (
     <div className="space-y-6">
+      <TermBudgetPlanner />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <BudgetProgressCard period="weekly" />
         <BudgetProgressCard period="monthly" />
@@ -333,7 +503,7 @@ export default function BudgetPage() {
       <div className="space-y-1 sm:space-y-2">
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-ink">Budget Tracker</h1>
         <p className="text-sm sm:text-base text-ink/70">
-          Log what you actually spend and see it against your weekly and monthly budget.
+          Plan out the term, then log what you actually spend against it.
         </p>
       </div>
       <div className="receipt-divider" />
