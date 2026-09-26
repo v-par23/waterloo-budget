@@ -12,7 +12,6 @@ html,body{width:1920px;height:1080px;overflow:hidden;background:var(--cream);fon
 .center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column}
 .H{font-weight:700;letter-spacing:-.04em;line-height:.95;text-transform:uppercase}
 .acc{color:var(--acc)}
-.bg-grid{position:absolute;inset:-200px;background-image:linear-gradient(rgba(27,26,23,.07) 2px,transparent 2px),linear-gradient(90deg,rgba(27,26,23,.07) 2px,transparent 2px);background-size:80px 80px}
 .card{background:var(--paper);border:3px solid var(--ink);box-shadow:12px 12px 0 var(--ink)}
 .win{position:absolute;overflow:hidden;background:var(--cream);border:3px solid var(--ink);box-shadow:16px 16px 0 var(--ink)}
 .win .bar{position:absolute;left:0;right:0;top:0;height:44px;background:var(--ink);display:flex;align-items:center;gap:10px;padding:0 16px;z-index:3}
@@ -38,7 +37,6 @@ html,body{width:1920px;height:1080px;overflow:hidden;background:var(--cream);fon
 </style></head>
 <body>
 <div id="stage">
-  <div class="bg-grid" id="grid"></div>
   <div id="scenes"></div>
   <div id="wipe"></div>
   <div id="flash"></div>
@@ -108,12 +106,12 @@ scene(4,6,`<div class="center"><div class="tag ink" id="lt">WATERLOO, ON · EST.
 /* ===== S4: 172 spots (bars 6-8) ===== */
 scene(6,8,`${win('w4','home2',760,110,1080,860,'/')}
 <div class="abs" style="left:90px;top:190px;width:640px"><div class="tag o lw0">Spots</div>
- <div class="H" id="n172" style="font-size:260px;margin-top:20px">172</div>
+ <div class="H" style="font-size:260px;margin-top:20px"><span id="n172">0</span><span class="acc">+</span></div>
  ${words('CURATED|SPOTS.|<span class="acc">REAL</span>|<span class="acc">PRICES.</span>')}</div>`,function(t){
   const w=this.q('#w4');st(w,{x:lerp(1100,0,ex(P(t,0,.45))),r:lerp(6,0,ex(P(t,0,.45)))});
   cam(w,t,[[0,1850,700,.62],[1.3,1850,700,.62],[2.4,1500,560,.9],[3.75,1800,1100,.9]]);
   st(this.q('.lw0'),{o:P(t,0,.2)});
-  this.q('#n172').textContent=Math.round(172*eo(P(t,.05,1.0)));
+  this.q('#n172').textContent=Math.round(170*eo(P(t,.05,1.0)));
   this.qa('.ln').forEach(e=>e.querySelector('.lw').style.fontSize='96px');wordsIn(this,t,.6,B/2);
   this.qa('.lw').forEach(e=>e.classList.add('H'));
 });
@@ -194,7 +192,7 @@ scene(21,22,rf.map(m=>`<div class="center rf" style="background:${m[2]};color:${
 });
 
 /* ===== S13: end receipt (bars 22-25) ===== */
-const endRows=[["CURATED SPOTS","172"],["CATEGORIES","7"],["AI GUIDE","INCLUDED"],["BUDGET STRESS","$0.00"]];
+const endRows=[["CURATED SPOTS","170+"],["CATEGORIES","7"],["AI GUIDE","INCLUDED"],["BUDGET STRESS","$0.00"]];
 scene(22,25,`<div class="rc" id="r2" style="left:120px;top:60px;width:760px">
  <div style="text-align:center;font-weight:700;font-size:30px;letter-spacing:.3em">WATERLOOBUDGET</div><div style="text-align:center;font-size:22px;opacity:.6;margin:8px 0 24px">RECEIPT #2026 · WATERLOO, ON</div><div class="dash" style="margin-bottom:20px"></div>
  ${endRows.map(r=>`<div class="row it2" style="margin:16px 0;font-size:34px"><span>${r[0]}</span><span class="d"></span><span>${r[1]}</span></div>`).join('')}
@@ -218,7 +216,6 @@ scene(22,25,`<div class="rc" id="r2" style="left:120px;top:60px;width:760px">
 const TOTAL=25*BAR;window.TOTAL=TOTAL;
 const cuts=[2,4,6,8,10,12,14,16,19,21,22].map(b=>b*BAR);
 window.render=function(t){
-  document.getElementById('grid').style.transform=`translate(${(t*30)%80}px,${(t*20)%80}px)`;
   let f=0,pu=0;for(const c of cuts){const d=t-c;if(d>=0&&d<.22){f=Math.max(f,(1-d/.22)*(c==4*BAR||c==22*BAR?.85:.3));pu=Math.max(pu,1-d/.22)}}
   document.getElementById('flash').style.opacity=f;
   const beatP=(t%B)/B,drop=t>=4*BAR&&t<22*BAR;const sh=drop?Math.exp(-beatP*8)*.008:0;

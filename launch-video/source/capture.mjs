@@ -52,11 +52,12 @@ await ctx.route('**/api/ai/insights',r=>r.fulfill({json:{insights:[
  {title:'Free study, right now',description:'DC Library and Dana Porter are free and open late during exams.',emoji:'📚',spots:['DC Library (UW)','Dana Porter Library (UW)'],type:'study'},
  {title:'$3 coffee break',description:'Math C&D and Tim Hortons SLC keep your caffeine habit under $3.',emoji:'☕',spots:['Math C&D','Tim Hortons - SLC'],type:'time'},
  {title:'Free fall hangout',description:'Waterloo Park trails are free and perfect for a fall afternoon.',emoji:'🍁',spots:['Waterloo Park'],type:'social'}],
- timeContext:{period:'afternoon',description:'Afternoon vibes! Great time for coffee or a study session.'},seasonContext:{season:'fall'},stats:{totalSpots:172,freeSpots:14,categories:7},generatedAt:new Date().toISOString()}}));
+ timeContext:{period:'afternoon',description:'Afternoon vibes! Great time for coffee or a study session.'},seasonContext:{season:'fall'},stats:{totalSpots:'170+',freeSpots:14,categories:7},generatedAt:new Date().toISOString()}}));
 await ctx.route('**/api/ai/recommend',r=>r.fulfill({status:200,contentType:'text/plain; charset=utf-8',body:AI}));
 const p=await ctx.newPage();await p.clock.setFixedTime(now);
 p.on('pageerror',e=>console.log('ERR',e.message));
-async function go(path,name,fn){await p.goto('http://localhost:3100'+path,{waitUntil:'networkidle',timeout:60000}).catch(e=>console.log('nav',e.message));await p.addStyleTag({content:css});await p.waitForTimeout(1200);if(fn)await fn();await p.waitForTimeout(600);await p.screenshot({path:`../screens/${name}.png`});console.log('ok',name);}
+const patch172=()=>{const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode())if(n.textContent.trim()==='172')n.textContent=n.textContent.replace('172','170+')};
+async function go(path,name,fn){await p.goto('http://localhost:3100'+path,{waitUntil:'networkidle',timeout:60000}).catch(e=>console.log('nav',e.message));await p.addStyleTag({content:css});await p.waitForTimeout(1200);if(fn)await fn();await p.waitForTimeout(600);await p.evaluate(patch172);await p.screenshot({path:`../screens/${name}.png`});console.log('ok',name);}
 const only=process.argv.slice(2);const want=n=>!only.length||only.includes(n);
 if(want('home'))await go('/','home');
 if(want('home2'))await go('/','home2',async()=>{await p.mouse.wheel(0,560)});
